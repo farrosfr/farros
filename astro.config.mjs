@@ -3,6 +3,8 @@ import UnoCSS from 'unocss/astro';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://farrosfr.github.io',
+  base: '/farros',
   integrations: [
     UnoCSS({
       injectReset: true,
