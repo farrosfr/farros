@@ -1,0 +1,98 @@
+---
+const projects = [
+  {
+    name: 'AESI',
+    description: 'Asosiasi Energi Surya Indonesia. Managing digital infrastructure for Indonesia\'s primary solar energy association.',
+    href: 'https://aesi.or.id',
+    size: 'large'
+  },
+  {
+    name: 'Aurora Nutrima',
+    description: 'B2B Industrial Catering Services. Secure supply chain and logistics management.',
+    href: 'https://aurora-nutrima.id',
+    size: 'small'
+  },
+  {
+    name: 'Kidiko',
+    description: 'AI Educational Platform. Architecting secure data pipelines for personalized learning.',
+    href: 'https://kidiko.id',
+    size: 'small'
+  },
+  {
+    name: 'Solar Nusantara',
+    description: 'Renewable Energy EPC. Implementing robust monitoring and security for clean energy systems.',
+    href: 'https://solar-nusantara.id',
+    size: 'medium'
+  },
+  {
+    name: 'SonusHUB Profile',
+    description: 'B2B Marketplace for Electrical & Solar. Ensuring transaction integrity and platform security.',
+    href: 'https://sonus-hub.id',
+    size: 'small'
+  },
+  {
+    name: 'Indonesia Terang',
+    description: 'Energy & Sustainability Solutions. Secure data collection for environmental impact analysis.',
+    href: 'https://indonesia-terang.id',
+    size: 'small'
+  }
+];
+---
+<section id="projects" class="py-20 md:py-32 flex flex-col gap-12">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div class="flex flex-col gap-3 max-w-xl">
+      <h2 class="text-4xl font-bold tracking-tighter sm:text-5xl">Selected <span class="text-primary italic font-serif font-light">Work</span></h2>
+      <p class="text-muted-foreground text-lg font-light leading-relaxed">
+        A collection of systems and platforms I've engineered and secured. Focused on performance, reliability, and architectural integrity.
+      </p>
+    </div>
+    <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary pb-2">
+      <div class="i-lucide-shield-check size-4"></div>
+      Verified Deployments
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[280px]">
+    {projects.map((project) => (
+      <a 
+        href={project.href} 
+        target="_blank" 
+        class={`group relative flex flex-col justify-between overflow-hidden rounded-[2rem] p-8 glass-card 
+          ${project.size === 'large' ? 'md:col-span-2 md:row-span-2' : ''}
+          ${project.size === 'medium' ? 'md:col-span-2' : ''}
+        `}
+      >
+        <!-- Scan Line Effect -->
+        <div class="absolute inset-x-0 top-0 h-[2px] bg-primary/40 -translate-y-full group-hover:animate-[scan_2s_linear_infinite] pointer-events-none"></div>
+        
+        <div class="relative z-10 flex items-start justify-between">
+          <div class="flex flex-col gap-1">
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/60 group-hover:text-primary transition-colors">Case Study</span>
+            <h3 class="text-2xl font-bold tracking-tight group-hover:translate-x-1 transition-transform">{project.name}</h3>
+          </div>
+          <div class="rounded-full bg-muted/50 p-3 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+            <div class="i-lucide-arrow-up-right size-5"></div>
+          </div>
+        </div>
+
+        <div class="relative z-10">
+          <p class="text-muted-foreground leading-relaxed font-light group-hover:text-foreground transition-colors duration-500">
+            {project.description}
+          </p>
+        </div>
+
+        <!-- Subtle Background Glow -->
+        <div class="absolute -bottom-20 -right-20 size-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-700"></div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  @keyframes scan {
+    0% { transform: translateY(-100%); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(280px); opacity: 0; }
+  }
+</style>

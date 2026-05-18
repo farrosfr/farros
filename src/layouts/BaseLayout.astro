@@ -1,0 +1,39 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = 'Farros | Cybersecurity Researcher', 
+  description = 'Independent security researcher helping teams build secure applications.' 
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <ClientRouter />
+  </head>
+  <body class="bg-background text-foreground font-sans antialiased flex flex-col min-h-screen selection:bg-primary/30 selection:text-foreground">
+    <div class="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,hsl(var(--primary)/0.08),transparent_50%)] pointer-events-none"></div>
+    <Header />
+    <main class="flex-grow mx-auto max-w-screen-xl px-6 md:px-12 lg:px-24 w-full">
+      <slot />
+    </main>
+    <div class="mx-auto max-w-screen-xl px-6 md:px-12 lg:px-24 w-full">
+      <Footer />
+    </div>
+  </body>
+</html>

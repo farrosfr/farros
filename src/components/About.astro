@@ -1,0 +1,108 @@
+---
+const stats = [
+  { platform: 'GitHub', icon: 'i-simple-icons-github', link: 'https://github.com/farrosfr', text: '500+ Commits' },
+  { platform: 'LinkedIn', icon: 'i-simple-icons-linkedin', link: 'https://linkedin.com/in/farrosfr', text: 'Professional Network' },
+  { platform: 'Email', icon: 'i-lucide-mail', link: 'mailto:hello@farros.co', text: 'Direct Inquiry' },
+  { platform: 'X', icon: 'i-simple-icons-x', link: 'https://x.com/farrosfr_', text: 'Security Updates' }
+];
+
+const experience = [
+  { 
+    date: '2025 - Present', 
+    role: 'Cybersecurity Researcher', 
+    company: 'Independent Advisory',
+    content: 'Conducting advanced vulnerability research and architecting secure infrastructure for high-growth platforms.' 
+  },
+  { 
+    date: '2025', 
+    role: 'Lead Data Engineer', 
+    company: 'Fintech Solutions',
+    content: 'Designed resilient data pipelines and established security protocols for sensitive financial data processing.' 
+  },
+  { 
+    date: '2024', 
+    role: 'Security Consultant', 
+    company: 'Web Infrastructure',
+    content: 'Performed systemic audits and hardening for complex web ecosystems and API networks.' 
+  }
+];
+---
+<section id="about" class="py-20 md:py-32 flex flex-col gap-16">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+    <!-- Biography -->
+    <div class="flex flex-col gap-8">
+      <div class="flex flex-col gap-3">
+        <h2 class="text-4xl font-bold tracking-tighter sm:text-5xl">About <span class="text-primary italic font-serif font-light">Farros</span></h2>
+        <p class="text-xl font-medium text-foreground tracking-tight">Technical Architect & Security Strategist</p>
+      </div>
+      
+      <div class="flex flex-col gap-6 text-muted-foreground text-lg leading-relaxed font-light">
+        <p>
+          I am a specialized engineer operating at the intersection of <span class="text-foreground font-normal">Data Engineering</span> and <span class="text-foreground font-normal">Offensive Security</span>. My work focuses on building systems that are not only high-performing but fundamentally resilient against modern threat vectors.
+        </p>
+        <p>
+          Currently, I assist organizations in identifying critical architectural weaknesses before they are exploited. My approach combines rigorous data analysis with a red-team mindset to deliver actionable security intelligence.
+        </p>
+
+        <div class="relative py-8 px-10 glass-card rounded-3xl overflow-hidden group">
+          <div class="absolute top-0 left-0 w-1 h-full bg-primary/40 group-hover:bg-primary transition-colors"></div>
+          <p class="text-lg text-foreground italic font-serif leading-relaxed">
+            "May the eyes of the cowards never sleep."
+          </p>
+          <p class="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+            — Khalid ibn al-Walid
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience Timeline -->
+    <div class="flex flex-col gap-10">
+      <h3 class="text-2xl font-bold tracking-tight">Professional <span class="text-primary">Trajectory</span></h3>
+      <div class="flex flex-col gap-10 border-l border-border/50 ml-4 pl-8">
+        {experience.map((item) => (
+          <div class="relative flex flex-col gap-2 group">
+            <div class="absolute -left-[41px] top-1 size-5 rounded-full bg-background border-2 border-primary group-hover:scale-125 transition-transform"></div>
+            <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary/70">{item.date}</span>
+            <div class="flex flex-col">
+              <h4 class="text-lg font-bold text-foreground">{item.role}</h4>
+              <p class="text-sm font-medium text-muted-foreground/80">{item.company}</p>
+            </div>
+            <p class="text-sm text-muted-foreground font-light leading-relaxed mt-2">{item.content}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Networking & CTAs -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    {stats.map((item) => (
+      <a href={item.link} target="_blank" class="group flex flex-col gap-4 glass-card p-6 rounded-3xl hover:-translate-y-1 transition-all duration-500">
+        <div class="flex items-center justify-between">
+          <div class={`${item.icon} size-6 text-muted-foreground group-hover:text-primary transition-colors`}></div>
+          <div class="i-lucide-arrow-right size-4 text-muted-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all"></div>
+        </div>
+        <div>
+          <h4 class="font-bold text-foreground">{item.platform}</h4>
+          <p class="text-xs text-muted-foreground mt-1 uppercase tracking-widest">{item.text}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <div class="flex flex-wrap gap-4 justify-center py-10">
+    <a 
+      href="/CV_Farros.pdf" 
+      class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-sm font-semibold text-primary-foreground transition-all hover:scale-[1.02] active:scale-[0.98]"
+    >
+      Request Full Dossier (CV)
+    </a>
+    <a 
+      href="mailto:hello@farros.co" 
+      class="inline-flex h-14 items-center justify-center rounded-full border-2 border-border bg-background px-10 text-sm font-semibold transition-all hover:bg-muted active:scale-[0.98]"
+    >
+      Schedule Advisory
+    </a>
+  </div>
+</section>
