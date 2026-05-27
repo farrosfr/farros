@@ -1,98 +1,56 @@
 ---
-const projects = [
-  {
-    name: 'AESI',
-    description: 'Asosiasi Energi Surya Indonesia. Managing digital infrastructure for Indonesia\'s primary solar energy association.',
-    href: 'https://aesi.or.id',
-    size: 'large'
-  },
-  {
-    name: 'Aurora Nutrima',
-    description: 'B2B Industrial Catering Services. Secure supply chain and logistics management.',
-    href: 'https://aurora-nutrima.id',
-    size: 'small'
-  },
-  {
-    name: 'Kidiko',
-    description: 'AI Educational Platform. Architecting secure data pipelines for personalized learning.',
-    href: 'https://kidiko.id',
-    size: 'small'
-  },
-  {
-    name: 'Solar Nusantara',
-    description: 'Renewable Energy EPC. Implementing robust monitoring and security for clean energy systems.',
-    href: 'https://solar-nusantara.id',
-    size: 'medium'
-  },
-  {
-    name: 'SonusHUB Profile',
-    description: 'B2B Marketplace for Electrical & Solar. Ensuring transaction integrity and platform security.',
-    href: 'https://sonus-hub.id',
-    size: 'small'
-  },
-  {
-    name: 'Indonesia Terang',
-    description: 'Energy & Sustainability Solutions. Secure data collection for environmental impact analysis.',
-    href: 'https://indonesia-terang.id',
-    size: 'small'
-  }
-];
+import { projects } from '../data/profile';
 ---
-<section id="projects" class="py-20 md:py-32 flex flex-col gap-12">
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-    <div class="flex flex-col gap-3 max-w-xl">
-      <h2 class="text-4xl font-bold tracking-tighter sm:text-5xl">Selected <span class="text-primary italic font-serif font-light">Work</span></h2>
-      <p class="text-muted-foreground text-lg font-light leading-relaxed">
-        A collection of systems and platforms I've engineered and secured. Focused on performance, reliability, and architectural integrity.
-      </p>
+
+<section id="projects" class="py-20 md:py-28">
+  <div class="mb-10 flex flex-col gap-5 md:mb-14 md:flex-row md:items-end md:justify-between">
+    <div class="max-w-2xl">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Selected work</p>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">Production websites, marketplaces, and infrastructure-backed systems.</h2>
     </div>
-    <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary pb-2">
-      <div class="i-lucide-shield-check size-4"></div>
-      Verified Deployments
-    </div>
+    <p class="max-w-md text-base leading-7 text-muted-foreground">
+      Live Astro/web projects across industrial commerce, renewable energy, education, marketplace, and operational services.
+    </p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[280px]">
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:auto-rows-[330px]">
     {projects.map((project) => (
-      <a 
-        href={project.href} 
-        target="_blank" 
-        class={`group relative flex flex-col justify-between overflow-hidden rounded-[2rem] p-8 glass-card 
+      <a
+        href={project.href}
+        target="_blank"
+        rel="noreferrer"
+        class={`group glass-card relative flex min-h-[320px] flex-col overflow-hidden rounded-[1.5rem] p-4 hover:-translate-y-1
           ${project.size === 'large' ? 'md:col-span-2 md:row-span-2' : ''}
           ${project.size === 'medium' ? 'md:col-span-2' : ''}
         `}
       >
-        <!-- Scan Line Effect -->
-        <div class="absolute inset-x-0 top-0 h-[2px] bg-primary/40 -translate-y-full group-hover:animate-[scan_2s_linear_infinite] pointer-events-none"></div>
-        
-        <div class="relative z-10 flex items-start justify-between">
-          <div class="flex flex-col gap-1">
-            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/60 group-hover:text-primary transition-colors">Case Study</span>
-            <h3 class="text-2xl font-bold tracking-tight group-hover:translate-x-1 transition-transform">{project.name}</h3>
-          </div>
-          <div class="rounded-full bg-muted/50 p-3 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-            <div class="i-lucide-arrow-up-right size-5"></div>
-          </div>
+        <div class={`relative overflow-hidden rounded-[1.15rem] border border-border/70 bg-muted ${project.size === 'large' ? 'h-56 md:h-[420px]' : 'h-40 md:h-44'}`}>
+          <img src={project.image} alt={`${project.name} website screenshot`} class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+          <span class="absolute left-3 top-3 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary backdrop-blur">
+            {project.category}
+          </span>
         </div>
 
-        <div class="relative z-10">
-          <p class="text-muted-foreground leading-relaxed font-light group-hover:text-foreground transition-colors duration-500">
-            {project.description}
-          </p>
-        </div>
+        <div class="flex flex-col p-2 pt-5">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">{project.domain}</p>
+              <h3 class="mt-2 text-2xl font-bold tracking-tight text-foreground">{project.name}</h3>
+            </div>
+            <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background/70 text-muted-foreground transition-all group-hover:border-primary/50 group-hover:text-primary">
+              <span class="i-lucide-arrow-up-right size-5"></span>
+            </span>
+          </div>
 
-        <!-- Subtle Background Glow -->
-        <div class="absolute -bottom-20 -right-20 size-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-700"></div>
+          <div class="pt-6">
+            <p class="max-w-xl text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">{project.description}</p>
+            <div class="mt-4 inline-flex rounded-full border border-border/70 bg-background/70 px-3 py-1 font-mono text-[11px] text-primary">
+              {project.outcome}
+            </div>
+          </div>
+        </div>
       </a>
     ))}
   </div>
 </section>
-
-<style>
-  @keyframes scan {
-    0% { transform: translateY(-100%); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(280px); opacity: 0; }
-  }
-</style>

@@ -63,6 +63,11 @@ export default defineConfig({
     })
   ],
   transformers: [transformerDirectives(), transformerVariantGroup()],
+  safelist: [
+    'i-lucide-sun',
+    'i-lucide-moon',
+    'i-lucide-monitor'
+  ],
   theme: {
     colors: {
       border: 'hsl(var(--border) / <alpha-value>)',
@@ -103,7 +108,7 @@ export default defineConfig({
   shortcuts: [
     ['flex-center', 'flex items-center justify-center'],
     ['absolute-center', 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'],
-    ['glass', 'bg-background/70 backdrop-blur-xl border border-white/10'],
-    ['glass-card', 'bg-card/50 backdrop-blur-md border border-border/50 hover:border-primary/30 transition-all duration-300']
+    ['glass', 'bg-background/80 backdrop-blur-xl border border-border/60 shadow-2xl shadow-black/10 dark:shadow-black/30'],
+    ['glass-card', 'bg-card/72 backdrop-blur-xl border border-border/70 shadow-xl shadow-black/5 dark:shadow-black/25 hover:border-primary/45 transition-all duration-300']
   ]
 })

@@ -1,40 +1,386 @@
 ---
-const navItems = [
-  { name: 'Research', href: '#projects' },
-  { name: 'Profile', href: '#about' },
-  { name: 'Contact', href: 'mailto:hello@farros.co' },
-];
+import { navItems, searchItems } from '../data/profile';
 ---
-<header class="fixed top-0 z-50 w-full flex justify-center py-4">
-  <div class="glass flex h-16 items-center justify-between w-[calc(100%-2rem)] max-w-screen-xl px-8 rounded-full shadow-2xl shadow-black/20 border-white/5">
-    <a href="/" class="group flex items-center gap-2 font-bold text-xl tracking-tighter">
-      <div class="size-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground group-hover:rotate-12 transition-transform">
-        F
-      </div>
-      <span class="group-hover:text-primary transition-colors">Farros<span class="text-primary/50 group-hover:text-primary">.co</span></span>
+
+<header class="sticky top-0 z-50 w-full px-4 py-4">
+  <div class="glass mx-auto flex min-h-16 max-w-screen-xl items-center justify-between gap-2 rounded-2xl px-4 py-3 sm:px-6">
+    <a href="/" class="group flex items-center gap-2 font-bold tracking-tight shrink-0">
+      <img src="/logo.png" alt="Farros logo" class="size-8 rounded-lg ring-1 ring-white/10 transition-transform group-hover:scale-105 sm:size-9" />
+      <span class="hidden text-lg text-foreground sm:block">Farros<span class="text-primary">.co</span></span>
     </a>
-    
-    <nav class="hidden md:flex items-center gap-8">
+
+    <nav class="hidden items-center gap-8 md:flex">
       {navItems.map((item) => (
-        <a 
-          href={item.href} 
-          class="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground transition-all hover:text-primary hover:tracking-[0.3em]"
-        >
+        <a href={item.href} class="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary">
           {item.name}
         </a>
       ))}
     </nav>
 
-    <div class="flex items-center gap-4">
-      <div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-        </span>
-        <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Secure Connection</span>
+    <div class="flex items-center justify-end gap-1 sm:gap-3">
+      <button
+        type="button"
+        data-search-toggle
+        class="hidden h-10 w-10 items-center justify-center rounded-xl border border-border/70 bg-card/70 text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 md:flex lg:w-auto lg:px-3 lg:gap-2"
+        aria-label="Search"
+      >
+        <span class="i-lucide-search size-4"></span>
+        <span class="hidden lg:inline">Search</span>
+        <kbd class="hidden rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:inline-flex">Ctrl K</kbd>
+      </button>
+
+      <div class="hidden md:block relative" data-theme-picker>
+        <button
+          type="button"
+          data-theme-toggle
+          class="flex h-10 w-10 items-center justify-center rounded-xl border border-border/70 bg-card/70 text-muted-foreground transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 lg:w-auto lg:px-3 lg:gap-2"
+          aria-label="Choose theme"
+          aria-expanded="false"
+        >
+          <span data-theme-icon class="i-lucide-monitor size-5"></span>
+          <span data-theme-label class="hidden lg:inline">System</span>
+        </button>
+        <div data-theme-menu class="glass absolute right-0 top-12 hidden w-40 rounded-xl p-1">
+          {[
+            { mode: 'system', label: 'System', icon: 'i-lucide-monitor' },
+            { mode: 'light', label: 'Light', icon: 'i-lucide-sun' },
+            { mode: 'dark', label: 'Dark', icon: 'i-lucide-moon' }
+          ].map((item) => (
+            <button
+              type="button"
+              data-theme-option={item.mode}
+              class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <span class={`${item.icon} size-4`}></span>
+              {item.label}
+            </button>
+          ))}
+        </div>
       </div>
-      <button class="md:hidden i-lucide-menu size-6 text-foreground"></button>
+
+      <button
+        type="button"
+        data-menu-toggle
+        class="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-border/70 bg-card/70 px-2 text-sm font-semibold text-foreground transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 sm:px-3 md:hidden"
+        aria-label="Open navigation"
+        aria-expanded="false"
+      >
+        <span data-menu-open-icon class="i-lucide-menu size-5"></span>
+        <span data-menu-close-icon class="i-lucide-x hidden size-5"></span>
+        <span class="hidden sm:inline">Menu</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    data-mobile-menu
+    class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-background/95 p-6 backdrop-blur-xl md:hidden"
+  >
+    <button
+      type="button"
+      data-menu-close
+      class="absolute right-6 top-6 flex size-12 items-center justify-center rounded-2xl border border-border/70 bg-card/70 text-foreground"
+      aria-label="Close navigation"
+    >
+      <span class="i-lucide-x size-6"></span>
+    </button>
+
+    <div class="flex flex-col items-center gap-12 w-full max-w-xs">
+      <!-- Mobile Theme & Search Row -->
+      <div class="flex w-full gap-2">
+        <button
+          type="button"
+          data-search-toggle
+          class="flex h-14 flex-1 items-center justify-center gap-3 rounded-2xl border border-border/70 bg-card/70 font-bold text-foreground transition-all active:scale-95"
+        >
+          <span class="i-lucide-search size-5"></span>
+          <span>Search</span>
+        </button>
+
+        <div class="relative flex-1" data-theme-picker>
+          <button
+            type="button"
+            data-theme-toggle
+            class="flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-border/70 bg-card/70 font-bold text-foreground transition-all active:scale-95"
+            aria-label="Choose theme"
+            aria-expanded="false"
+          >
+            <span data-theme-icon class="i-lucide-monitor size-5"></span>
+            <span data-theme-label>System</span>
+          </button>
+          <div data-theme-menu class="glass absolute bottom-full left-0 right-0 z-10 mb-2 hidden flex-col rounded-2xl p-1">
+            {[
+              { mode: 'system', label: 'System', icon: 'i-lucide-monitor' },
+              { mode: 'light', label: 'Light', icon: 'i-lucide-sun' },
+              { mode: 'dark', label: 'Dark', icon: 'i-lucide-moon' }
+            ].map((item) => (
+              <button
+                type="button"
+                data-theme-option={item.mode}
+                class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                <span class={`${item.icon} size-5`}></span>
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <nav class="flex flex-col items-center gap-6 w-full">
+        {navItems.map((item) => (
+          <a 
+            href={item.href} 
+            class="w-full rounded-2xl border border-border/40 py-4 text-center text-xl font-bold uppercase tracking-[0.2em] text-muted-foreground transition-all hover:border-primary/50 hover:text-primary active:scale-95"
+          >
+            {item.name}
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="absolute bottom-12 flex flex-col items-center gap-6">
+      <div class="flex items-center gap-6">
+        <a href="https://github.com/farrosfr" target="_blank" class="text-muted-foreground hover:text-primary transition-all">
+          <div class="i-simple-icons-github size-6"></div>
+        </a>
+        <a href="https://linkedin.com/in/farrosfr" target="_blank" class="text-muted-foreground hover:text-primary transition-all">
+          <div class="i-simple-icons-linkedin size-6"></div>
+        </a>
+      </div>
+      <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/60">
+        &copy; {new Date().getFullYear()} FARROS FR
+      </p>
     </div>
   </div>
 </header>
-<div class="h-24"></div>
+
+<div
+  data-search-palette
+  class="fixed inset-0 z-[90] hidden p-4 pt-24 sm:p-6 sm:pt-28"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search Farros.co"
+>
+  <button data-search-backdrop class="absolute inset-0 cursor-default bg-background/70 backdrop-blur-md" aria-label="Close search"></button>
+  <div class="glass relative mx-auto max-w-2xl overflow-hidden rounded-2xl">
+    <div class="relative border-b border-border/70">
+      <span class="i-lucide-search pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground"></span>
+      <input
+        data-search-input
+        class="h-14 w-full bg-transparent pl-12 pr-4 text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground"
+        placeholder="Search work, CV, certificates, writing, or contact..."
+        autocomplete="off"
+      />
+    </div>
+    <div data-search-results class="max-h-[26rem] overflow-y-auto p-3"></div>
+  </div>
+</div>
+
+<script>
+  function setupHeaderControls() {
+    const root = document.documentElement;
+    const systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const themePickers = document.querySelectorAll('[data-theme-picker]');
+
+    function getThemeMode() {
+      const mode = localStorage.getItem('theme');
+      return mode === 'light' || mode === 'dark' ? mode : 'system';
+    }
+
+    function applyTheme(mode = getThemeMode()) {
+      const shouldUseDark = mode === 'dark' || (mode === 'system' && systemQuery.matches);
+      root.classList.toggle('dark', shouldUseDark);
+      root.dataset.themeMode = mode;
+
+      if (mode === 'system') {
+        localStorage.removeItem('theme');
+      } else {
+        localStorage.setItem('theme', mode);
+      }
+
+      themePickers.forEach((picker) => {
+        const button = picker.querySelector('[data-theme-toggle]');
+        const label = button?.querySelector('[data-theme-label]');
+        const icon = button?.querySelector('[data-theme-icon]');
+        
+        if (label) label.textContent = mode === 'system' ? 'System' : mode === 'dark' ? 'Dark' : 'Light';
+        if (icon) {
+          icon.className = `${mode === 'system' ? 'i-lucide-monitor' : mode === 'dark' ? 'i-lucide-moon' : 'i-lucide-sun'} size-5`;
+        }
+
+        picker.querySelectorAll('[data-theme-option]').forEach((option) => {
+          const isActive = option.getAttribute('data-theme-option') === mode;
+          option.setAttribute('aria-pressed', String(isActive));
+          option.classList.toggle('bg-muted', isActive);
+          option.classList.toggle('text-foreground', isActive);
+        });
+      });
+    }
+
+    themePickers.forEach((picker) => {
+      const button = picker.querySelector('[data-theme-toggle]');
+      const menu = picker.querySelector('[data-theme-menu]');
+      const options = picker.querySelectorAll('[data-theme-option]');
+
+      if (button && menu && button.getAttribute('data-bound') !== 'true') {
+        button.setAttribute('data-bound', 'true');
+        button.addEventListener('click', () => {
+          const isOpen = menu.classList.toggle('hidden') === false;
+          if (isOpen) {
+            menu.classList.add('flex');
+          } else {
+            menu.classList.remove('flex');
+          }
+          button.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        document.addEventListener('click', (event) => {
+          if (event.target instanceof Node && !picker.contains(event.target)) {
+            menu.classList.add('hidden');
+            menu.classList.remove('flex');
+            button.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+
+      options.forEach((option) => {
+        if (option.getAttribute('data-bound') === 'true') return;
+        option.setAttribute('data-bound', 'true');
+        option.addEventListener('click', () => {
+          const mode = option.getAttribute('data-theme-option') || 'system';
+          applyTheme(mode);
+          menu?.classList.add('hidden');
+          menu?.classList.remove('flex');
+          button?.setAttribute('aria-expanded', 'false');
+        });
+      });
+    });
+
+    if (!window.__farrosSystemThemeBound) {
+      window.__farrosSystemThemeBound = true;
+      systemQuery.addEventListener('change', () => {
+        if (getThemeMode() === 'system') applyTheme('system');
+      });
+    }
+
+    applyTheme(getThemeMode());
+
+    const menuButton = document.querySelector('[data-menu-toggle]');
+    const closeButton = document.querySelector('[data-menu-close]');
+    const mobileMenu = document.querySelector('[data-mobile-menu]');
+    if (!menuButton || !mobileMenu) return;
+
+    function openMobileMenu() {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      menuButton.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+      document.body.style.overflow = '';
+      menuButton.setAttribute('aria-expanded', 'false');
+    }
+
+    if (mobileMenu.getAttribute('data-link-bound') !== 'true') {
+      mobileMenu.setAttribute('data-link-bound', 'true');
+      mobileMenu.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('a') : null;
+        if (target) closeMobileMenu();
+      });
+    }
+
+    if (menuButton.getAttribute('data-bound') !== 'true') {
+      menuButton.setAttribute('data-bound', 'true');
+      menuButton.addEventListener('click', openMobileMenu);
+    }
+
+    if (closeButton && closeButton.getAttribute('data-bound') !== 'true') {
+      closeButton.setAttribute('data-bound', 'true');
+      closeButton.addEventListener('click', closeMobileMenu);
+    }
+  }
+
+  setupHeaderControls();
+  document.addEventListener('astro:page-load', setupHeaderControls);
+</script>
+
+<script define:vars={{ searchItems }}>
+  function setupSearchPalette() {
+    const palette = document.querySelector('[data-search-palette]');
+    const input = document.querySelector('[data-search-input]');
+    const results = document.querySelector('[data-search-results]');
+    const toggles = document.querySelectorAll('[data-search-toggle]');
+    const backdrop = document.querySelector('[data-search-backdrop]');
+
+    if (!palette || !input || !results) return;
+
+    function render(query = '') {
+      const normalized = query.trim().toLowerCase();
+      const matches = searchItems.filter((item) => {
+        const haystack = `${item.title} ${item.description} ${item.type}`.toLowerCase();
+        return !normalized || haystack.includes(normalized);
+      });
+
+      results.innerHTML = matches.length
+        ? matches.map((item) => `
+          <a href="${item.href}" class="group flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-muted">
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background font-mono text-[10px] font-bold uppercase text-primary">${item.type.slice(0, 1)}</span>
+            <span class="min-w-0 flex-1">
+              <span class="block text-sm font-bold text-foreground">${item.title}</span>
+              <span class="block truncate text-xs text-muted-foreground">${item.description}</span>
+            </span>
+            <span class="i-lucide-arrow-up-right size-4 text-muted-foreground transition-colors group-hover:text-primary"></span>
+          </a>
+        `).join('')
+        : '<p class="px-4 py-10 text-center text-sm text-muted-foreground">No matching results.</p>';
+    }
+
+    function openPalette() {
+      palette.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      render(input.value);
+      setTimeout(() => input.focus(), 0);
+    }
+
+    function closePalette() {
+      palette.classList.add('hidden');
+      document.body.style.overflow = '';
+      input.value = '';
+      render();
+    }
+
+    if (palette.getAttribute('data-bound') !== 'true') {
+      palette.setAttribute('data-bound', 'true');
+      input.addEventListener('input', () => render(input.value));
+      results.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('a') : null;
+        if (target) closePalette();
+      });
+      backdrop?.addEventListener('click', closePalette);
+      window.addEventListener('keydown', (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+          event.preventDefault();
+          openPalette();
+        }
+        if (event.key === 'Escape' && !palette.classList.contains('hidden')) {
+          closePalette();
+        }
+      });
+    }
+
+    toggles.forEach((button) => {
+      if (button.getAttribute('data-bound') === 'true') return;
+      button.setAttribute('data-bound', 'true');
+      button.addEventListener('click', openPalette);
+    });
+
+    render();
+  }
+
+  setupSearchPalette();
+  document.addEventListener('astro:page-load', setupSearchPalette);
+</script>

@@ -1,108 +1,108 @@
 ---
-const stats = [
-  { platform: 'GitHub', icon: 'i-simple-icons-github', link: 'https://github.com/farrosfr', text: '500+ Commits' },
-  { platform: 'LinkedIn', icon: 'i-simple-icons-linkedin', link: 'https://linkedin.com/in/farrosfr', text: 'Professional Network' },
-  { platform: 'Email', icon: 'i-lucide-mail', link: 'mailto:hello@farros.co', text: 'Direct Inquiry' },
-  { platform: 'X', icon: 'i-simple-icons-x', link: 'https://x.com/farrosfr_', text: 'Security Updates' }
-];
+import { awards, capabilities, experience, featuredWork, profile } from '../data/profile';
 
-const experience = [
-  { 
-    date: '2025 - Present', 
-    role: 'Cybersecurity Researcher', 
-    company: 'Independent Advisory',
-    content: 'Conducting advanced vulnerability research and architecting secure infrastructure for high-growth platforms.' 
-  },
-  { 
-    date: '2025', 
-    role: 'Lead Data Engineer', 
-    company: 'Fintech Solutions',
-    content: 'Designed resilient data pipelines and established security protocols for sensitive financial data processing.' 
-  },
-  { 
-    date: '2024', 
-    role: 'Security Consultant', 
-    company: 'Web Infrastructure',
-    content: 'Performed systemic audits and hardening for complex web ecosystems and API networks.' 
-  }
+const links = [
+  { platform: 'GitHub', icon: 'i-simple-icons-github', link: profile.github, text: 'Engineering record' },
+  { platform: 'LinkedIn', icon: 'i-simple-icons-linkedin', link: profile.linkedin, text: 'Professional profile' },
+  { platform: 'Medium', icon: 'i-simple-icons-medium', link: profile.medium, text: 'Security writing' },
+  { platform: 'Email', icon: 'i-lucide-mail', link: `mailto:${profile.email}`, text: 'Direct inquiry' },
 ];
 ---
-<section id="about" class="py-20 md:py-32 flex flex-col gap-16">
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
-    <!-- Biography -->
-    <div class="flex flex-col gap-8">
-      <div class="flex flex-col gap-3">
-        <h2 class="text-4xl font-bold tracking-tighter sm:text-5xl">About <span class="text-primary italic font-serif font-light">Farros</span></h2>
-        <p class="text-xl font-medium text-foreground tracking-tight">Technical Architect & Security Strategist</p>
-      </div>
-      
-      <div class="flex flex-col gap-6 text-muted-foreground text-lg leading-relaxed font-light">
-        <p>
-          I am a specialized engineer operating at the intersection of <span class="text-foreground font-normal">Data Engineering</span> and <span class="text-foreground font-normal">Offensive Security</span>. My work focuses on building systems that are not only high-performing but fundamentally resilient against modern threat vectors.
-        </p>
-        <p>
-          Currently, I assist organizations in identifying critical architectural weaknesses before they are exploited. My approach combines rigorous data analysis with a red-team mindset to deliver actionable security intelligence.
-        </p>
 
-        <div class="relative py-8 px-10 glass-card rounded-3xl overflow-hidden group">
-          <div class="absolute top-0 left-0 w-1 h-full bg-primary/40 group-hover:bg-primary transition-colors"></div>
-          <p class="text-lg text-foreground italic font-serif leading-relaxed">
-            "May the eyes of the cowards never sleep."
-          </p>
-          <p class="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-            — Khalid ibn al-Walid
-          </p>
-        </div>
+<section id="about" class="py-20 md:py-28">
+  <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10">
+    <div class="glass-card rounded-[1.5rem] p-6 sm:p-8">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Profile</p>
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">Full-stack builder with data, infrastructure, and security depth.</h2>
+      <div class="mt-7 space-y-5 text-base leading-7 text-muted-foreground">
+        <p>{profile.summary}</p>
+        <p>
+          I build fast, minimal, practical web products with Astro and TypeScript, while keeping close to real operational needs: hosting, product data, internal systems, analytics, and security.
+        </p>
+      </div>
+
+      <div class="mt-8 grid gap-3">
+        {capabilities.map((capability) => (
+          <div class="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/65 p-4">
+            <span class="i-lucide-check-circle-2 size-5 text-primary"></span>
+            <span class="text-sm font-semibold text-foreground">{capability}</span>
+          </div>
+        ))}
       </div>
     </div>
 
-    <!-- Experience Timeline -->
-    <div class="flex flex-col gap-10">
-      <h3 class="text-2xl font-bold tracking-tight">Professional <span class="text-primary">Trajectory</span></h3>
-      <div class="flex flex-col gap-10 border-l border-border/50 ml-4 pl-8">
+    <div class="glass-card rounded-[1.5rem] p-6 sm:p-8">
+      <div class="mb-8 flex items-center justify-between gap-4">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Trajectory</p>
+          <h3 class="mt-2 text-2xl font-bold tracking-tight">Professional record</h3>
+        </div>
+        <img src="/logo.png" alt="" class="hidden size-12 rounded-xl ring-1 ring-white/10 sm:block" />
+      </div>
+
+      <div class="space-y-7 border-l border-border/70 pl-6">
         {experience.map((item) => (
-          <div class="relative flex flex-col gap-2 group">
-            <div class="absolute -left-[41px] top-1 size-5 rounded-full bg-background border-2 border-primary group-hover:scale-125 transition-transform"></div>
-            <span class="text-xs font-bold uppercase tracking-[0.2em] text-primary/70">{item.date}</span>
-            <div class="flex flex-col">
-              <h4 class="text-lg font-bold text-foreground">{item.role}</h4>
-              <p class="text-sm font-medium text-muted-foreground/80">{item.company}</p>
-            </div>
-            <p class="text-sm text-muted-foreground font-light leading-relaxed mt-2">{item.content}</p>
+          <div class="relative">
+            <span class="absolute -left-[33px] top-1 size-3 rounded-full border-2 border-background bg-primary"></span>
+            <p class="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">{item.date}</p>
+            <h4 class="mt-2 text-lg font-bold text-foreground">{item.role}</h4>
+            <p class="text-sm font-semibold text-muted-foreground">{item.company} | {item.location}</p>
+            <p class="mt-3 text-sm leading-6 text-muted-foreground">{item.content}</p>
           </div>
         ))}
       </div>
     </div>
   </div>
 
-  <!-- Networking & CTAs -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    {stats.map((item) => (
-      <a href={item.link} target="_blank" class="group flex flex-col gap-4 glass-card p-6 rounded-3xl hover:-translate-y-1 transition-all duration-500">
+  <div class="mt-4 grid gap-4 lg:grid-cols-[1fr_1fr]">
+    <div class="glass-card rounded-[1.5rem] p-6">
+      <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Featured builds</p>
+      <div class="mt-5 grid gap-3">
+        {featuredWork.map((item) => (
+          <a href={item.href} target="_blank" rel="noreferrer" class="group flex items-center justify-between gap-4 rounded-2xl border border-border/70 bg-background/65 p-4 transition-colors hover:border-primary/40">
+            <div>
+              <p class="font-bold text-foreground">{item.name}</p>
+              <p class="mt-1 text-sm text-muted-foreground">{item.description}</p>
+            </div>
+            <span class="i-lucide-arrow-up-right size-5 text-muted-foreground transition-colors group-hover:text-primary"></span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="glass-card rounded-[1.5rem] p-6">
+      <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Awards</p>
+      <div class="mt-5 grid gap-3">
+        {awards.slice(0, 3).map((item) => (
+          <div class="rounded-2xl border border-border/70 bg-background/65 p-4">
+            <p class="font-bold text-foreground">{item.title}</p>
+            <p class="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{item.issuer} | {item.date}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+    {links.map((item) => (
+      <a href={item.link} target="_blank" rel="noreferrer" class="group glass-card flex flex-col gap-5 rounded-[1.5rem] p-6 hover:-translate-y-1">
         <div class="flex items-center justify-between">
-          <div class={`${item.icon} size-6 text-muted-foreground group-hover:text-primary transition-colors`}></div>
-          <div class="i-lucide-arrow-right size-4 text-muted-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all"></div>
+          <span class={`${item.icon} size-6 text-muted-foreground transition-colors group-hover:text-primary`}></span>
+          <span class="i-lucide-arrow-right size-4 text-muted-foreground/40 transition-all group-hover:translate-x-1 group-hover:text-primary"></span>
         </div>
         <div>
           <h4 class="font-bold text-foreground">{item.platform}</h4>
-          <p class="text-xs text-muted-foreground mt-1 uppercase tracking-widest">{item.text}</p>
+          <p class="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-muted-foreground">{item.text}</p>
         </div>
       </a>
     ))}
   </div>
 
-  <div class="flex flex-wrap gap-4 justify-center py-10">
-    <a 
-      href="/CV_Farros.pdf" 
-      class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-sm font-semibold text-primary-foreground transition-all hover:scale-[1.02] active:scale-[0.98]"
-    >
-      Request Full Dossier (CV)
+  <div class="flex flex-col gap-3 py-10 sm:flex-row sm:justify-center">
+    <a href="/cv" class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50">
+      View CV
     </a>
-    <a 
-      href="mailto:hello@farros.co" 
-      class="inline-flex h-14 items-center justify-center rounded-full border-2 border-border bg-background px-10 text-sm font-semibold transition-all hover:bg-muted active:scale-[0.98]"
-    >
-      Schedule Advisory
+    <a href={profile.cvPath} class="inline-flex h-14 items-center justify-center rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50">
+      Download PDF
     </a>
   </div>
 </section>

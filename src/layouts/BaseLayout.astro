@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { profile } from '../data/profile';
 import '../styles/global.css';
 
 interface Props {
@@ -10,8 +11,8 @@ interface Props {
 }
 
 const { 
-  title = 'Farros | Cybersecurity Researcher', 
-  description = 'Independent security researcher helping teams build secure applications.' 
+  title = 'Farros | Full-Stack Developer & Cybersecurity Researcher', 
+  description = 'Astro developer, system architect, data engineer, browser extension developer, and cybersecurity writer building practical web and infrastructure systems.' 
 } = Astro.props;
 ---
 
@@ -20,19 +21,42 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      const themeMode = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const shouldUseDark = themeMode === 'dark' || (!themeMode && prefersDark);
+      document.documentElement.classList.toggle('dark', shouldUseDark);
+      document.documentElement.dataset.themeMode = themeMode || 'system';
+    </script>
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/logo.png" />
+    <meta name="theme-color" content="#070b12" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: profile.name,
+      url: profile.website,
+      email: profile.email,
+      sameAs: [profile.github, profile.linkedin, profile.medium, profile.x],
+      jobTitle: profile.title
+    })} />
     <ClientRouter />
   </head>
   <body class="bg-background text-foreground font-sans antialiased flex flex-col min-h-screen selection:bg-primary/30 selection:text-foreground">
-    <div class="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,hsl(var(--primary)/0.08),transparent_50%)] pointer-events-none"></div>
     <Header />
-    <main class="flex-grow mx-auto max-w-screen-xl px-6 md:px-12 lg:px-24 w-full">
+    <main class="flex-grow mx-auto max-w-screen-xl px-5 sm:px-6 md:px-10 lg:px-16 w-full">
       <slot />
     </main>
-    <div class="mx-auto max-w-screen-xl px-6 md:px-12 lg:px-24 w-full">
+    <div class="mx-auto max-w-screen-xl px-5 sm:px-6 md:px-10 lg:px-16 w-full">
       <Footer />
     </div>
   </body>

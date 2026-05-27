@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { awards, capabilities, certificates, experience, featuredWork, profile, projects } from '../data/profile';
+
+const certificateGroups = [...new Set(certificates.map((item) => item.group))];
+---
+
+<BaseLayout title={`CV | ${profile.name}`} description={`Web CV for ${profile.name}: full-stack Astro developer, system architect, data engineer, and cybersecurity writer.`}>
+  <section class="py-14 md:py-20">
+    <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+      <div>
+        <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-primary">Web CV</p>
+        <h1 class="text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl">{profile.name}</h1>
+        <p class="mt-5 max-w-3xl text-xl leading-8 text-muted-foreground">{profile.title}</p>
+      </div>
+      <div class="glass-card rounded-[1.5rem] p-6">
+        <p class="text-sm leading-7 text-muted-foreground">{profile.summary}</p>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <a href={profile.cvPath} class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground">Download PDF</a>
+          <a href={`mailto:${profile.email}`} class="inline-flex h-12 items-center justify-center rounded-full border border-border bg-background/70 px-6 text-sm font-bold text-foreground">Contact</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid gap-4 pb-12 md:grid-cols-3">
+    {[
+      ['Email', profile.email],
+      ['Website', profile.website],
+      ['LinkedIn', profile.linkedin],
+    ].map(([label, value]) => (
+      <div class="glass-card rounded-2xl p-5">
+        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{label}</p>
+        <p class="mt-2 break-words text-sm font-bold text-foreground">{value}</p>
+      </div>
+    ))}
+  </section>
+
+  <section class="grid gap-8 py-12 lg:grid-cols-[0.75fr_1.25fr]">
+    <div>
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Experience</p>
+      <h2 class="text-3xl font-bold tracking-tight">Professional record</h2>
+    </div>
+    <div class="space-y-5">
+      {experience.map((item) => (
+        <article class="glass-card rounded-[1.5rem] p-6">
+          <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">{item.date}</p>
+          <h3 class="mt-2 text-2xl font-bold text-foreground">{item.role}</h3>
+          <p class="text-sm font-semibold text-muted-foreground">{item.company} | {item.location}</p>
+          <p class="mt-4 text-sm leading-7 text-muted-foreground">{item.content}</p>
+          <ul class="mt-4 grid gap-2">
+            {item.bullets.map((bullet) => (
+              <li class="flex gap-3 text-sm leading-6 text-muted-foreground">
+                <span class="mt-2 size-1.5 shrink-0 rounded-full bg-primary"></span>
+                {bullet}
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="py-12">
+    <div class="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Projects</p>
+        <h2 class="text-3xl font-bold tracking-tight">Live web portfolio</h2>
+      </div>
+      <p class="max-w-lg text-sm leading-6 text-muted-foreground">Production sites and product pages across e-commerce, energy, education, and services.</p>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3">
+      {projects.slice(0, 6).map((project) => (
+        <a href={project.href} target="_blank" rel="noreferrer" class="glass-card overflow-hidden rounded-[1.25rem]">
+          <img src={project.image} alt={`${project.name} screenshot`} class="h-36 w-full object-cover object-top" loading="lazy" />
+          <div class="p-5">
+            <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">{project.category}</p>
+            <h3 class="mt-2 text-lg font-bold text-foreground">{project.name}</h3>
+            <p class="mt-2 text-sm leading-6 text-muted-foreground">{project.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="grid gap-8 py-12 lg:grid-cols-2">
+    <div class="glass-card rounded-[1.5rem] p-6">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Capabilities</p>
+      <div class="grid gap-3">
+        {capabilities.map((item) => (
+          <div class="rounded-2xl border border-border/70 bg-background/65 p-4 text-sm font-semibold text-foreground">{item}</div>
+        ))}
+      </div>
+    </div>
+    <div class="glass-card rounded-[1.5rem] p-6">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Featured work</p>
+      <div class="grid gap-3">
+        {featuredWork.map((item) => (
+          <a href={item.href} target="_blank" rel="noreferrer" class="rounded-2xl border border-border/70 bg-background/65 p-4 transition-colors hover:border-primary/40">
+            <p class="font-bold text-foreground">{item.name}</p>
+            <p class="mt-1 text-sm text-muted-foreground">{item.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="certificates" class="py-12">
+    <div class="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Certificates</p>
+        <h2 class="text-3xl font-bold tracking-tight">Selected credentials</h2>
+      </div>
+      <a href="https://farrosfr.github.io/about/#certificates" target="_blank" rel="noreferrer" class="text-sm font-bold text-primary">Full archive</a>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {certificateGroups.map((group) => (
+        <div class="glass-card rounded-[1.5rem] p-5">
+          <h3 class="font-bold text-foreground">{group}</h3>
+          <div class="mt-4 grid gap-3">
+            {certificates.filter((item) => item.group === group).slice(0, 4).map((item) => (
+              <div class="rounded-xl border border-border/70 bg-background/65 p-3">
+                <p class="text-sm font-bold text-foreground">{item.name}</p>
+                <p class="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">{item.issuer} | {item.year}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="grid gap-8 py-12 lg:grid-cols-[0.75fr_1.25fr]">
+    <div>
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Awards</p>
+      <h2 class="text-3xl font-bold tracking-tight">Honors and competitions</h2>
+    </div>
+    <div class="grid gap-4">
+      {awards.map((item) => (
+        <article class="glass-card rounded-[1.25rem] p-5">
+          <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">{item.date}</p>
+          <h3 class="mt-2 font-bold text-foreground">{item.title}</h3>
+          <p class="mt-1 text-sm font-semibold text-muted-foreground">{item.issuer}</p>
+          <p class="mt-3 text-sm leading-6 text-muted-foreground">{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  @media print {
+    :global(header),
+    :global(footer),
+    :global([data-search-palette]) {
+      display: none !important;
+    }
+
+    :global(body) {
+      background: white !important;
+      color: black !important;
+    }
+
+    :global(.glass-card) {
+      border: 1px solid #d0d7de !important;
+      box-shadow: none !important;
+      break-inside: avoid;
+    }
+  }
+</style>
