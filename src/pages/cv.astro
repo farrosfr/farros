@@ -110,9 +110,9 @@ const certificateGroups = [...new Set(certificates.map((item) => item.group))];
       <div>
         <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Certificates</p>
         <h2 class="text-3xl font-bold tracking-tight">Selected credentials</h2>
-      </div>
-      <a href="https://farrosfr.github.io/about/#certificates" target="_blank" rel="noreferrer" class="text-sm font-bold text-primary">Full archive</a>
-    </div>
+        </div>
+        <a href="#certificates" class="text-sm font-bold text-primary">Full archive</a>
+        </div>
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {certificateGroups.map((group) => (
         <div class="glass-card rounded-[1.5rem] p-5">
