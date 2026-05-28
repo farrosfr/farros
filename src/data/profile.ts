@@ -4,7 +4,7 @@ export const profile = {
   title: 'Full-Stack Developer | Astro Contributor | Browser Extension Developer | Red Team Operator',
   email: 'hello@farros.co',
   cvPath: '/CV_Farros_2026.pdf',
-  website: 'https://farrosfr.com',
+  website: 'https://farros.co',
   github: 'https://github.com/farrosfr',
   linkedin: 'https://linkedin.com/in/farrosfr',
   x: 'https://x.com/farrosfr_',
@@ -235,10 +235,10 @@ export const featuredWork = [
     description: 'DOM-level keyword and content filtering browser extension.',
   },
   {
-    name: 'farrosfr.com',
+    name: 'farros.co',
     type: 'Writing',
-    href: 'https://farrosfr.com',
-    description: 'Substack custom domain for cybersecurity and engineering writing.',
+    href: 'https://farros.co',
+    description: 'Cybersecurity and engineering writing on my personal domain.',
   },
 ];
 
