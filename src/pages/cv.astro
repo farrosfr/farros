@@ -110,15 +110,14 @@ const certificateGroups = [...new Set(certificates.map((item) => item.group))];
       <div>
         <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Certificates</p>
         <h2 class="text-3xl font-bold tracking-tight">Selected credentials</h2>
-        </div>
-        <a href="#certificates" class="text-sm font-bold text-primary">Full archive</a>
-        </div>
+      </div>
+    </div>
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {certificateGroups.map((group) => (
         <div class="glass-card rounded-[1.5rem] p-5">
           <h3 class="font-bold text-foreground">{group}</h3>
           <div class="mt-4 grid gap-3">
-            {certificates.filter((item) => item.group === group).slice(0, 4).map((item) => (
+            {certificates.filter((item) => item.group === group).map((item) => (
               <div class="rounded-xl border border-border/70 bg-background/65 p-3">
                 <p class="text-sm font-bold text-foreground">{item.name}</p>
                 <p class="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">{item.issuer} | {item.year}</p>
