@@ -235,10 +235,10 @@ export const featuredWork = [
     description: 'DOM-level keyword and content filtering browser extension.',
   },
   {
-    name: 'farros.co',
+    name: 'farrosfr.com',
     type: 'Writing',
-    href: 'https://farros.co',
-    description: 'Cybersecurity and engineering writing on my personal domain.',
+    href: 'https://farrosfr.com',
+    description: 'Substack custom domain for cybersecurity and engineering writing.',
   },
 ];
 
