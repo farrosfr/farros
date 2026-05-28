@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { services, profile } from '../../data/profile';
+
+export function getStaticPaths() {
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const whatsappBase = "https://wa.me/6282234057613"; // Using the placeholder number from standard ID formats or user context if available
+const message = encodeURIComponent(`Hello Farros, I am interested in your ${service.title} service. Can we discuss this further?`);
+const whatsappLink = `${whatsappBase}?text=${message}`;
+---
+
+<BaseLayout title={`${service.title} | Farros Advisory`}>
+  <main class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <a href="/#services" class="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground transition-colors hover:text-primary">
+        <span class="i-lucide-arrow-left size-4"></span>
+        Back to services
+      </a>
+    </div>
+
+    <div class="grid gap-12 lg:grid-cols-2">
+      <div class="space-y-8">
+        <div>
+          <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">{service.category}</p>
+          <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">{service.title}</h1>
+          <p class="mt-6 text-lg leading-8 text-muted-foreground">{service.detailedDescription}</p>
+        </div>
+
+        <div class="glass-card rounded-[2rem] p-8">
+          <h2 class="text-xl font-bold text-foreground">Service inclusions</h2>
+          <ul class="mt-6 space-y-4">
+            {service.features.map((feature) => (
+              <li class="flex items-start gap-3">
+                <span class="i-lucide-check-circle-2 mt-0.5 size-5 shrink-0 text-primary"></span>
+                <span class="text-muted-foreground">{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="flex flex-col gap-4 sm:flex-row">
+          <a href={whatsappLink} target="_blank" rel="noreferrer" class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20">
+            {service.cta}
+          </a>
+          <a href={`mailto:${profile.email}`} class="inline-flex h-14 items-center justify-center rounded-full border border-border bg-card/70 px-10 text-sm font-bold text-foreground transition-all hover:-translate-y-1 hover:border-primary/40">
+            Send email
+          </a>
+        </div>
+      </div>
+
+      <div class="relative aspect-square overflow-hidden rounded-[2.5rem] border border-border/50 bg-muted ring-1 ring-white/10 lg:sticky lg:top-32">
+        <img 
+          src={service.image} 
+          alt={service.title} 
+          class="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent"></div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

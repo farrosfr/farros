@@ -13,6 +13,59 @@ export const profile = {
     'Statistics graduate from ITS with a professional background in data engineering, IT operations, Astro web development, browser extensions, backend tooling, and offensive security practice.',
 };
 
+export const services = [
+  {
+    title: 'High-Performance Web Architecture',
+    slug: 'web-architecture',
+    description: 'Minimalist, ultra-fast, and SEO-optimized web products built with Astro and TypeScript.',
+    detailedDescription: 'I specialize in moving away from heavy, slow frameworks to lightweight, static-first architectures. This results in superior SEO ranking, near-instant load times, and reduced maintenance costs.',
+    features: ['Astro & TypeScript implementation', 'Core Web Vitals optimization', 'Responsive Glassmorphism UI', 'Headless CMS integration'],
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1000&auto=format&fit=crop', // 1:1 placeholder
+    category: 'Development',
+    cta: 'Discuss your project',
+  },
+  {
+    title: 'Security Assessment & Risk Review',
+    slug: 'security-review',
+    description: 'Vulnerability assessments and red-team perspective audits for web applications and infrastructure.',
+    detailedDescription: 'Leveraging my experience as a cybersecurity writer and researcher, I identify critical security gaps in your systems before they can be exploited by attackers.',
+    features: ['Web application pentesting', 'Infrastructure security review', 'Risk mitigation roadmap', 'Security writing & documentation'],
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop', // 1:1 placeholder
+    category: 'Security',
+    cta: 'Secure your assets',
+  },
+  {
+    title: 'Resilient Data Infrastructure',
+    slug: 'data-engineering',
+    description: 'Automated ETL pipelines and database architecture for reliable business intelligence.',
+    detailedDescription: 'I build the "plumbing" for your data, ensuring it flows correctly from sources to your reporting tools with high integrity and minimal downtime.',
+    features: ['ETL pipeline automation', 'Database optimization (SQL/NoSQL)', 'BI tool integration', 'Data warehouse mapping'],
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop', 
+    category: 'Data',
+    cta: 'Optimize your data',
+  },
+  {
+    title: 'Custom Browser Solutions',
+    slug: 'browser-extensions',
+    description: 'Specialized browser extensions for productivity, automation, and content filtering.',
+    detailedDescription: 'Custom browser tools tailored to specific workflow needs, from DOM-level filtering to automated data extraction and privacy enhancement.',
+    features: ['Chrome & Firefox extension development', 'Workflow automation tools', 'Content & privacy filtering', 'TypeScript-based extension core'],
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop', 
+    category: 'Automation',
+    cta: 'Build your tool',
+  },
+  {
+    title: 'Infrastructure & IT Operations',
+    slug: 'it-operations',
+    description: 'Reliable VPS hosting, corporate email, and secure server configuration for growing teams.',
+    detailedDescription: 'Strategic setup and management of your digital foundation, ensuring high availability and professional-grade communication systems.',
+    features: ['VPS & Hosting management', 'Corporate email setup', 'Security configuration', 'Operational IT support'],
+    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop', 
+    category: 'Infrastructure',
+    cta: 'Set up foundation',
+  },
+];
+
 export const heroMetrics = [
   { label: 'Production Sites', value: '10+' },
   { label: 'Security Articles', value: '70+' },
@@ -232,6 +285,7 @@ export const awards = [
 ];
 
 export const navItems = [
+  { name: 'Services', href: '/#services' },
   { name: 'Work', href: '/#projects' },
   { name: 'Profile', href: '/#about' },
   { name: 'CV', href: '/cv' },
@@ -239,6 +293,8 @@ export const navItems = [
 ];
 
 export const searchItems = [
+  { title: 'Services', description: 'View professional advisory services.', href: '/#services', type: 'Services' },
+  ...services.map((item) => ({ title: item.title, description: item.description, href: `/services/${item.slug}`, type: 'Service' })),
   { title: 'View CV', description: 'Open the designed web CV page.', href: '/cv', type: 'CV' },
   { title: 'Download PDF', description: 'Download the 2026 CV PDF.', href: profile.cvPath, type: 'Document' },
   { title: 'Certificates', description: 'Review highlighted certificates and credentials.', href: '/cv#certificates', type: 'CV' },
