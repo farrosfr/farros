@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import UnoCSS from 'unocss/astro';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
@@ -8,5 +9,6 @@ export default defineConfig({
     UnoCSS({
       injectReset: true,
     }),
+    sitemap(),
   ],
 });
