@@ -14,6 +14,9 @@ const {
   title = 'Farros | Full-Stack Developer & Cybersecurity Researcher', 
   description = 'Astro developer, system architect, data engineer, browser extension developer, and cybersecurity writer building practical web and infrastructure systems.' 
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL('/logo.png', Astro.site);
 ---
 
 <!doctype html>
@@ -21,6 +24,7 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="canonical" href={canonicalURL} />
     <script is:inline>
       const themeMode = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -38,7 +42,15 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/logo.png" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={socialImageURL} />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@farrosfr_" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+    
     <meta name="theme-color" content="#070b12" />
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
