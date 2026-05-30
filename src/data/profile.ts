@@ -120,6 +120,16 @@ export const experience = [
 
 export const projects = [
   {
+    name: 'Zenix Theme',
+    domain: 'Astro Theme Directory',
+    category: 'Astro',
+    description: 'High-performance, minimalist Astro theme for technical personal brands.',
+    outcome: 'Published on official Astro theme directory',
+    href: 'https://zenix.farros.co',
+    image: '/projects/zenix-farros-co.png',
+    size: 'medium',
+  },
+  {
     name: 'KIW Commerce',
     domain: 'Industrial E-commerce',
     category: 'E-commerce',
