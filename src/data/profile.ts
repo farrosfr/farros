@@ -127,7 +127,7 @@ export const projects = [
     outcome: 'Published on official Astro theme directory',
     href: 'https://zenix.farros.co',
     image: '/projects/zenix-farros-co.png',
-    size: 'medium',
+    size: 'small',
   },
   {
     name: 'KIW Commerce',
