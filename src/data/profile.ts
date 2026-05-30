@@ -150,6 +150,16 @@ export const projects = [
     size: 'small',
   },
   {
+    name: 'Ngajiin',
+    domain: 'Education Platform',
+    category: 'Education',
+    description: 'Islamic learning platform for streamlined student management and progress tracking.',
+    outcome: 'Learning management, student monitoring',
+    href: 'https://ngajiin.web.id',
+    image: '/projects/ngajiin-web-id.png',
+    size: 'small',
+  },
+  {
     name: 'SonusHUB',
     domain: 'B2B Marketplace',
     category: 'Marketplace',
