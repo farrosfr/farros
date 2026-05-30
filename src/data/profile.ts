@@ -140,16 +140,6 @@ export const projects = [
     size: 'large',
   },
   {
-    name: 'SonusHUB',
-    domain: 'B2B Marketplace',
-    category: 'Marketplace',
-    description: 'Marketplace for electrical and renewable energy materials.',
-    outcome: 'Marketplace experience, supplier navigation, commerce handoff',
-    href: 'https://sonushub.id',
-    image: '/projects/sonushub-id.png',
-    size: 'medium',
-  },
-  {
     name: 'AESI Marketplace',
     domain: 'Solar Association Commerce',
     category: 'E-commerce',
@@ -158,6 +148,16 @@ export const projects = [
     href: 'https://ecommerce.aesi.or.id',
     image: '/projects/ecommerce-aesi-or-id.png',
     size: 'small',
+  },
+  {
+    name: 'SonusHUB',
+    domain: 'B2B Marketplace',
+    category: 'Marketplace',
+    description: 'Marketplace for electrical and renewable energy materials.',
+    outcome: 'Marketplace experience, supplier navigation, commerce handoff',
+    href: 'https://sonushub.id',
+    image: '/projects/sonushub-id.png',
+    size: 'medium',
   },
   {
     name: 'AESI',
