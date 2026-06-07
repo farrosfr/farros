@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://farros.co/sitemap-index.xml
