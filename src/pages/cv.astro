@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { awards, capabilities, certificates, experience, featuredWork, profile, projects } from '../data/profile';
+import { awards, capabilities, certificates, experience, featuredProjects, featuredWork, profile } from '../data/profile';
 
 const certificateGroups = [...new Set(certificates.map((item) => item.group))];
 ---
@@ -65,12 +65,15 @@ const certificateGroups = [...new Set(certificates.map((item) => item.group))];
     <div class="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
       <div>
         <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Projects</p>
-        <h2 class="text-3xl font-bold tracking-tight">Live web portfolio</h2>
+        <h2 class="text-3xl font-bold tracking-tight">Top web highlights</h2>
       </div>
-      <p class="max-w-lg text-sm leading-6 text-muted-foreground">Production sites and product pages across e-commerce, energy, education, and services.</p>
+      <a href="/web-porto/" class="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-5 text-sm font-bold text-foreground transition-all hover:-translate-y-1 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50">
+        See full web portfolio
+        <span class="i-lucide-arrow-right size-4"></span>
+      </a>
     </div>
     <div class="grid gap-4 md:grid-cols-3">
-      {projects.slice(0, 6).map((project) => (
+      {featuredProjects.map((project) => (
         <a href={project.href} target="_blank" rel="noreferrer" class="glass-card overflow-hidden rounded-[1.25rem]">
           <img src={project.image} alt={`${project.name} screenshot`} class="h-36 w-full object-cover object-top" loading="lazy" />
           <div class="p-5">
