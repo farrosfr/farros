@@ -45,6 +45,16 @@ export const services = [
     cta: 'Optimize your data',
   },
   {
+    title: 'AI & Automation',
+    slug: 'ai-automation',
+    description: 'Practical AI assistants, workflow automation, and integrations that reduce repetitive operational work.',
+    detailedDescription: 'I design AI-assisted workflows and automation layers that connect existing tools, clean up manual handoffs, and make day-to-day operations faster without forcing teams into an oversized platform rebuild.',
+    features: ['AI assistant workflow design', 'Internal tool and API integrations', 'Process automation for repetitive tasks', 'Reporting, routing, and handoff automation'],
+    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&auto=format&fit=crop',
+    category: 'AI',
+    cta: 'Automate your workflow',
+  },
+  {
     title: 'Custom Browser Solutions',
     slug: 'browser-extensions',
     description: 'Specialized browser extensions for productivity, automation, and content filtering.',
@@ -75,6 +85,7 @@ export const heroMetrics = [
 
 export const capabilities = [
   'Astro, TypeScript, Tailwind, and static-first web products',
+  'AI-assisted workflows, automation systems, and practical tool integrations',
   'VPS, hosting, corporate email, website, and e-commerce operations',
   'ETL architecture, PostgreSQL, SQL Server, NoSQL, dashboards, and reporting',
   'Browser extensions, privacy tooling, and red-team security writing',
@@ -83,16 +94,16 @@ export const capabilities = [
 
 export const experience = [
   {
-    date: 'Apr 2023 - Present',
+    date: 'Jan 2026 - Present',
     role: 'System Architect',
-    company: 'PT Tripower Solar Nusantara',
+    company: 'Solar Nusantara',
     location: 'Yogyakarta',
     content:
-      'Supports VPS servers, internal hosting, corporate email, security configuration, websites, e-commerce product databases, and onsite IT operations.',
+      'Leads architecture, design, and maintenance for company websites and platforms including solar-nusantara.id, sonus-hub.id, sonus-epc.id, and indonesia-terang.id.',
     bullets: [
-      'Develops and maintains aesi.or.id, solar-nusantara.id, sonus-hub.id, sonus-epc.id, and indonesia-terang.id.',
-      'Organizes e-commerce product data structures, updates, and integration needs.',
-      'Keeps operational infrastructure stable across departments.',
+      'Defines system architecture, technology stack selection, and long-term scalability.',
+      'Modernizes public web platforms with Astro-focused performance and SEO practices.',
+      'Maintains production websites and platform reliability for renewable energy operations.',
     ],
   },
   {
@@ -103,6 +114,30 @@ export const experience = [
     content:
       'Writes practical cybersecurity notes with a red-team perspective across Medium publications such as InfoSec Write-ups, System Weakness, and OSINT Team.',
     bullets: ['Published 70+ cybersecurity articles.', 'Focuses on offensive security, OSINT, and applied security learning.'],
+  },
+  {
+    date: 'Sep 2023 - Dec 2025',
+    role: 'Information Technology Engineer',
+    company: 'Solar Nusantara',
+    location: 'Yogyakarta',
+    content:
+      'Designed, installed, maintained, tested, configured, and troubleshot server, mail, website, and networking systems for operational needs.',
+    bullets: [
+      'Maintained internal hosting, company websites, mail systems, and supporting infrastructure.',
+      'Handled troubleshooting and configuration work across server, website, and network systems.',
+    ],
+  },
+  {
+    date: 'Apr 2023 - Sep 2023',
+    role: 'Data Specialist',
+    company: 'PT Tripower Solar Nusantara',
+    location: 'Yogyakarta',
+    content:
+      'Led digital-sector responsibilities from database management to corporate and e-commerce website development and maintenance.',
+    bullets: [
+      'Managed database and web operations across corporate and commerce sites.',
+      'Supported product data structure and digital workflow needs.',
+    ],
   },
   {
     date: 'Nov 2019 - Apr 2023',
@@ -128,6 +163,7 @@ export const projects = [
     href: 'https://zenix.farros.co',
     image: '/projects/zenix-farros-co.png',
     size: 'small',
+    featured: true,
   },
   {
     name: 'KIW Commerce',
@@ -138,6 +174,18 @@ export const projects = [
     href: 'https://shop.kiw.co.id',
     image: '/projects/shop-kiw-co-id.png',
     size: 'large',
+    featured: true,
+  },
+  {
+    name: 'Gladys',
+    domain: 'AI Education',
+    category: 'Education',
+    description: 'AI education companion website for helping high school students explore majors and career paths.',
+    outcome: 'Education landing page, service positioning, conversion flow',
+    href: 'https://tentang.gladys.id',
+    image: '/projects/tentang-gladys-id.png',
+    size: 'medium',
+    featured: true,
   },
   {
     name: 'AESI Marketplace',
@@ -148,6 +196,7 @@ export const projects = [
     href: 'https://ecommerce.aesi.or.id',
     image: '/projects/ecommerce-aesi-or-id.png',
     size: 'small',
+    featured: true,
   },
   {
     name: 'Ngajiin',
@@ -158,6 +207,7 @@ export const projects = [
     href: 'https://ngajiin.web.id',
     image: '/projects/ngajiin-web-id.png',
     size: 'small',
+    featured: true,
   },
   {
     name: 'SonusHUB',
@@ -168,6 +218,7 @@ export const projects = [
     href: 'https://sonushub.id',
     image: '/projects/sonushub-id.png',
     size: 'medium',
+    featured: true,
   },
   {
     name: 'AESI',
@@ -241,6 +292,8 @@ export const projects = [
   },
 ];
 
+export const featuredProjects = projects.filter((project) => project.featured);
+
 export const featuredWork = [
   {
     name: 'Zenix',
@@ -275,6 +328,7 @@ export const certificates = [
   { year: '2024', name: 'Working with the OpenAI API', issuer: 'DataCamp', group: 'AI' },
   { year: '2024', name: 'Responsive Web Design', issuer: 'freeCodeCamp', group: 'Web Development' },
   { year: '2024', name: 'Introduction to Information Security', issuer: 'Cyber Academy Indonesia', group: 'Cybersecurity' },
+  { year: '2019', name: 'R Programming for Data Science', issuer: 'idata1011 Data Science Community', group: 'Data/SQL' },
 ];
 
 export const awards = [
@@ -305,15 +359,14 @@ export const awards = [
 ];
 
 export const navItems = [
-  { name: 'Services', href: '/#services' },
-  { name: 'Work', href: '/#projects' },
-  { name: 'Profile', href: '/#about' },
+  { name: 'Web Porto', href: '/web-porto/' },
   { name: 'CV', href: '/cv' },
   { name: 'Contact', href: `mailto:${profile.email}` },
 ];
 
 export const searchItems = [
   { title: 'Services', description: 'View professional advisory services.', href: '/#services', type: 'Services' },
+  { title: 'Web Portfolio', description: 'See the full website portfolio.', href: '/web-porto/', type: 'Portfolio' },
   ...services.map((item) => ({ title: item.title, description: item.description, href: `/services/${item.slug}`, type: 'Service' })),
   { title: 'View CV', description: 'Open the designed web CV page.', href: '/cv', type: 'CV' },
   { title: 'Download PDF', description: 'Download the 2026 CV PDF.', href: profile.cvPath, type: 'Document' },
