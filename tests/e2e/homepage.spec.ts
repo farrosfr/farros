@@ -9,10 +9,19 @@ test.describe('premium portfolio', () => {
     await expect(page.getByRole('heading', { name: /Production websites/i })).toBeVisible();
     await expect(page.getByRole('heading', { name: /Full-stack builder/i })).toBeVisible();
 
-    for (const asset of ['/logo.png', '/favicon.ico', '/favicon.png', '/CV_Farros_2026.pdf', '/projects/shop-kiw-co-id.png']) {
+    // Static assets that should always 200
+    for (const asset of ['/logo.png', '/favicon.ico', '/favicon.png', '/CV_Farros_2026.pdf']) {
       const response = await request.get(asset);
       expect(response.status(), asset).toBe(200);
     }
+
+    // At least one rendered project screenshot must load. astro:assets
+    // emits hashed _astro/...webp paths at build time, so we scrape the
+    // first one from the page and verify it returns 200.
+    const projectSrc = await page.locator('img[alt*="screenshot"]').first().getAttribute('src');
+    expect(projectSrc, 'project screenshot src').toBeTruthy();
+    const projectResponse = await request.get(projectSrc!);
+    expect(projectResponse.status(), projectSrc!).toBe(200);
   });
 
   test('defaults to system theme and supports light/dark override', async ({ browser }) => {

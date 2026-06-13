@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img" aria-label="Data engineering pipelines">
+  <defs>
+    <linearGradient id="bg-de" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a1428"/>
+      <stop offset="100%" stop-color="#040813"/>
+    </linearGradient>
+    <linearGradient id="flow-de" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1dd5ed" stop-opacity="0.0"/>
+      <stop offset="50%" stop-color="#1dd5ed" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#3b8eff" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="1000" fill="url(#bg-de)"/>
+  <g fill="none" stroke="#1c2c4a" stroke-width="1.5" opacity="0.5">
+    <ellipse cx="500" cy="240" rx="220" ry="40"/>
+    <ellipse cx="500" cy="240" rx="220" ry="40" transform="translate(0 60)"/>
+    <ellipse cx="500" cy="240" rx="220" ry="40" transform="translate(0 120)"/>
+    <line x1="280" y1="240" x2="280" y2="360"/>
+    <line x1="720" y1="240" x2="720" y2="360"/>
+    <line x1="500" y1="240" x2="500" y2="360"/>
+  </g>
+  <g fill="#3b8eff" opacity="0.85">
+    <ellipse cx="500" cy="240" rx="220" ry="40"/>
+  </g>
+  <g fill="#1a2540" opacity="0.85" stroke="#3b8eff" stroke-width="1.5">
+    <ellipse cx="500" cy="300" rx="220" ry="40"/>
+    <ellipse cx="500" cy="360" rx="220" ry="40"/>
+  </g>
+  <g stroke="url(#flow-de)" stroke-width="3" fill="none">
+    <path d="M380 420 Q380 540 240 540 L240 600"/>
+    <path d="M500 420 L500 600"/>
+    <path d="M620 420 Q620 540 760 540 L760 600"/>
+  </g>
+  <g fill="#0a1428" stroke="#1dd5ed" stroke-width="2">
+    <rect x="120" y="600" width="240" height="160" rx="10"/>
+    <rect x="380" y="600" width="240" height="160" rx="10"/>
+    <rect x="640" y="600" width="240" height="160" rx="10"/>
+  </g>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#1dd5ed">
+    <text x="148" y="650">etl.extract()</text>
+    <text x="148" y="678" fill="#a0aec0" font-size="10">from: postgres</text>
+    <text x="408" y="650">etl.transform()</text>
+    <text x="408" y="678" fill="#a0aec0" font-size="10">window: 24h</text>
+    <text x="668" y="650">etl.load()</text>
+    <text x="668" y="678" fill="#a0aec0" font-size="10">to: warehouse</text>
+  </g>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#3b8eff">
+    <text x="380" y="232" font-weight="bold">postgres.primary</text>
+  </g>
+  <g fill="#1dd5ed" opacity="0.6">
+    <circle cx="240" cy="540" r="3"/>
+    <circle cx="500" cy="540" r="3"/>
+    <circle cx="760" cy="540" r="3"/>
+  </g>
+</svg>

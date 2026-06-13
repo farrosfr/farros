@@ -62,6 +62,40 @@ const socialImageURL = new URL('/logo.png', Astro.site);
       jobTitle: profile.title
     })} />
     <ClientRouter />
+    <script is:inline>
+      // Scroll-reveal: adds .is-revealed to [data-reveal] elements when
+      // they enter the viewport. Tiny vanilla IntersectionObserver, no
+      // animation library. Stagger is controlled per-element via the
+      // --reveal-delay CSS custom property (e.g. style="--reveal-delay: 120ms").
+      function setupReveal() {
+        const targets = document.querySelectorAll('[data-reveal]:not(.is-revealed)');
+        if (!targets.length) return;
+
+        if (!('IntersectionObserver' in window)) {
+          targets.forEach((el) => el.classList.add('is-revealed'));
+          return;
+        }
+
+        const observer = new IntersectionObserver((entries, obs) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              obs.unobserve(entry.target);
+            }
+          }
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+        targets.forEach((el) => observer.observe(el));
+      }
+
+      // Run once on initial load and again after every Astro view transition.
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupReveal);
+      } else {
+        setupReveal();
+      }
+      document.addEventListener('astro:page-load', setupReveal);
+    </script>
   </head>
   <body class="bg-background text-foreground font-sans antialiased flex flex-col min-h-screen selection:bg-primary/30 selection:text-foreground">
     <Header />

@@ -9,8 +9,25 @@ export const profile = {
   linkedin: 'https://linkedin.com/in/farrosfr',
   x: 'https://x.com/farrosfr_',
   medium: 'https://farrosfr.medium.com',
+  whatsapp: '6282234057613',
   summary:
     'Statistics graduate from ITS with a professional background in data engineering, IT operations, Astro web development, browser extensions, backend tooling, and offensive security practice.',
+};
+
+// Project screenshots live in /src/assets/projects/. The data layer only
+// stores the filename; the consuming .astro component uses import.meta.glob
+// (which works correctly in .astro context) to resolve ImageMetadata, then
+// passes it to <Image /> from astro:assets for AVIF/WebP + srcset + lazy.
+export type ProjectEntry = {
+  name: string;
+  domain: string;
+  category: string;
+  description: string;
+  outcome: string;
+  href: string;
+  image: string;
+  size: 'small' | 'medium' | 'large';
+  featured?: boolean;
 };
 
 export const services = [
@@ -20,7 +37,7 @@ export const services = [
     description: 'Minimalist, ultra-fast, and SEO-optimized web products built with Astro and TypeScript.',
     detailedDescription: 'I specialize in moving away from heavy, slow frameworks to lightweight, static-first architectures. This results in superior SEO ranking, near-instant load times, and reduced maintenance costs.',
     features: ['Astro & TypeScript implementation', 'Core Web Vitals optimization', 'Responsive Glassmorphism UI', 'Headless CMS integration'],
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=1000&auto=format&fit=crop', // 1:1 placeholder
+    image: '/services/web-architecture.svg',
     category: 'Development',
     cta: 'Discuss your project',
   },
@@ -30,7 +47,7 @@ export const services = [
     description: 'Vulnerability assessments and red-team perspective audits for web applications and infrastructure.',
     detailedDescription: 'Leveraging my experience as a cybersecurity writer and researcher, I identify critical security gaps in your systems before they can be exploited by attackers.',
     features: ['Web application pentesting', 'Infrastructure security review', 'Risk mitigation roadmap', 'Security writing & documentation'],
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop', // 1:1 placeholder
+    image: '/services/security-review.svg',
     category: 'Security',
     cta: 'Secure your assets',
   },
@@ -40,7 +57,7 @@ export const services = [
     description: 'Automated ETL pipelines and database architecture for reliable business intelligence.',
     detailedDescription: 'I build the "plumbing" for your data, ensuring it flows correctly from sources to your reporting tools with high integrity and minimal downtime.',
     features: ['ETL pipeline automation', 'Database optimization (SQL/NoSQL)', 'BI tool integration', 'Data warehouse mapping'],
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop', 
+    image: '/services/data-engineering.svg', 
     category: 'Data',
     cta: 'Optimize your data',
   },
@@ -50,7 +67,7 @@ export const services = [
     description: 'Practical AI assistants, workflow automation, and integrations that reduce repetitive operational work.',
     detailedDescription: 'I design AI-assisted workflows and automation layers that connect existing tools, clean up manual handoffs, and make day-to-day operations faster without forcing teams into an oversized platform rebuild.',
     features: ['AI assistant workflow design', 'Internal tool and API integrations', 'Process automation for repetitive tasks', 'Reporting, routing, and handoff automation'],
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&auto=format&fit=crop',
+    image: '/services/ai-automation.svg',
     category: 'AI',
     cta: 'Automate your workflow',
   },
@@ -60,7 +77,7 @@ export const services = [
     description: 'Specialized browser extensions for productivity, automation, and content filtering.',
     detailedDescription: 'Custom browser tools tailored to specific workflow needs, from DOM-level filtering to automated data extraction and privacy enhancement.',
     features: ['Chrome & Firefox extension development', 'Workflow automation tools', 'Content & privacy filtering', 'TypeScript-based extension core'],
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop', 
+    image: '/services/browser-extensions.svg', 
     category: 'Automation',
     cta: 'Build your tool',
   },
@@ -70,7 +87,7 @@ export const services = [
     description: 'Reliable VPS hosting, corporate email, and secure server configuration for growing teams.',
     detailedDescription: 'Strategic setup and management of your digital foundation, ensuring high availability and professional-grade communication systems.',
     features: ['VPS & Hosting management', 'Corporate email setup', 'Security configuration', 'Operational IT support'],
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop', 
+    image: '/services/it-operations.svg', 
     category: 'Infrastructure',
     cta: 'Set up foundation',
   },
@@ -79,7 +96,7 @@ export const services = [
 export const heroMetrics = [
   { label: 'Production Sites', value: '10+' },
   { label: 'Security Articles', value: '70+' },
-  { label: 'Astro Theme', value: 'Zenix' },
+  { label: 'Astro Theme', value: '1' },
   { label: 'Data Experience', value: '5y+' },
 ];
 
@@ -161,7 +178,7 @@ export const projects = [
     description: 'High-performance, minimalist Astro theme for technical personal brands.',
     outcome: 'Published on official Astro theme directory',
     href: 'https://zenix.farros.co',
-    image: '/projects/zenix-farros-co.png',
+    image: 'zenix-farros-co.png',
     size: 'small',
     featured: true,
   },
@@ -172,7 +189,7 @@ export const projects = [
     description: 'Procurement platform for industrial, energy, and utility materials.',
     outcome: 'Product catalog, procurement flow, B2B/B2G commerce',
     href: 'https://shop.kiw.co.id',
-    image: '/projects/shop-kiw-co-id.png',
+    image: 'shop-kiw-co-id.png',
     size: 'large',
     featured: true,
   },
@@ -183,7 +200,7 @@ export const projects = [
     description: 'AI education companion website for helping high school students explore majors and career paths.',
     outcome: 'Education landing page, service positioning, conversion flow',
     href: 'https://tentang.gladys.id',
-    image: '/projects/tentang-gladys-id.png',
+    image: 'tentang-gladys-id.png',
     size: 'medium',
     featured: true,
   },
@@ -194,7 +211,7 @@ export const projects = [
     description: 'Marketplace experience for Indonesia solar energy association commerce needs.',
     outcome: 'Association storefront and product discovery',
     href: 'https://ecommerce.aesi.or.id',
-    image: '/projects/ecommerce-aesi-or-id.png',
+    image: 'ecommerce-aesi-or-id.png',
     size: 'small',
     featured: true,
   },
@@ -205,7 +222,7 @@ export const projects = [
     description: 'Islamic learning platform for streamlined student management and progress tracking.',
     outcome: 'Learning management, student monitoring',
     href: 'https://ngajiin.web.id',
-    image: '/projects/ngajiin-web-id.png',
+    image: 'ngajiin-web-id.png',
     size: 'small',
     featured: true,
   },
@@ -216,7 +233,7 @@ export const projects = [
     description: 'Marketplace for electrical and renewable energy materials.',
     outcome: 'Marketplace experience, supplier navigation, commerce handoff',
     href: 'https://sonushub.id',
-    image: '/projects/sonushub-id.png',
+    image: 'sonushub-id.png',
     size: 'medium',
     featured: true,
   },
@@ -227,7 +244,7 @@ export const projects = [
     description: 'Main web presence for Asosiasi Energi Surya Indonesia.',
     outcome: 'Association identity, member access, public information',
     href: 'https://aesi.or.id',
-    image: '/projects/aesi-or-id.png',
+    image: 'aesi-or-id.png',
     size: 'small',
   },
   {
@@ -237,7 +254,7 @@ export const projects = [
     description: 'Renewable energy company website and operational digital presence.',
     outcome: 'Brand site, energy services, infrastructure visibility',
     href: 'https://solar-nusantara.id',
-    image: '/projects/solar-nusantara-id.png',
+    image: 'solar-nusantara-id.png',
     size: 'medium',
   },
   {
@@ -247,7 +264,7 @@ export const projects = [
     description: 'B2B material platform for electrical and renewable energy needs.',
     outcome: 'Lead generation, product positioning, partner trust',
     href: 'https://sonus-hub.id',
-    image: '/projects/sonus-hub-id.png',
+    image: 'sonus-hub-id.png',
     size: 'small',
   },
   {
@@ -257,7 +274,7 @@ export const projects = [
     description: 'Clean and renewable energy solutions website for EPC services.',
     outcome: 'Service communication and project positioning',
     href: 'https://sonus-epc.id',
-    image: '/projects/sonus-epc-id.png',
+    image: 'sonus-epc-id.png',
     size: 'small',
   },
   {
@@ -267,7 +284,7 @@ export const projects = [
     description: 'Energy and sustainability platform for impact-oriented reporting.',
     outcome: 'Sustainability communication and reporting presence',
     href: 'https://indonesia-terang.id',
-    image: '/projects/indonesia-terang-id.png',
+    image: 'indonesia-terang-id.png',
     size: 'small',
   },
   {
@@ -277,7 +294,7 @@ export const projects = [
     description: 'AI learning platform for WhatsApp-based student questions and teacher monitoring.',
     outcome: 'AI product page, education positioning, conversion flow',
     href: 'https://kidiko.id',
-    image: '/projects/kidiko-id.png',
+    image: 'kidiko-id.png',
     size: 'small',
   },
   {
@@ -287,7 +304,7 @@ export const projects = [
     description: 'Industrial catering website for business-scale food service operations.',
     outcome: 'Service trust, client communication, lead generation',
     href: 'https://aurora-nutrima.id',
-    image: '/projects/aurora-nutrima-id.png',
+    image: 'aurora-nutrima-id.png',
     size: 'small',
   },
 ];

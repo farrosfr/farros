@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img" aria-label="AI and automation neural network">
+  <defs>
+    <linearGradient id="bg-ai" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0f24"/>
+      <stop offset="100%" stop-color="#04060f"/>
+    </linearGradient>
+    <radialGradient id="node-ai" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#1dd5ed"/>
+      <stop offset="100%" stop-color="#3b8eff"/>
+    </radialGradient>
+  </defs>
+  <rect width="1000" height="1000" fill="url(#bg-ai)"/>
+  <g stroke="#1c2c4a" stroke-width="1" opacity="0.5">
+    <line x1="0" y1="200" x2="1000" y2="200"/>
+    <line x1="0" y1="400" x2="1000" y2="400"/>
+    <line x1="0" y1="600" x2="1000" y2="600"/>
+    <line x1="0" y1="800" x2="1000" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="1000"/>
+    <line x1="400" y1="0" x2="400" y2="1000"/>
+    <line x1="600" y1="0" x2="600" y2="1000"/>
+    <line x1="800" y1="0" x2="800" y2="1000"/>
+  </g>
+  <g stroke="#1dd5ed" stroke-width="1" opacity="0.35" fill="none">
+    <line x1="200" y1="200" x2="400" y2="200"/>
+    <line x1="200" y1="200" x2="400" y2="400"/>
+    <line x1="200" y1="400" x2="400" y2="200"/>
+    <line x1="200" y1="400" x2="400" y2="400"/>
+    <line x1="200" y1="600" x2="400" y2="400"/>
+    <line x1="200" y1="600" x2="400" y2="600"/>
+    <line x1="200" y1="800" x2="400" y2="600"/>
+    <line x1="200" y1="800" x2="400" y2="800"/>
+    <line x1="400" y1="200" x2="600" y2="200"/>
+    <line x1="400" y1="200" x2="600" y2="400"/>
+    <line x1="400" y1="200" x2="600" y2="600"/>
+    <line x1="400" y1="400" x2="600" y2="200"/>
+    <line x1="400" y1="400" x2="600" y2="400"/>
+    <line x1="400" y1="400" x2="600" y2="600"/>
+    <line x1="400" y1="600" x2="600" y2="400"/>
+    <line x1="400" y1="600" x2="600" y2="600"/>
+    <line x1="400" y1="600" x2="600" y2="800"/>
+    <line x1="400" y1="800" x2="600" y2="600"/>
+    <line x1="400" y1="800" x2="600" y2="800"/>
+    <line x1="600" y1="200" x2="800" y2="400"/>
+    <line x1="600" y1="400" x2="800" y2="400"/>
+    <line x1="600" y1="400" x2="800" y2="600"/>
+    <line x1="600" y1="600" x2="800" y2="400"/>
+    <line x1="600" y1="600" x2="800" y2="600"/>
+    <line x1="600" y1="800" x2="800" y2="600"/>
+    <line x1="600" y1="800" x2="800" y2="800"/>
+  </g>
+  <g>
+    <circle cx="200" cy="200" r="22" fill="url(#node-ai)"/>
+    <circle cx="200" cy="400" r="22" fill="url(#node-ai)"/>
+    <circle cx="200" cy="600" r="22" fill="url(#node-ai)"/>
+    <circle cx="200" cy="800" r="22" fill="url(#node-ai)"/>
+    <circle cx="400" cy="200" r="28" fill="url(#node-ai)"/>
+    <circle cx="400" cy="400" r="28" fill="url(#node-ai)"/>
+    <circle cx="400" cy="600" r="28" fill="url(#node-ai)"/>
+    <circle cx="400" cy="800" r="28" fill="url(#node-ai)"/>
+    <circle cx="600" cy="200" r="28" fill="url(#node-ai)"/>
+    <circle cx="600" cy="400" r="28" fill="url(#node-ai)"/>
+    <circle cx="600" cy="600" r="28" fill="url(#node-ai)"/>
+    <circle cx="600" cy="800" r="28" fill="url(#node-ai)"/>
+    <circle cx="800" cy="400" r="22" fill="url(#node-ai)"/>
+    <circle cx="800" cy="600" r="22" fill="url(#node-ai)"/>
+    <circle cx="800" cy="800" r="22" fill="url(#node-ai)"/>
+  </g>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#1dd5ed" opacity="0.6">
+    <text x="170" y="190">x0</text>
+    <text x="170" y="390">x1</text>
+    <text x="170" y="590">x2</text>
+    <text x="170" y="790">x3</text>
+    <text x="828" y="400">y0</text>
+    <text x="828" y="600">y1</text>
+    <text x="828" y="800">y2</text>
+  </g>
+</svg>

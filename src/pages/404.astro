@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/profile';
+
+const quickLinks = [
+  { href: '/', label: 'Home', description: 'Return to the homepage.' },
+  { href: '/web-porto/', label: 'Web Portfolio', description: 'Browse all production websites.' },
+  { href: '/cv', label: 'CV', description: 'Open the web CV and credentials.' },
+  { href: '/#services', label: 'Services', description: 'See the advisory service catalog.' },
+  { href: profile.medium, label: 'Writing', description: 'Cybersecurity and engineering notes.', external: true },
+  { href: `mailto:${profile.email}`, label: 'Email', description: 'Direct inquiry.', external: true },
+];
+---
+
+<BaseLayout
+  title={`Page not found | ${profile.shortName}`}
+  description="The page you are looking for does not exist or has been moved."
+>
+  <section class="grid min-h-[calc(100vh-12rem)] items-center py-16 md:py-24" data-reveal>
+    <div class="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Error 404</p>
+      <h1 class="text-6xl font-bold leading-[0.95] tracking-tight text-foreground sm:text-7xl md:text-8xl">
+        Lost in the stack.
+      </h1>
+      <p class="mt-6 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
+        The page you are looking for does not exist, has moved, or the link is stale.
+        Use one of the routes below or hit
+        <kbd class="mx-1 rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground">Ctrl K</kbd>
+        to search the site.
+      </p>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a
+          href="/"
+          class="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50"
+        >
+          <span class="i-lucide-arrow-left size-4"></span>
+          Back to home
+        </a>
+        <a
+          href="/web-porto/"
+          class="inline-flex h-14 items-center justify-center rounded-full border border-border bg-card/70 px-7 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+        >
+          Review work
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-20 md:pb-28" data-reveal>
+    <div class="glass-card rounded-[1.5rem] p-6 sm:p-8">
+      <p class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-primary">Common routes</p>
+      <ul class="grid gap-3 sm:grid-cols-2">
+        {quickLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noreferrer' : undefined}
+              class="group flex items-center gap-4 rounded-2xl border border-border/70 bg-background/65 p-4 transition-colors hover:border-primary/40"
+            >
+              <span class="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background font-mono text-[10px] font-bold uppercase text-primary">
+                {link.label.slice(0, 1)}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-sm font-bold text-foreground">{link.label}</span>
+                <span class="block truncate text-xs text-muted-foreground">{link.description}</span>
+              </span>
+              <span class="i-lucide-arrow-up-right size-4 text-muted-foreground transition-colors group-hover:text-primary"></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
