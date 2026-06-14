@@ -1,0 +1,76 @@
+---
+/**
+ * AvailabilityBadge — small pill with a status dot. Reads from
+ * profile.availability (configured statically in src/data/profile.ts).
+ * Three status values: 'available' (green), 'limited' (amber), 'busy' (red).
+ *
+ * The 'size' prop lets callers choose between 'sm' (inline in a tight
+ * card header) and 'md' (standalone on a page section).
+ */
+type Availability = {
+  status: 'available' | 'limited' | 'busy';
+  label: string;
+  nextSlot?: string;
+};
+
+interface Props {
+  availability: Availability;
+  size?: 'sm' | 'md';
+  showNextSlot?: boolean;
+}
+
+const { availability, size = 'sm', showNextSlot = false } = Astro.props;
+
+const colorMap: Record<Availability['status'], { dot: string; ping: string; text: string; border: string; bg: string }> = {
+  available: {
+    dot: 'bg-emerald-500',
+    ping: 'bg-emerald-400',
+    text: 'text-emerald-600 dark:text-emerald-300',
+    border: 'border-emerald-500/30',
+    bg: 'bg-emerald-500/10',
+  },
+  limited: {
+    dot: 'bg-amber-500',
+    ping: 'bg-amber-400',
+    text: 'text-amber-600 dark:text-amber-300',
+    border: 'border-amber-500/30',
+    bg: 'bg-amber-500/10',
+  },
+  busy: {
+    dot: 'bg-rose-500',
+    ping: 'bg-rose-400',
+    text: 'text-rose-600 dark:text-rose-300',
+    border: 'border-rose-500/30',
+    bg: 'bg-rose-500/10',
+  },
+};
+
+const colors = colorMap[availability.status];
+
+const padding = size === 'md' ? 'px-4 py-2 text-xs' : 'px-3 py-1 text-[10px]';
+const dotSize = size === 'md' ? 'h-2.5 w-2.5' : 'h-2 w-2';
+---
+
+<span
+  data-availability-badge
+  data-status={availability.status}
+  class:list={[
+    'inline-flex w-fit items-center gap-2 rounded-full border font-bold uppercase tracking-[0.18em]',
+    padding,
+    colors.border,
+    colors.bg,
+    colors.text,
+  ]}
+>
+  <span class:list={['relative flex', dotSize]}>
+    <span class:list={['absolute inline-flex h-full w-full animate-ping rounded-full opacity-75', colors.ping]}></span>
+    <span class:list={['relative inline-flex h-full w-full rounded-full', colors.dot]}></span>
+  </span>
+  {availability.label}
+</span>
+
+{showNextSlot && availability.nextSlot && (
+  <p class:list={['mt-3 text-sm leading-6 text-muted-foreground']}>
+    {availability.nextSlot}
+  </p>
+)}

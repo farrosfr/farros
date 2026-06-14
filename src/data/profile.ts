@@ -10,6 +10,20 @@ export const profile = {
   x: 'https://x.com/farrosfr_',
   medium: 'https://farrosfr.medium.com',
   whatsapp: '6282234057613',
+  /**
+   * Static availability signal. Used by the AvailabilityBadge component
+   * on the home page and /contact. To go from "available" to "busy" or
+   * to update the next slot, just edit the values below and rebuild.
+   *
+   *   status:    'available' | 'limited' | 'busy'
+   *   label:     short headline (3-5 words)
+   *   nextSlot:  optional, e.g. 'From July 2026' or 'Currently full'
+   */
+  availability: {
+    status: 'available' as 'available' | 'limited' | 'busy',
+    label: 'Available for new work',
+    nextSlot: 'Booking engagements starting Q3 2026',
+  },
   summary:
     'Statistics graduate from ITS with a professional background in data engineering, IT operations, Astro web development, browser extensions, backend tooling, and offensive security practice.',
 };
