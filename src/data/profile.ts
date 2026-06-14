@@ -36,7 +36,13 @@ export type ProjectEntry = {
   name: string;
   domain: string;
   category: string;
+  /** Top-level filter bucket for the /web-porto filter chips. */
+  filterCategory: 'commerce' | 'education' | 'energy' | 'other';
   description: string;
+  /** Longer form description surfaced in the project lightbox. */
+  details: string;
+  /** Optional stack/tech list, surfaced in the project lightbox. */
+  stack?: string[];
   outcome: string;
   href: string;
   image: string;
@@ -184,12 +190,15 @@ export const experience = [
   },
 ];
 
-export const projects = [
+export const projects: ProjectEntry[] = [
   {
     name: 'Zenix Theme',
     domain: 'Astro Theme Directory',
     category: 'Astro',
+    filterCategory: 'other',
     description: 'High-performance, minimalist Astro theme for technical personal brands.',
+    details: 'A free, open-source Astro theme built around content-first design and a small component surface. Ships with dark mode, a 3-col service grid, a writing section, and a contact form. Designed to be cloned and re-skinned without touching the framework layer.',
+    stack: ['Astro', 'TypeScript', 'UnoCSS', 'MDX'],
     outcome: 'Published on official Astro theme directory',
     href: 'https://zenix.farros.co',
     image: 'zenix-farros-co.png',
@@ -200,7 +209,10 @@ export const projects = [
     name: 'KIW Commerce',
     domain: 'Industrial E-commerce',
     category: 'E-commerce',
+    filterCategory: 'commerce',
     description: 'Procurement platform for industrial, energy, and utility materials.',
+    details: 'A B2B/B2G procurement platform for industrial and energy-sector buyers. Built around long-form product specs, request-for-quote flows, and account-based pricing. Focus on reducing the friction of large-catalog technical purchasing.',
+    stack: ['Astro', 'TypeScript', 'PostgreSQL'],
     outcome: 'Product catalog, procurement flow, B2B/B2G commerce',
     href: 'https://shop.kiw.co.id',
     image: 'shop-kiw-co-id.png',
@@ -211,7 +223,10 @@ export const projects = [
     name: 'Gladys',
     domain: 'AI Education',
     category: 'Education',
+    filterCategory: 'education',
     description: 'AI education companion website for helping high school students explore majors and career paths.',
+    details: 'Landing site for an AI companion that helps Indonesian high-school students explore majors, career paths, and study tracks. Conversational UX in Bahasa Indonesia, with a soft conversion funnel toward the parent product.',
+    stack: ['Astro', 'TypeScript'],
     outcome: 'Education landing page, service positioning, conversion flow',
     href: 'https://tentang.gladys.id',
     image: 'tentang-gladys-id.png',
@@ -222,7 +237,10 @@ export const projects = [
     name: 'AESI Marketplace',
     domain: 'Solar Association Commerce',
     category: 'E-commerce',
+    filterCategory: 'commerce',
     description: 'Marketplace experience for Indonesia solar energy association commerce needs.',
+    details: 'Marketplace storefront for the Indonesian Solar Energy Association (AESI), giving member companies a shared commerce surface for solar products, services, and partner offers. Designed for low-bandwidth browsing and WhatsApp handoff.',
+    stack: ['WordPress', 'WooCommerce'],
     outcome: 'Association storefront and product discovery',
     href: 'https://ecommerce.aesi.or.id',
     image: 'ecommerce-aesi-or-id.png',
@@ -233,7 +251,10 @@ export const projects = [
     name: 'Ngajiin',
     domain: 'Education Platform',
     category: 'Education',
+    filterCategory: 'education',
     description: 'Islamic learning platform for streamlined student management and progress tracking.',
+    details: 'A web platform for Islamic learning programs, focused on simplifying student onboarding, lesson scheduling, and progress reporting for parents and teachers. Lightweight, mobile-first, and built for low-end devices on Indonesian networks.',
+    stack: ['Astro', 'TypeScript'],
     outcome: 'Learning management, student monitoring',
     href: 'https://ngajiin.web.id',
     image: 'ngajiin-web-id.png',
@@ -244,7 +265,10 @@ export const projects = [
     name: 'SonusHUB',
     domain: 'B2B Marketplace',
     category: 'Marketplace',
+    filterCategory: 'commerce',
     description: 'Marketplace for electrical and renewable energy materials.',
+    details: 'A B2B marketplace for sourcing electrical and renewable energy materials, with a focus on supplier discovery, RFQ flows, and category navigation across hundreds of SKUs.',
+    stack: ['Astro', 'TypeScript'],
     outcome: 'Marketplace experience, supplier navigation, commerce handoff',
     href: 'https://sonushub.id',
     image: 'sonushub-id.png',
@@ -255,7 +279,10 @@ export const projects = [
     name: 'AESI',
     domain: 'Solar Association',
     category: 'Association',
+    filterCategory: 'other',
     description: 'Main web presence for Asosiasi Energi Surya Indonesia.',
+    details: 'Public information site for the Indonesian Solar Energy Association: member directory, news, event calendar, and policy briefs. Designed to be a long-form reading experience for industry stakeholders.',
+    stack: ['WordPress'],
     outcome: 'Association identity, member access, public information',
     href: 'https://aesi.or.id',
     image: 'aesi-or-id.png',
@@ -265,7 +292,10 @@ export const projects = [
     name: 'Solar Nusantara',
     domain: 'Renewable Energy',
     category: 'Energy',
+    filterCategory: 'energy',
     description: 'Renewable energy company website and operational digital presence.',
+    details: 'Corporate site for Solar Nusantara, a renewable energy services and operations company. Public-facing service explanations, project portfolio, and an enquiry flow for EPC and O&M work.',
+    stack: ['Astro', 'TypeScript'],
     outcome: 'Brand site, energy services, infrastructure visibility',
     href: 'https://solar-nusantara.id',
     image: 'solar-nusantara-id.png',
@@ -275,7 +305,10 @@ export const projects = [
     name: 'SonusHUB Profile',
     domain: 'Electrical Materials',
     category: 'Marketplace',
+    filterCategory: 'commerce',
     description: 'B2B material platform for electrical and renewable energy needs.',
+    details: 'Sister site to SonusHUB, focused on profile pages for partner brands and material categories. Acts as a lead-generation front door for the parent marketplace.',
+    stack: ['Astro', 'TypeScript'],
     outcome: 'Lead generation, product positioning, partner trust',
     href: 'https://sonus-hub.id',
     image: 'sonus-hub-id.png',
@@ -285,7 +318,10 @@ export const projects = [
     name: 'Sonus EPC',
     domain: 'Clean Energy EPC',
     category: 'Energy',
+    filterCategory: 'energy',
     description: 'Clean and renewable energy solutions website for EPC services.',
+    details: 'Marketing site for the EPC (engineering, procurement, construction) arm of the Sonus group, covering solar and BESS project delivery. Long-form project pages and a heavy emphasis on technical credibility.',
+    stack: ['Astro'],
     outcome: 'Service communication and project positioning',
     href: 'https://sonus-epc.id',
     image: 'sonus-epc-id.png',
@@ -295,7 +331,10 @@ export const projects = [
     name: 'Indonesia Terang',
     domain: 'Sustainability',
     category: 'Energy',
+    filterCategory: 'energy',
     description: 'Energy and sustainability platform for impact-oriented reporting.',
+    details: 'A sustainability and impact-reporting platform for Indonesian energy access programs. Designed for editorial-style storytelling around projects, with a focus on data visualisations of energy access and emissions impact.',
+    stack: ['Astro'],
     outcome: 'Sustainability communication and reporting presence',
     href: 'https://indonesia-terang.id',
     image: 'indonesia-terang-id.png',
@@ -305,7 +344,10 @@ export const projects = [
     name: 'Kidiko',
     domain: 'AI Education',
     category: 'Education',
+    filterCategory: 'education',
     description: 'AI learning platform for WhatsApp-based student questions and teacher monitoring.',
+    details: 'A WhatsApp-native AI learning companion for K-12 students, with a teacher dashboard for monitoring engagement and outcomes. Web landing page targets school procurement and parent sign-up.',
+    stack: ['Astro', 'TypeScript'],
     outcome: 'AI product page, education positioning, conversion flow',
     href: 'https://kidiko.id',
     image: 'kidiko-id.png',
@@ -315,7 +357,10 @@ export const projects = [
     name: 'Aurora Nutrima',
     domain: 'Industrial Catering',
     category: 'Industrial Services',
+    filterCategory: 'commerce',
     description: 'Industrial catering website for business-scale food service operations.',
+    details: 'Corporate site for an industrial catering operator serving factory sites, mining camps, and remote work locations. Service descriptions, certifications, and an enquiry flow for B2B contracts.',
+    stack: ['WordPress'],
     outcome: 'Service trust, client communication, lead generation',
     href: 'https://aurora-nutrima.id',
     image: 'aurora-nutrima-id.png',

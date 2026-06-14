@@ -8,6 +8,25 @@ const projectImages = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/projects/*.png',
   { eager: true },
 );
+
+// Build the filter chips dynamically from the data. We surface the
+// count on each chip so visitors know what they'll get before they
+// click. The "all" chip is the default selection.
+type FilterChip = { id: 'all' | 'commerce' | 'education' | 'energy' | 'other'; label: string };
+const filterChips: FilterChip[] = [
+  { id: 'all', label: 'All' },
+  { id: 'commerce', label: 'Commerce' },
+  { id: 'education', label: 'Education' },
+  { id: 'energy', label: 'Energy' },
+  { id: 'other', label: 'Other' },
+];
+
+const filterCounts: Record<string, number> = projects.reduce<Record<string, number>>((acc, p) => {
+  acc[p.filterCategory] = (acc[p.filterCategory] ?? 0) + 1;
+  return acc;
+}, {});
+const totalCount = projects.length;
+const countFor = (id: string) => (id === 'all' ? totalCount : filterCounts[id] ?? 0);
 ---
 
 <BaseLayout title={`Web Portfolio | ${profile.name}`} description="Full website portfolio by Farros across Astro themes, e-commerce, education, energy, marketplaces, and service websites.">
@@ -24,54 +43,300 @@ const projectImages = import.meta.glob<{ default: ImageMetadata }>(
   </section>
 
   <section class="pb-20 md:pb-28">
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {projects.map((project) => (
-        <a
-          href={project.href}
-          target="_blank"
-          rel="noreferrer"
-          class={`group glass-card flex min-h-full flex-col overflow-hidden rounded-[1.25rem] transition-all hover:-translate-y-1 ${project.featured ? 'ring-1 ring-primary/30' : ''}`}
-          data-reveal
+    <div
+      role="tablist"
+      aria-label="Filter projects by category"
+      class="mb-8 flex flex-wrap items-center gap-2"
+      data-filter-bar
+    >
+      <span class="mr-1 text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Filter</span>
+      {filterChips.map((chip) => (
+        <button
+          type="button"
+          role="tab"
+          aria-selected={chip.id === 'all' ? 'true' : 'false'}
+          aria-controls="web-porto-grid"
+          data-filter={chip.id}
+          data-filter-count={countFor(chip.id)}
+          class="rounded-full border border-border bg-card/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-foreground transition-all hover:border-primary/50 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 aria-selected:border-primary aria-selected:bg-primary aria-selected:text-primary-foreground"
         >
-          <div class="relative h-52 overflow-hidden border-b border-border/70 bg-muted">
-            <Image
-              src={projectImages[`../assets/projects/${project.image}`].default}
-              alt={`${project.name} website screenshot`}
-              width={800}
-              height={416}
-              widths={[400, 600, 800]}
-              sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-              format="webp"
-              quality={82}
-              class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-            <span class="absolute left-3 top-3 rounded-full border border-border/70 bg-background/85 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary backdrop-blur">
-              {project.category}
-            </span>
-            {project.featured && (
-              <span class="absolute right-3 top-3 rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary backdrop-blur">
-                Top
-              </span>
-            )}
-          </div>
-
-          <div class="flex flex-1 flex-col p-5">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{project.domain}</p>
-                <h2 class="mt-2 text-xl font-bold tracking-tight text-foreground">{project.name}</h2>
-              </div>
-              <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background/70 text-muted-foreground transition-all group-hover:border-primary/50 group-hover:text-primary">
-                <span class="i-lucide-arrow-up-right size-5"></span>
-              </span>
-            </div>
-            <p class="mt-4 flex-1 text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">{project.description}</p>
-            <div class="mt-5 inline-flex w-fit rounded-full border border-border/70 bg-background/70 px-3 py-1 font-mono text-[11px] text-primary">
-              {project.outcome}
-            </div>
-          </div>
-        </a>
+          {chip.label}
+          <span class="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-background/80 px-1.5 text-[10px] font-mono text-muted-foreground aria-selected:bg-primary-foreground/20 aria-selected:text-primary-foreground" data-filter-count-badge>
+            {countFor(chip.id)}
+          </span>
+        </button>
       ))}
     </div>
+
+    <div id="web-porto-grid" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {projects.map((project) => {
+        const image = projectImages[`../assets/projects/${project.image}`].default;
+        return (
+          <article
+            role="button"
+            tabindex="0"
+            data-project-card
+            data-filter-category={project.filterCategory}
+            data-project-name={project.name}
+            data-project-domain={project.domain}
+            data-project-category={project.category}
+            data-project-description={project.description}
+            data-project-details={project.details}
+            data-project-outcome={project.outcome}
+            data-project-href={project.href}
+            data-project-stack={(project.stack ?? []).join('|')}
+            data-project-image-url={image.src}
+            data-project-image-width={image.width}
+            data-project-image-height={image.height}
+            aria-label={`View details for ${project.name}`}
+            class={`group glass-card flex min-h-full cursor-pointer flex-col overflow-hidden rounded-[1.25rem] transition-all hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary/50 ${project.featured ? 'ring-1 ring-primary/30' : ''}`}
+            data-reveal
+          >
+            <div class="relative h-52 overflow-hidden border-b border-border/70 bg-muted">
+              <Image
+                src={image}
+                alt={`${project.name} website screenshot`}
+                width={800}
+                height={416}
+                widths={[400, 600, 800]}
+                sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                format="webp"
+                quality={82}
+                class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+              <span class="absolute left-3 top-3 rounded-full border border-border/70 bg-background/85 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary backdrop-blur">
+                {project.category}
+              </span>
+              {project.featured && (
+                <span class="absolute right-3 top-3 rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary backdrop-blur">
+                  Top
+                </span>
+              )}
+            </div>
+
+            <div class="flex flex-1 flex-col p-5">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">{project.domain}</p>
+                  <h2 class="mt-2 text-xl font-bold tracking-tight text-foreground">{project.name}</h2>
+                </div>
+                <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background/70 text-muted-foreground transition-all group-hover:border-primary/50 group-hover:text-primary">
+                  <span class="i-lucide-arrow-up-right size-5"></span>
+                </span>
+              </div>
+              <p class="mt-4 flex-1 text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">{project.description}</p>
+              <div class="mt-5 inline-flex w-fit rounded-full border border-border/70 bg-background/70 px-3 py-1 font-mono text-[11px] text-primary">
+                {project.outcome}
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <p
+      data-no-results
+      class="mt-10 hidden rounded-[1.25rem] border border-border/70 bg-card/40 p-8 text-center text-sm text-muted-foreground"
+      hidden
+    >
+      No projects match this filter yet — more are on the way.
+    </p>
   </section>
+
+  <dialog
+    id="web-porto-lightbox"
+    aria-labelledby="web-porto-lightbox-title"
+    data-lightbox
+    class="max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-[1.5rem] border border-border/70 bg-background p-4 text-foreground shadow-2xl backdrop:bg-background/80 backdrop:backdrop-blur-sm sm:p-6"
+  >
+    <div class="relative max-h-[calc(90vh-2rem)] overflow-y-auto rounded-[1.15rem] border border-border/70 bg-background sm:max-h-[calc(90vh-3rem)]">
+      <div class="relative aspect-[2/1] w-full overflow-hidden border-b border-border/70 bg-muted">
+        <img
+          data-lightbox-image
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover object-top"
+        />
+      </div>
+      <button
+        type="button"
+        data-lightbox-close
+        aria-label="Close project details"
+        class="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-full border border-border/70 bg-background/85 text-foreground shadow-md backdrop-blur transition-all hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        <span class="i-lucide-x size-5"></span>
+      </button>
+      <div class="p-6 sm:p-8">
+        <p data-lightbox-domain class="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground"></p>
+        <h2 id="web-porto-lightbox-title" data-lightbox-title class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl"></h2>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span data-lightbox-category class="rounded-full border border-border/70 bg-background/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary"></span>
+        </div>
+        <p data-lightbox-description class="mt-5 text-base leading-7 text-muted-foreground"></p>
+        <div data-lightbox-stack-wrap class="mt-6 hidden">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">Stack</p>
+          <ul data-lightbox-stack class="mt-3 flex flex-wrap gap-2"></ul>
+        </div>
+        <div class="mt-6 inline-flex w-fit rounded-full border border-border/70 bg-background/70 px-3 py-1 font-mono text-[11px] text-primary">
+          <span data-lightbox-outcome></span>
+        </div>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            data-lightbox-visit
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            Visit live site
+            <span class="i-lucide-arrow-up-right size-4"></span>
+          </a>
+          <button
+            type="button"
+            data-lightbox-close-2
+            class="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-6 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
 </BaseLayout>
+
+<script>
+  // Filter + lightbox behaviour for /web-porto. Re-runs on every
+  // Astro view transition so the page works after client-side nav.
+  function setupWebPorto() {
+    const dialog = document.getElementById('web-porto-lightbox') as HTMLDialogElement | null;
+    if (!dialog) return;
+
+    const filterChips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('[data-project-card]');
+    const noResults = document.querySelector<HTMLElement>('[data-no-results]');
+
+    function applyFilter(filterId: string) {
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const matches = filterId === 'all' || card.dataset.filterCategory === filterId;
+        card.classList.toggle('hidden', !matches);
+        card.toggleAttribute('hidden', !matches);
+        if (matches) visibleCount += 1;
+      });
+      if (noResults) {
+        noResults.classList.toggle('hidden', visibleCount > 0);
+        noResults.toggleAttribute('hidden', visibleCount > 0);
+      }
+      // Update active state on chips (chips themselves use aria-selected).
+      filterChips.forEach((chip) => {
+        chip.setAttribute('aria-selected', chip.dataset.filter === filterId ? 'true' : 'false');
+      });
+      // Reflect in URL hash so back/forward + share-link restore filter.
+      const nextHash = filterId === 'all' ? '' : `#filter=${encodeURIComponent(filterId)}`;
+      if (window.location.hash !== nextHash) {
+        history.replaceState(null, '', window.location.pathname + window.location.search + nextHash);
+      }
+    }
+
+    function restoreFromHash() {
+      const match = window.location.hash.match(/filter=([a-z]+)/i);
+      const initial = match ? decodeURIComponent(match[1]) : 'all';
+      const valid = ['all', 'commerce', 'education', 'energy', 'other'];
+      applyFilter(valid.includes(initial) ? initial : 'all');
+    }
+
+    filterChips.forEach((chip) => {
+      chip.addEventListener('click', () => applyFilter(chip.dataset.filter ?? 'all'));
+    });
+
+    function openLightbox(card: HTMLElement) {
+      const data = card.dataset;
+      const image = dialog!.querySelector<HTMLImageElement>('[data-lightbox-image]');
+      if (image) {
+        image.src = data.projectImageUrl ?? '';
+        image.alt = `${data.projectName ?? 'Project'} website screenshot`;
+        image.width = Number(data.projectImageWidth ?? 1200);
+        image.height = Number(data.projectImageHeight ?? 630);
+      }
+      setText('[data-lightbox-domain]', data.projectDomain ?? '');
+      setText('[data-lightbox-title]', data.projectName ?? '');
+      setText('[data-lightbox-category]', data.projectCategory ?? '');
+      setText('[data-lightbox-description]', data.projectDetails ?? data.projectDescription ?? '');
+      setText('[data-lightbox-outcome]', data.projectOutcome ?? '');
+
+      const visit = dialog!.querySelector<HTMLAnchorElement>('[data-lightbox-visit]');
+      if (visit) visit.href = data.projectHref ?? '#';
+
+      // Stack list
+      const stackWrap = dialog!.querySelector<HTMLElement>('[data-lightbox-stack-wrap]');
+      const stackList = dialog!.querySelector<HTMLElement>('[data-lightbox-stack]');
+      if (stackWrap && stackList) {
+        const items = (data.projectStack ?? '').split('|').filter(Boolean);
+        stackList.innerHTML = '';
+        if (items.length > 0) {
+          stackWrap.classList.remove('hidden');
+          items.forEach((item) => {
+            const li = document.createElement('li');
+            li.className = 'rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs font-mono text-foreground';
+            li.textContent = item;
+            stackList.appendChild(li);
+          });
+        } else {
+          stackWrap.classList.add('hidden');
+        }
+      }
+
+      dialog!.showModal();
+      // Move focus to the close button so keyboard users can dismiss.
+      const firstClose = dialog!.querySelector<HTMLButtonElement>('[data-lightbox-close]');
+      firstClose?.focus();
+    }
+
+    function closeLightbox() {
+      if (dialog?.open) dialog.close();
+    }
+
+    cards.forEach((card) => {
+      card.addEventListener('click', () => openLightbox(card));
+      card.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLightbox(card);
+        }
+      });
+    });
+
+    dialog.addEventListener('click', (e) => {
+      // Clicks on the dialog itself (the backdrop) close it; clicks
+      // inside the content do not.
+      if (e.target === dialog) closeLightbox();
+    });
+    dialog.querySelectorAll<HTMLButtonElement>('[data-lightbox-close], [data-lightbox-close-2]').forEach((btn) => {
+      btn.addEventListener('click', closeLightbox);
+    });
+    // ESC is handled by the native <dialog>, but we add a hook so we
+    // can return focus to the originating card after close.
+    dialog.addEventListener('close', () => {
+      const lastTrigger = document.activeElement as HTMLElement | null;
+      // Don't fight the browser's own focus restoration if it was on a
+      // button inside the dialog. Otherwise leave focus where it is.
+      void lastTrigger;
+    });
+
+    restoreFromHash();
+    window.addEventListener('hashchange', restoreFromHash);
+  }
+
+  function setText(selector: string, value: string) {
+    document.querySelectorAll(selector).forEach((el) => {
+      el.textContent = value;
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupWebPorto);
+  } else {
+    setupWebPorto();
+  }
+  document.addEventListener('astro:page-load', setupWebPorto);
+</script>
