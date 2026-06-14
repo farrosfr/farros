@@ -16,7 +16,36 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImageURL = new URL('/logo.png', Astro.site);
+
+// Build a per-page OG image URL. The endpoint at /og.png takes the
+// page title and description as query params and renders a branded
+// 1200x630 PNG at build time. Falls back to the site logo if
+// title/description are missing.
+const ogImageURL = new URL(
+  `/og.png?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(description)}`,
+  Astro.site,
+);
+
+// Cloudflare Web Analytics is opt-in. If the user has set
+// PUBLIC_CF_ANALYTICS_TOKEN in .env, emit the beacon. No-op otherwise.
+// CF inserts a privacy-friendly script (no cookies, no personal data).
+const cfBeaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN ?? '';
+
+// Site-wide WebSite schema with SearchAction. The Person schema lives
+// separately so we can extend it without touching this block.
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: profile.shortName,
+  url: profile.website,
+  description,
+  inLanguage: 'en',
+  author: {
+    '@type': 'Person',
+    name: profile.name,
+    url: profile.website,
+  },
+};
 ---
 
 <!doctype html>
@@ -39,19 +68,43 @@ const socialImageURL = new URL('/logo.png', Astro.site);
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Open Graph (Facebook, LinkedIn, Slack, Discord, WhatsApp) -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={socialImageURL} />
-    
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:site_name" content={profile.shortName} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@farrosfr_" />
+    <meta name="twitter:creator" content="@farrosfr_" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={socialImageURL} />
-    
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={title} />
+
     <meta name="theme-color" content="#070b12" />
+
+    <!-- Cloudflare Web Analytics (opt-in via PUBLIC_CF_ANALYTICS_TOKEN).
+         Privacy-friendly: no cookies, no personal data, no fingerprinting.
+         Get your beacon token at https://dash.cloudflare.com/?to=/:account/web-analytics -->
+    {cfBeaconToken && (
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={`{"token": "${cfBeaconToken}"}`}
+      ></script>
+    )}
+
+    <!-- Person schema: author identity for knowledge panels and rich results -->
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
@@ -59,8 +112,13 @@ const socialImageURL = new URL('/logo.png', Astro.site);
       url: profile.website,
       email: profile.email,
       sameAs: [profile.github, profile.linkedin, profile.medium, profile.x],
-      jobTitle: profile.title
+      jobTitle: profile.title,
+      description: profile.summary,
     })} />
+
+    <!-- WebSite schema: site-level metadata + author link -->
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+
     <ClientRouter />
     <script is:inline>
       // Scroll-reveal: adds .is-revealed to [data-reveal] elements when
