@@ -45,27 +45,32 @@ function parseFeed(xml: string): Post[] {
     attributeNamePrefix: '@_',
   });
   const parsed = parser.parse(xml);
-  // Substack publishes an Atom feed. Posts are <entry> children of <feed>.
-  const entries = parsed?.feed?.entry;
-  if (!Array.isArray(entries)) return [];
-  return entries.slice(0, 20).map((entry: unknown) => {
+  // Substack publishes RSS 2.0: <rss><channel><item>.
+  // Some hosts publish Atom: <feed><entry>. Handle both.
+  const items =
+    (Array.isArray(parsed?.rss?.channel?.item) && parsed.rss.channel.item) ||
+    (Array.isArray(parsed?.feed?.entry) && parsed.feed.entry) ||
+    [];
+  if (items.length === 0) return [];
+  return items.slice(0, 20).map((entry: unknown) => {
     const e = entry as Record<string, unknown>;
-    const link = e.link as { '@_href'?: string } | string | undefined;
+    // RSS 2.0: <link>https://...</link> (text node). Atom: <link href="..."/>.
+    const linkRaw = e.link as { '@_href'?: string } | string | undefined;
     const url =
-      typeof link === 'string'
-        ? link
-        : (link?.['@_href'] ?? '');
+      typeof linkRaw === 'string'
+        ? linkRaw
+        : (linkRaw?.['@_href'] ?? '');
     const titleRaw = e.title as { '#text'?: string } | string | undefined;
     const title =
       typeof titleRaw === 'string' ? titleRaw : (titleRaw?.['#text'] ?? '');
-    const summaryRaw = e.summary as { '#text'?: string } | string | undefined;
+    const summaryRaw = e.description as { '#text'?: string } | string | undefined;
     const description = (typeof summaryRaw === 'string' ? summaryRaw : (summaryRaw?.['#text'] ?? ''))
       .replace(/<[^>]+>/g, '')
       .slice(0, 240);
     return {
       title: String(title).trim(),
       url: String(url).trim(),
-      pubDate: String(e.published ?? e.updated ?? '').trim(),
+      pubDate: String(e.pubDate ?? e.published ?? e.updated ?? '').trim(),
       description,
       source: 'farrosfr.com',
     };
