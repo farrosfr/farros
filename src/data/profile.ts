@@ -377,12 +377,14 @@ export const awards = [
 
 export const navItems = [
   { name: 'Web Porto', href: '/web-porto/' },
+  { name: 'Writing', href: '/writing' },
   { name: 'CV', href: '/cv' },
   { name: 'Contact', href: `mailto:${profile.email}` },
 ];
 
 export const searchItems = [
   { title: 'Services', description: 'View professional advisory services.', href: '/#services', type: 'Services' },
+  { title: 'Writing', description: 'Notes on security, data, and engineering from farrosfr.com.', href: '/writing', type: 'Writing' },
   { title: 'Web Portfolio', description: 'See the full website portfolio.', href: '/web-porto/', type: 'Portfolio' },
   ...services.map((item) => ({ title: item.title, description: item.description, href: `/services/${item.slug}`, type: 'Service' })),
   { title: 'View CV', description: 'Open the designed web CV page.', href: '/cv', type: 'CV' },
