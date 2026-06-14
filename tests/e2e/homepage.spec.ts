@@ -63,7 +63,12 @@ test.describe('premium portfolio', () => {
     await expect(dialog).toBeVisible();
 
     await page.locator('[data-search-input]').fill('Zenix');
-    await expect(dialog.getByRole('link', { name: /Zenix/i })).toBeVisible();
+    // Multiple search items reference Zenix (the Astro theme + the
+    // custom project), so we assert at least one Zenix link is visible
+    // rather than demanding a single match.
+    await expect(
+      dialog.getByRole('link', { name: /Zenix/i }).first()
+    ).toBeVisible();
 
     await page.locator('[data-search-input]').fill('KIW');
     await expect(dialog.getByRole('link', { name: /KIW Commerce/i })).toBeVisible();
@@ -91,9 +96,15 @@ test.describe('premium portfolio', () => {
     const menuButton = page.getByRole('button', { name: /open navigation/i });
 
     await menuButton.click();
-    await expect(page.getByRole('navigation').filter({ hasText: 'Work' })).toBeVisible();
+    // The first nav item is "Web Porto" (per navItems in profile.ts).
+    // We assert the mobile drawer nav is now visible and contains at
+    // least one of the known nav labels. All three labels match, so
+    // we use .first() to avoid strict-mode violations.
+    await expect(
+      page.locator('[data-mobile-menu]').getByRole('link', { name: /Web Porto|Writing|CV/i }).first()
+    ).toBeVisible();
 
-    await page.locator('[data-mobile-menu]').getByRole('link', { name: 'Work', exact: true }).click();
+    await page.locator('[data-mobile-menu]').getByRole('link', { name: 'Web Porto', exact: true }).click();
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   });
 

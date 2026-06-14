@@ -4,9 +4,15 @@ test.describe('web portfolio page', () => {
   test('renders hero, full project list, and hashed webp images', async ({ page, request }) => {
     await page.goto('/web-porto/');
 
-    // Hero copy
-    await expect(page.getByRole('heading', { name: /Web portfolio/i }).first()).toBeVisible();
-    await expect(page.getByText(/website portfolio/i).first()).toBeVisible();
+    // Hero copy — the eyebrow is a <p> inside <main>. The header nav
+    // also contains a "Web Portfolio" link (hidden in mobile drawer),
+    // so we scope to main to avoid the hidden drawer entry.
+    await expect(
+      page.locator('main p').filter({ hasText: /^Web portfolio$/i }).first()
+    ).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: /Production websites and public web systems/i })
+    ).toBeVisible();
 
     // Project cards: should have at least 10 (we ship 13)
     const cards = page.locator('a[href^="https://"]').filter({ has: page.locator('img[alt*="screenshot"]') });
@@ -21,10 +27,10 @@ test.describe('web portfolio page', () => {
     expect(srcset, 'project image srcset').toBeTruthy();
     expect(srcset!).toContain('webp');
 
-    // At least one card has the featured ring
-    const featured = page.locator('a[href^="https://"]').filter({ has: page.locator('img[alt*="screenshot"]') }).filter({
-      has: page.locator('[class*="ring"]'),
-    });
+    // At least one card has the featured ring. The ring-* class lives
+    // ON the <a> itself, so we match it via attribute selector rather
+    // than :has() (which only looks at descendants).
+    const featured = page.locator('a[href^="https://"][class*="ring"]');
     expect(await featured.count()).toBeGreaterThan(0);
 
     // The first image src must actually load (no 404 from hashed _astro/ path)

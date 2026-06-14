@@ -16,12 +16,15 @@ for (const slug of slugs) {
       await expect(h1).toBeVisible();
       await expect(h1).not.toBeEmpty();
 
-      // The cover image must be a self-hosted SVG and return 200
-      const cover = page.locator('img').first();
+      // The service cover image lives inside <main>. The header logo
+      // is the first <img> on the page, so we scope to main + the
+      // /services/ path. Same for the assertion.
+      const cover = page.locator(`main img[src="/services/${slug}.svg"]`);
+      await expect(cover).toBeVisible();
       const coverSrc = await cover.getAttribute('src');
       expect(coverSrc, 'service cover src').toBeTruthy();
       expect(coverSrc!, `${slug} cover must be self-hosted, not Unsplash`).not.toMatch(/unsplash\.com/);
-      expect(coverSrc!, `${slug} cover should be the matching SVG`).toContain(`/services/${slug}.svg`);
+      expect(coverSrc!, `${slug} cover should be the matching SVG`).toBe(`/services/${slug}.svg`);
       const coverRes = await request.get(coverSrc!);
       expect(coverRes.status(), coverSrc!).toBe(200);
       // SVG body should be a real <svg> document
@@ -44,7 +47,9 @@ for (const slug of slugs) {
 test('services list on homepage links to all 6 service pages', async ({ page }) => {
   await page.goto('/#services');
   for (const slug of slugs) {
-    const link = page.locator(`a[href="/services/${slug}/"]`).first();
-    await expect(link, `homepage must link to /services/${slug}/`).toBeAttached();
+    // Services.astro renders <a href={`/services/${service.slug}`}> with
+    // no trailing slash, so the selector matches the real href.
+    const link = page.locator(`a[href="/services/${slug}"]`).first();
+    await expect(link, `homepage must link to /services/${slug}`).toBeAttached();
   }
 });
