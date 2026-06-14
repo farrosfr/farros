@@ -1,0 +1,60 @@
+---
+import { profile } from '../data/profile';
+
+interface BreadcrumbItem {
+  /** Display name of the crumb. */
+  name: string;
+  /** Full URL. Omit on the last (current) crumb. */
+  href?: string;
+}
+
+interface Props {
+  /** Crumbs in order from root to current page. The last entry is the current page. */
+  items: BreadcrumbItem[];
+  /** Optional CSS class for the visible breadcrumb nav. */
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props;
+
+// The current page is always the last item and should not be a link.
+const lastIndex = items.length - 1;
+
+// Build the BreadcrumbList JSON-LD. position is 1-indexed per schema.org.
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, i) => {
+    const isLast = i === lastIndex;
+    return {
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      ...(isLast || !item.href ? {} : { item: new URL(item.href, Astro.site ?? profile.website).toString() }),
+    };
+  }),
+};
+---
+
+<nav aria-label="Breadcrumb" class={className} data-breadcrumb>
+  <ol class="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+    {items.map((item, i) => {
+      const isLast = i === lastIndex;
+      return (
+        <li class="flex items-center gap-1.5">
+          {isLast || !item.href ? (
+            <span class="text-foreground" aria-current="page">{item.name}</span>
+          ) : (
+            <a
+              href={item.href}
+              class="transition-colors hover:text-primary"
+            >{item.name}</a>
+          )}
+          {!isLast && <span class="i-lucide-chevron-right size-3 text-muted-foreground/60" aria-hidden="true"></span>}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />

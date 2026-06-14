@@ -48,11 +48,11 @@ test.describe('essays (native content collection)', () => {
       const paragraphs = body.locator('p');
       expect(await paragraphs.count()).toBeGreaterThan(0);
 
-      // Back link to /writing works
-      const back = page.getByRole('link', { name: /back to writing/i });
-      await expect(back).toBeVisible();
-      const backHref = await back.getAttribute('href');
-      expect(backHref).toBe('/writing');
+      // Back link to /writing via the breadcrumb (Home → Writing → current)
+      const writingCrumb = page.locator('nav[aria-label="Breadcrumb"] a[href="/writing"]');
+      await expect(writingCrumb).toBeVisible();
+      const crumbHref = await writingCrumb.getAttribute('href');
+      expect(crumbHref).toBe('/writing');
 
       // Article JSON-LD present
       const jsonLdScripts = await page.locator('script[type="application/ld+json"]').allTextContents();

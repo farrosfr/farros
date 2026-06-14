@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AvailabilityBadge from '../components/AvailabilityBadge.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { profile } from '../data/profile';
 
 // Web3Forms access key. Sign up free at https://web3forms.com — the key
@@ -35,6 +36,7 @@ const directLinks = [
   description="Start a conversation about a web project, security review, data engineering work, or anything else worth a reply."
 >
   <main class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8" data-reveal>
+    <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Contact' }]} class="mb-8" />
     <section class="py-6 md:py-10">
       <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
         <div>

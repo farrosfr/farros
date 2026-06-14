@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { profile, projects } from '../data/profile';
 
 const projectImages = import.meta.glob<{ default: ImageMetadata }>(
@@ -30,7 +31,8 @@ const countFor = (id: string) => (id === 'all' ? totalCount : filterCounts[id] ?
 ---
 
 <BaseLayout title={`Web Portfolio | ${profile.name}`} description="Full website portfolio by Farros across Astro themes, e-commerce, education, energy, marketplaces, and service websites.">
-  <section class="py-14 md:py-20" data-reveal>
+  <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Web Portfolio' }]} class="pt-10 md:pt-14" />
+  <section class="py-8 md:py-10" data-reveal>
     <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
       <div>
         <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-primary">Web portfolio</p>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { services, profile } from '../../data/profile';
 
 export function getStaticPaths() {
@@ -58,7 +59,15 @@ const jsonLd = {
 
 <BaseLayout title={`${service.title} | Farros Advisory`} description={service.description}>
   <main class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8" data-reveal>
-    <div class="mb-8">
+    <Breadcrumbs
+      items={[
+        { name: 'Home', href: '/' },
+        { name: 'Services', href: '/#services' },
+        { name: service.title },
+      ]}
+      class="mb-8"
+    />
+    <div class="mb-8 hidden">
       <a href="/#services" class="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground transition-colors hover:text-primary">
         <span class="i-lucide-arrow-left size-4"></span>
         Back to services

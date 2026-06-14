@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 import { getLatestPosts } from '../data/writing';
 import WritingCard from '../components/WritingCard.astro';
@@ -22,7 +23,8 @@ const { posts } = await getLatestPosts(9);
   title={`Writing | ${profile.name}`}
   description={`Essays and field notes on cybersecurity, AI threats, and engineering, syndicated from ${profile.name}'s Substack at farrosfr.com.`}
 >
-  <section class="py-14 md:py-20" data-reveal>
+  <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Writing' }]} class="pt-10 md:pt-14" />
+  <section class="py-8 md:py-10" data-reveal>
     <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
       <div>
         <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-primary">Writing</p>

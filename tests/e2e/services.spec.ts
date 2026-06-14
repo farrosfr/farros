@@ -8,8 +8,9 @@ for (const slug of slugs) {
     test('renders hero, features, CTA, and SVG cover', async ({ page, request }) => {
       await page.goto(`/services/${slug}/`);
 
-      // Back link is present
-      await expect(page.getByRole('link', { name: /back to services/i })).toBeVisible();
+      // Back link to services via the breadcrumb (Home → Services → current)
+      const servicesCrumb = page.locator('nav[aria-label="Breadcrumb"] a[href="/#services"]');
+      await expect(servicesCrumb).toBeVisible();
 
       // H1 contains the service title
       const h1 = page.getByRole('heading', { level: 1 });

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { profile } from '../../data/profile';
 
 export async function getStaticPaths() {
@@ -47,13 +48,14 @@ const articleJsonLd = {
 
 <BaseLayout title={`${essay.data.title} | ${profile.shortName}`} description={essay.data.description} ogType="article">
   <main class="mx-auto max-w-screen-md px-4 py-12 sm:px-6 lg:px-8" data-reveal>
-    <div class="mb-8">
-      <a href="/writing" class="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground transition-colors hover:text-primary">
-        <span class="i-lucide-arrow-left size-4"></span>
-        Back to writing
-      </a>
-    </div>
-
+    <Breadcrumbs
+      items={[
+        { name: 'Home', href: '/' },
+        { name: 'Writing', href: '/writing' },
+        { name: essay.data.title },
+      ]}
+      class="mb-8"
+    />
     <article>
       <header class="mb-10">
         <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-[0.18em] text-primary">
