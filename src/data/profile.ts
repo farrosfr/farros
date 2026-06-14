@@ -632,6 +632,30 @@ export const navItems = [
   { name: 'Contact', href: '/contact' },
 ];
 
+// Long-form essays published in this repo (see src/content/writing).
+// Surfaced in the search palette so visitors can jump straight to a
+// specific piece. Keep the list in sync with the content collection.
+export const essayItems: Array<{ title: string; description: string; slug: string; type: string }> = [
+  {
+    title: 'Building for the long term when every dependency wants to break',
+    description: 'Why I default to static-first architectures, small dependency trees, and a bias for boring tools.',
+    slug: 'building-for-the-long-term',
+    type: 'Essay',
+  },
+  {
+    title: 'Practical red-team notes: what offensive work taught me about defensive defaults',
+    description: 'The four boring defensive defaults that survive contact with an attacker mindset.',
+    slug: 'practical-red-team-notes',
+    type: 'Essay',
+  },
+  {
+    title: 'Data engineering without a team: what one person can realistically own',
+    description: 'An honest scope-reduction list for one-person data operations and the smallest stack that survives.',
+    slug: 'data-engineering-without-a-team',
+    type: 'Essay',
+  },
+];
+
 export const searchItems = [
   { title: 'Services', description: 'View professional advisory services.', href: '/#services', type: 'Services' },
   { title: 'Writing', description: 'Notes on security, data, and engineering from farrosfr.com.', href: '/writing', type: 'Writing' },
@@ -645,4 +669,5 @@ export const searchItems = [
   { title: 'Send message', description: 'Open the contact form.', href: '/contact', type: 'Contact' },
   ...featuredWork.map((item) => ({ title: item.name, description: item.description, href: item.href, type: item.type })),
   ...projects.map((item) => ({ title: item.name, description: item.description, href: item.href, type: item.category })),
+  ...essayItems.map((item) => ({ title: item.title, description: item.description, href: `/essays/${item.slug}/`, type: item.type })),
 ];

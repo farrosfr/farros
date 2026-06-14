@@ -1,9 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 import { getLatestPosts } from '../data/writing';
 import WritingCard from '../components/WritingCard.astro';
 import { profile } from '../data/profile';
 
+// Native long-form essays from src/content/writing (Astro content
+// collection, lives in this repo). Sorted newest-first, with the
+// featured flag preserved for the top section.
+const allEssays = (await getCollection('writing')).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+);
+const featuredEssays = allEssays.filter((e) => e.data.featured);
+const otherEssays = allEssays.filter((e) => !e.data.featured);
+
+// Substack-derived short notes (live in the data/writing.ts RSS fetcher).
 const { posts } = await getLatestPosts(9);
 ---
 
@@ -20,27 +31,103 @@ const { posts } = await getLatestPosts(9);
         </h1>
       </div>
       <p class="max-w-2xl text-lg leading-8 text-muted-foreground lg:justify-self-end">
-        Practical cybersecurity and engineering writing, syndicated from
-        <a href="https://farrosfr.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">farrosfr.com</a>.
+        A mix of long-form essays published here, and shorter field notes
+        <a href="https://farrosfr.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">syndicated from farrosfr.com</a>.
       </p>
     </div>
   </section>
 
-  <section class="pb-20 md:pb-28">
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {posts.map((post) => <WritingCard post={post} />)}
-    </div>
+  {featuredEssays.length > 0 && (
+    <section class="pb-16" data-reveal data-section="essays-featured">
+      <div class="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Long-form</p>
+          <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Essays</h2>
+        </div>
+        <a href="https://farrosfr.com" target="_blank" rel="noreferrer" class="hidden text-sm font-semibold text-muted-foreground transition-colors hover:text-primary sm:inline">
+          Notes archive ↗
+        </a>
+      </div>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" data-essays-grid>
+        {featuredEssays.map((essay) => {
+          const dateLabel = essay.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+          return (
+            <a
+              href={`/essays/${essay.id}/`}
+              data-essay-card
+              data-essay-slug={essay.id}
+              class="group glass-card flex h-full flex-col rounded-[1.5rem] p-6 transition-all hover:-translate-y-1 hover:border-primary/40"
+            >
+              <div class="flex items-center justify-between gap-4">
+                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
+                  {dateLabel}
+                  {essay.data.readingTime && (
+                    <span class="ml-2 text-muted-foreground">· {essay.data.readingTime}</span>
+                  )}
+                </p>
+                <span class="i-lucide-arrow-up-right size-5 text-muted-foreground transition-colors group-hover:text-primary"></span>
+              </div>
+              <h3 class="mt-4 text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                {essay.data.title}
+              </h3>
+              <p class="mt-3 flex-1 text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">
+                {essay.data.description}
+              </p>
+              <p class="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                {essay.data.tags[0] ?? 'Essay'}
+              </p>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  )}
 
-    <div class="mt-12 flex justify-center">
+  {otherEssays.length > 0 && (
+    <section class="pb-16" data-reveal data-section="essays-other">
+      <div class="mb-6">
+        <h2 class="text-xl font-bold tracking-tight text-foreground sm:text-2xl">More essays</h2>
+      </div>
+      <ul class="space-y-2" data-essays-list>
+        {otherEssays.map((essay) => {
+          const dateLabel = essay.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+          return (
+            <li>
+              <a
+                href={`/essays/${essay.id}/`}
+                data-essay-list-item
+                class="glass-card flex items-center justify-between gap-4 rounded-2xl p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40"
+              >
+                <div class="min-w-0">
+                  <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">{dateLabel}</p>
+                  <p class="mt-1 text-sm font-semibold text-foreground">{essay.data.title}</p>
+                </div>
+                <span class="i-lucide-arrow-up-right size-4 shrink-0 text-muted-foreground"></span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  )}
+
+  <section class="pb-20 md:pb-28" data-reveal data-section="rss-notes">
+    <div class="mb-6 flex items-end justify-between gap-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Recent</p>
+        <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Field notes from farrosfr.com</h2>
+      </div>
       <a
         href="https://farrosfr.com"
         target="_blank"
         rel="noreferrer"
-        class="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-1 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+        class="text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"
       >
-        Browse the full archive
-        <span class="i-lucide-arrow-up-right size-4"></span>
+        Browse the full archive ↗
       </a>
+    </div>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" data-rss-grid>
+      {posts.map((post) => <WritingCard post={post} />)}
     </div>
   </section>
 </BaseLayout>
