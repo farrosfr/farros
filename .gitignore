@@ -30,3 +30,8 @@ pnpm-debug.log*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Google Search Console API credentials
+gsc-credentials.json
+avid-glazing-*.json
+

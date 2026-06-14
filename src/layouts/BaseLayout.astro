@@ -34,6 +34,10 @@ const ogImageURL = new URL(
 // CF inserts a privacy-friendly script (no cookies, no personal data).
 const cfBeaconToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN ?? '';
 
+// Google Search Console Site Verification (optional).
+// Add meta tag for domain ownership verification if set in .env.
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION ?? '';
+
 // Site-wide WebSite schema with SearchAction. The Person schema lives
 // separately so we can extend it without touching this block.
 const websiteSchema = {
@@ -69,6 +73,9 @@ const websiteSchema = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
     <title>{title}</title>
     <meta name="description" content={description} />
 
