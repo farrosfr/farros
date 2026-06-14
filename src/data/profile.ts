@@ -379,18 +379,20 @@ export const navItems = [
   { name: 'Web Porto', href: '/web-porto/' },
   { name: 'Writing', href: '/writing' },
   { name: 'CV', href: '/cv' },
-  { name: 'Contact', href: `mailto:${profile.email}` },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export const searchItems = [
   { title: 'Services', description: 'View professional advisory services.', href: '/#services', type: 'Services' },
   { title: 'Writing', description: 'Notes on security, data, and engineering from farrosfr.com.', href: '/writing', type: 'Writing' },
   { title: 'Web Portfolio', description: 'See the full website portfolio.', href: '/web-porto/', type: 'Portfolio' },
+  { title: 'Contact', description: 'Send a message or find direct lines (email, WhatsApp, social).', href: '/contact', type: 'Contact' },
   ...services.map((item) => ({ title: item.title, description: item.description, href: `/services/${item.slug}`, type: 'Service' })),
   { title: 'View CV', description: 'Open the designed web CV page.', href: '/cv', type: 'CV' },
   { title: 'Download PDF', description: 'Download the 2026 CV PDF.', href: profile.cvPath, type: 'Document' },
   { title: 'Certificates', description: 'Review highlighted certificates and credentials.', href: '/cv#certificates', type: 'CV' },
   { title: 'Writing', description: 'Read cybersecurity and engineering notes.', href: profile.medium, type: 'Writing' },
+  { title: 'Send message', description: 'Open the contact form.', href: '/contact', type: 'Contact' },
   ...featuredWork.map((item) => ({ title: item.name, description: item.description, href: item.href, type: item.type })),
   ...projects.map((item) => ({ title: item.name, description: item.description, href: item.href, type: item.category })),
 ];
