@@ -24,10 +24,54 @@ const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 type Cache = { fetchedAt: number; posts: Post[] };
 
+// Compliance scrub: the user's portfolio is syndicated to platforms that
+// ban platform brand names and trigger words in user-facing text. The /writing
+// page renders post titles and descriptions verbatim from the Substack RSS
+// feed, so we strip banned terms here. This runs at parse time so the
+// on-disk cache holds clean data and the page never has to think about it.
+const BANNED_TERMS: Array<[RegExp, string]> = [
+  // Platform brand names → stripped entirely, then whitespace/pipe cleanup
+  [/\btry[\s-]?hack[\s-]?me\b/gi, ''],
+  [/\bhtb\b/gi, ''],
+  [/\bhacker[\s-]?rank\b/gi, ''],
+  [/\bcyber[\s-]?sky[\s-]?line\b/gi, ''],
+  [/\bsecurity[\s-]?blue[\s-]?team\b/gi, ''],
+  [/\bhackviser\b/gi, ''],
+  // Trigger words → neutral "study notes"
+  [/\bwrite[\s-]?ups?\b/gi, 'study notes'],
+  [/\bwalk[\s-]?throughs?\b/gi, 'study notes'],
+  // Clean up artifacts: empty pipe-segments, trailing pipe, double spaces
+  [/\s*\|\s*\|/g, ' |'],
+  [/\s*\|\s*$/g, ''],
+  [/\s*\(\s*\)/g, ''],
+  [/\s{2,}/g, ' '],
+];
+
+function sanitize(text: string): string {
+  let out = text;
+  for (const [pattern, replacement] of BANNED_TERMS) {
+    out = out.replace(pattern, replacement);
+  }
+  return out.trim();
+}
+
+function sanitizePost(post: Post): Post {
+  return {
+    ...post,
+    title: sanitize(post.title),
+    description: sanitize(post.description),
+  };
+}
+
 function readCache(): Cache | null {
   if (!existsSync(CACHE_PATH)) return null;
   try {
-    return JSON.parse(readFileSync(CACHE_PATH, 'utf-8')) as Cache;
+    const raw = JSON.parse(readFileSync(CACHE_PATH, 'utf-8')) as Cache;
+    // Sanitize on read too, in case an older cache predates the scrub.
+    return {
+      ...raw,
+      posts: raw.posts.map(sanitizePost),
+    };
   } catch {
     return null;
   }
@@ -67,13 +111,13 @@ function parseFeed(xml: string): Post[] {
     const description = (typeof summaryRaw === 'string' ? summaryRaw : (summaryRaw?.['#text'] ?? ''))
       .replace(/<[^>]+>/g, '')
       .slice(0, 240);
-    return {
+    return sanitizePost({
       title: String(title).trim(),
       url: String(url).trim(),
       pubDate: String(e.pubDate ?? e.published ?? e.updated ?? '').trim(),
       description,
       source: 'farrosfr.com',
-    };
+    });
   });
 }
 

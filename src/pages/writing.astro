@@ -1,35 +1,46 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { getLatestPosts } from '../data/writing';
 import WritingCard from '../components/WritingCard.astro';
+import { profile } from '../data/profile';
 
 const { posts } = await getLatestPosts(9);
 ---
 
-<section class="py-20 md:py-28" data-reveal>
-  <div class="mb-12 flex flex-col items-center text-center">
-    <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Writing</p>
-    <h1 class="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-      Notes on security, data, and building for the long term.
-    </h1>
-    <p class="mt-4 max-w-2xl text-lg text-muted-foreground">
-      Practical cybersecurity and engineering writing, syndicated from
-      <a href="https://farrosfr.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">farrosfr.com</a>.
-    </p>
-  </div>
+<BaseLayout
+  title={`Writing | ${profile.name}`}
+  description={`Essays and field notes on cybersecurity, AI threats, and engineering, syndicated from ${profile.name}'s Substack at farrosfr.com.`}
+>
+  <section class="py-14 md:py-20" data-reveal>
+    <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+      <div>
+        <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-primary">Writing</p>
+        <h1 class="text-5xl font-bold leading-[0.95] tracking-tight text-foreground sm:text-6xl">
+          Notes on security, data, and building for the long term.
+        </h1>
+      </div>
+      <p class="max-w-2xl text-lg leading-8 text-muted-foreground lg:justify-self-end">
+        Practical cybersecurity and engineering writing, syndicated from
+        <a href="https://farrosfr.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">farrosfr.com</a>.
+      </p>
+    </div>
+  </section>
 
-  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    {posts.map((post) => <WritingCard post={post} />)}
-  </div>
+  <section class="pb-20 md:pb-28">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {posts.map((post) => <WritingCard post={post} />)}
+    </div>
 
-  <div class="mt-12 flex justify-center">
-    <a
-      href="https://farrosfr.com"
-      target="_blank"
-      rel="noreferrer"
-      class="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-    >
-      Browse the full archive
-      <span class="i-lucide-arrow-up-right size-4"></span>
-    </a>
-  </div>
-</section>
+    <div class="mt-12 flex justify-center">
+      <a
+        href="https://farrosfr.com"
+        target="_blank"
+        rel="noreferrer"
+        class="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-1 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        Browse the full archive
+        <span class="i-lucide-arrow-up-right size-4"></span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

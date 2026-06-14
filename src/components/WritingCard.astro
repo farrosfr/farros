@@ -17,21 +17,21 @@ const dateLabel = isNaN(date.getTime())
   href={post.url}
   target="_blank"
   rel="noreferrer"
-  class="group glass-card flex h-full flex-col rounded-[2rem] p-8 transition-all hover:-translate-y-2 hover:border-primary/40"
+  class="group glass-card flex h-full flex-col rounded-[1.5rem] p-6 transition-all hover:-translate-y-1 hover:border-primary/40"
 >
   <div class="flex items-center justify-between gap-4">
-    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+    <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
       {dateLabel || 'Article'}
     </p>
     <span class="i-lucide-arrow-up-right size-5 text-muted-foreground transition-colors group-hover:text-primary"></span>
   </div>
-  <h3 class="mt-4 text-2xl font-bold text-foreground transition-colors group-hover:text-primary">
+  <h3 class="mt-4 text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
     {post.title}
   </h3>
-  <p class="mt-3 flex-1 text-sm leading-6 text-muted-foreground">
+  <p class="mt-3 flex-1 text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">
     {post.description}
   </p>
-  <p class="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+  <p class="mt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
     {post.source}
   </p>
 </a>
