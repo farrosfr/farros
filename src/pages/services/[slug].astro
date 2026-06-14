@@ -10,12 +10,53 @@ export function getStaticPaths() {
 }
 
 const { service } = Astro.props;
-const whatsappBase = "https://wa.me/6282234057613"; // Using the placeholder number from standard ID formats or user context if available
+const whatsappBase = "https://wa.me/6282234057613";
 const message = encodeURIComponent(`Hello Farros, I am interested in your ${service.title} service. Can we discuss this further?`);
 const whatsappLink = `${whatsappBase}?text=${message}`;
+
+// ProfessionalService JSON-LD. Mirrors the on-page content so search
+// engines and AI agents can reason about the offering.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: service.title,
+  description: service.detailedDescription,
+  image: new URL(service.image, Astro.site ?? 'https://farros.co').toString(),
+  url: new URL(`/services/${service.slug}`, Astro.site ?? 'https://farros.co').toString(),
+  provider: {
+    '@type': 'Person',
+    name: profile.name,
+    url: profile.website,
+    email: profile.email,
+  },
+  areaServed: 'Worldwide',
+  serviceType: service.category,
+  offers: {
+    '@type': 'Offer',
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      description: service.priceRange,
+    },
+  },
+  ...(service.faqs && service.faqs.length > 0
+    ? {
+        mainEntity: {
+          '@type': 'FAQPage',
+          mainEntity: service.faqs.map((f) => ({
+            '@type': 'Question',
+            name: f.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: f.answer,
+            },
+          })),
+        },
+      }
+    : {}),
+};
 ---
 
-<BaseLayout title={`${service.title} | Farros Advisory`}>
+<BaseLayout title={`${service.title} | Farros Advisory`} description={service.description}>
   <main class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 lg:px-8" data-reveal>
     <div class="mb-8">
       <a href="/#services" class="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground transition-colors hover:text-primary">
@@ -44,6 +85,17 @@ const whatsappLink = `${whatsappBase}?text=${message}`;
           </ul>
         </div>
 
+        <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div class="glass-card rounded-2xl p-5">
+            <dt class="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Engagement</dt>
+            <dd class="mt-2 text-sm font-semibold text-foreground">{service.duration}</dd>
+          </div>
+          <div class="glass-card rounded-2xl p-5">
+            <dt class="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Investment</dt>
+            <dd class="mt-2 text-sm font-semibold text-foreground">{service.priceRange}</dd>
+          </div>
+        </dl>
+
         <div class="flex flex-col gap-4 sm:flex-row">
           <a href={whatsappLink} target="_blank" rel="noreferrer" class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20">
             {service.cta}
@@ -55,14 +107,147 @@ const whatsappLink = `${whatsappBase}?text=${message}`;
       </div>
 
       <div class="relative aspect-square overflow-hidden rounded-[2.5rem] border border-border/50 bg-muted ring-1 ring-white/10 lg:sticky lg:top-32">
-        <img 
-          src={service.image} 
-          alt={service.title} 
+        <img
+          src={service.image}
+          alt={service.title}
           loading="lazy"
           class="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent"></div>
       </div>
     </div>
+
+    {/* Process */}
+    {service.process && service.process.length > 0 && (
+      <section class="mt-20" aria-labelledby={`${service.slug}-process`}>
+        <div class="mb-10 flex flex-col gap-2">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Process</p>
+          <h2 id={`${service.slug}-process`} class="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">How the engagement runs</h2>
+          <p class="max-w-2xl text-base leading-7 text-muted-foreground">
+            A short, written loop with a clear end-of-engagement artefact at every step.
+          </p>
+        </div>
+        <ol class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4" data-process-steps>
+          {service.process.map((item) => (
+            <li class="glass-card relative flex flex-col gap-3 rounded-2xl p-6">
+              <span class="text-3xl font-bold tracking-tight text-primary/80">{item.step}</span>
+              <h3 class="text-lg font-semibold text-foreground">{item.title}</h3>
+              <p class="text-sm leading-6 text-muted-foreground">{item.description}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {/* Deliverables */}
+    {service.deliverables && service.deliverables.length > 0 && (
+      <section class="mt-20" aria-labelledby={`${service.slug}-deliverables`}>
+        <div class="grid gap-10 lg:grid-cols-[1fr,2fr]">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Deliverables</p>
+            <h2 id={`${service.slug}-deliverables`} class="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">What you walk away with</h2>
+            <p class="mt-4 text-base leading-7 text-muted-foreground">
+              Concrete artefacts in your own repository, not slides that age out of relevance.
+            </p>
+          </div>
+          <ul class="space-y-3" data-deliverables>
+            {service.deliverables.map((item) => (
+              <li class="glass-card flex items-start gap-3 rounded-xl p-4">
+                <span class="i-lucide-package-check mt-0.5 size-5 shrink-0 text-primary"></span>
+                <span class="text-sm leading-6 text-foreground">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* Good fit / not good fit */}
+    {(service.goodFit || service.notGoodFit) && (
+      <section class="mt-20" aria-labelledby={`${service.slug}-fit`}>
+        <div class="mb-10">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Fit check</p>
+          <h2 id={`${service.slug}-fit`} class="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Is this the right engagement for you?</h2>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2">
+          {service.goodFit && service.goodFit.length > 0 && (
+            <div class="glass-card rounded-2xl p-6">
+              <div class="mb-4 flex items-center gap-2">
+                <span class="i-lucide-circle-check size-5 text-emerald-500"></span>
+                <h3 class="text-lg font-semibold text-foreground">Good fit</h3>
+              </div>
+              <ul class="space-y-3" data-good-fit>
+                {service.goodFit.map((item) => (
+                  <li class="flex items-start gap-3 text-sm leading-6 text-muted-foreground">
+                    <span class="i-lucide-plus size-4 mt-1 shrink-0 text-emerald-500/80"></span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {service.notGoodFit && service.notGoodFit.length > 0 && (
+            <div class="glass-card rounded-2xl p-6">
+              <div class="mb-4 flex items-center gap-2">
+                <span class="i-lucide-circle-x size-5 text-rose-500"></span>
+                <h3 class="text-lg font-semibold text-foreground">Probably not a fit</h3>
+              </div>
+              <ul class="space-y-3" data-not-good-fit>
+                {service.notGoodFit.map((item) => (
+                  <li class="flex items-start gap-3 text-sm leading-6 text-muted-foreground">
+                    <span class="i-lucide-minus size-4 mt-1 shrink-0 text-rose-500/80"></span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    {/* FAQ */}
+    {service.faqs && service.faqs.length > 0 && (
+      <section class="mt-20" aria-labelledby={`${service.slug}-faq`}>
+        <div class="mb-10">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">FAQ</p>
+          <h2 id={`${service.slug}-faq`} class="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Common questions</h2>
+        </div>
+        <div class="space-y-3" data-faqs>
+          {service.faqs.map((faq, i) => (
+            <details class="glass-card group rounded-2xl p-6 open:bg-card/80" data-faq-item>
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-foreground">
+                <span>{faq.question}</span>
+                <span class="i-lucide-chevron-down size-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"></span>
+              </summary>
+              <p class="mt-4 text-sm leading-7 text-muted-foreground">{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Closing CTA */}
+    <section class="mt-20">
+      <div class="glass-card relative overflow-hidden rounded-[2rem] p-10 sm:p-14">
+        <div class="relative z-10 max-w-2xl">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Ready when you are</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Let's map your engagement</h2>
+          <p class="mt-4 text-base leading-7 text-muted-foreground">
+            Share a short brief by email or WhatsApp and I will reply within one business day with a proposed scope and a time to talk.
+          </p>
+        </div>
+        <div class="relative z-10 mt-8 flex flex-col gap-4 sm:flex-row">
+          <a href={whatsappLink} target="_blank" rel="noreferrer" class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20">
+            {service.cta}
+          </a>
+          <a href="/contact" class="inline-flex h-12 items-center justify-center rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-1 hover:border-primary/40">
+            Use the contact form
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 </BaseLayout>
