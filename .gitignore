@@ -35,3 +35,5 @@ pnpm-debug.log*
 gsc-credentials.json
 avid-glazing-*.json
 
+# hermes planning artifacts
+.hermes/
