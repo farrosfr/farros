@@ -40,7 +40,7 @@ const articleJsonLd = {
   },
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': new URL(`/essays/${essay.id}`, Astro.site ?? 'https://farros.co').toString(),
+    '@id': new URL(`/essays/${essay.id}`, Astro.site ?? 'https://porto.farrosfr.com').toString(),
   },
   keywords: essay.data.tags.join(', ') || undefined,
 };

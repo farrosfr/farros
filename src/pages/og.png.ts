@@ -66,7 +66,7 @@ export const GET: APIRoute = async ({ url }) => {
         </div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:flex-end;padding:0 72px 64px 72px;">
-        <div style="display:flex;font-size:22px;font-weight:400;color:#6b7785;letter-spacing:0.04em;">farros.co</div>
+        <div style="display:flex;font-size:22px;font-weight:400;color:#6b7785;letter-spacing:0.04em;">porto.farrosfr.com</div>
         <div style="display:flex;font-size:22px;font-weight:400;color:#6b7785;">Practical web · security · data</div>
       </div>
     </div>

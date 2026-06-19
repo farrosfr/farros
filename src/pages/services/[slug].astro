@@ -22,8 +22,8 @@ const jsonLd = {
   '@type': 'ProfessionalService',
   name: service.title,
   description: service.detailedDescription,
-  image: new URL(service.image, Astro.site ?? 'https://farros.co').toString(),
-  url: new URL(`/services/${service.slug}`, Astro.site ?? 'https://farros.co').toString(),
+  image: new URL(service.image, Astro.site ?? 'https://porto.farrosfr.com').toString(),
+  url: new URL(`/services/${service.slug}`, Astro.site ?? 'https://porto.farrosfr.com').toString(),
   provider: {
     '@type': 'Person',
     name: profile.name,

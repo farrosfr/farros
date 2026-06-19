@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://farros.co',
+  site: 'https://porto.farrosfr.com',
   integrations: [
     UnoCSS({
       injectReset: true,

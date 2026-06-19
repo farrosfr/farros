@@ -38,7 +38,7 @@ async function expectSharedMeta(page: Page) {
     jsonLdScripts.map(async (s) => JSON.parse((await s.textContent()) ?? '{}')),
   ).then((arr) => arr.find((j) => j['@type'] === 'WebSite'));
   expect(website).toBeTruthy();
-  expect(website.url).toBe('https://farros.co');
+  expect(website.url).toBe('https://porto.farrosfr.com');
 
   // Person JSON-LD: name + sameAs links
   const person = await Promise.all(
