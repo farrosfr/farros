@@ -15,10 +15,10 @@ import { featuredWork, heroMetrics, profile } from '../data/profile';
 
     <div class="flex flex-col gap-5 md:gap-6">
       <h1 class="max-w-3xl text-[2.5rem] font-bold leading-[1.15] tracking-tight text-foreground sm:text-5xl md:leading-[1.06]">
-        Building fast web products and resilient infrastructure systems.
+        I build websites with Astro, backend services in Rust and Python, and research offensive security.
       </h1>
       <p class="max-w-3xl text-sm leading-relaxed text-muted-foreground/80 md:text-lg md:leading-8">
-        I am a full-stack developer and system architect working with Astro, TypeScript, data engineering, infrastructure operations, browser extensions, and cybersecurity writing.
+        Statistics graduate from ITS Surabaya. I build Astro themes, backend tools with Rust, and work through offensive security labs.
       </p>
     </div>
 
@@ -45,14 +45,16 @@ import { featuredWork, heroMetrics, profile } from '../data/profile';
   <div class="animate relative [animation-delay:160ms]">
     <div class="absolute -inset-4 rounded-[2rem] bg-primary/10 blur-3xl"></div>
     <div class="glass-card relative overflow-hidden rounded-[1.75rem] p-5">
-      <div class="mb-5 flex items-center justify-between border-b border-border/70 pb-4">
-        <div class="flex items-center gap-3">
-          <div>
+      <div class="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/70 pb-4">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="min-w-0">
             <p class="text-sm font-bold">{profile.name}</p>
-            <p class="text-xs text-muted-foreground">{profile.title}</p>
+            <p class="text-xs text-muted-foreground whitespace-nowrap">{profile.title}</p>
           </div>
         </div>
-        <AvailabilityBadge availability={profile.availability} />
+        <div class="shrink-0">
+          <AvailabilityBadge availability={profile.availability} />
+        </div>
       </div>
 
       <div class="grid gap-4">

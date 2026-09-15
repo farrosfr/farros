@@ -9,7 +9,6 @@
       <stop offset="100%" stop-color="#3b8eff"/>
     </radialGradient>
   </defs>
-  <rect width="1000" height="1000" fill="url(#bg-ai)"/>
   <g stroke="#1c2c4a" stroke-width="1" opacity="0.5">
     <line x1="0" y1="200" x2="1000" y2="200"/>
     <line x1="0" y1="400" x2="1000" y2="400"/>
