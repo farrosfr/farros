@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Mochammad Farros Fatchur Roji',
   shortName: 'Farros',
-  title: 'System Architect · Frontend Engineering · Offensive Security',
+  title: 'Full-Stack Developer & Security Researcher',
   email: 'hello@farrosfr.com',
   cvPath: '/CV_Farros_2026.pdf',
   website: 'https://farrosfr.com',
@@ -25,7 +25,7 @@ export const profile = {
     nextSlot: 'Booking engagements starting Q3 2026',
   },
   summary:
-    'Statistics graduate from ITS Surabaya. I build websites with Astro, backend services in Rust and Python, and work through offensive security labs.',
+    'Statistics graduate from Institut Teknologi Sepuluh Nopember (ITS) Surabaya. My work bridges fast, accessible web frontend architectures with offensive security research—auditing codebases to eliminate vulnerability classes before they ever reach production.',
 };
 
 // Project screenshots live in /src/assets/projects/. The data layer only

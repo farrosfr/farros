@@ -5,9 +5,9 @@ test.describe('premium portfolio', () => {
     await page.goto('/');
 
     await expect(page.getByRole('link', { name: /Farros logo/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Building fast web products/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Production websites/i })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Full-stack builder/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Full-Stack Developer & Security Researcher/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Selected production websites/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Building secure web systems from first principles/i })).toBeVisible();
 
     // Static assets that should always 200
     for (const asset of ['/logo.png', '/favicon.ico', '/favicon.png', '/CV_Farros_2026.pdf']) {
@@ -24,29 +24,26 @@ test.describe('premium portfolio', () => {
     expect(projectResponse.status(), projectSrc!).toBe(200);
   });
 
-  test('defaults to system theme and supports light/dark override', async ({ browser }) => {
+  test('defaults to system theme and supports 1-click toggle override', async ({ browser }) => {
     const context = await browser.newContext({ colorScheme: 'dark' });
     const page = await context.newPage();
     await page.goto('/');
 
-    await expect.poll(() => page.locator('html').evaluate((node) => node.dataset.themeMode)).toBe('system');
+    await expect.poll(() => page.locator('html').evaluate((node) => node.dataset.themeMode)).toBe('dark');
     await expect.poll(() => page.locator('html').evaluate((node) => node.classList.contains('dark'))).toBe(true);
 
-    const isMobile = page.viewportSize()?.width! < 768;
+    const isMobile = (page.viewportSize()?.width ?? 1000) < 768;
     if (isMobile) {
       await page.getByRole('button', { name: /open navigation/i }).click();
     }
-    await page.getByRole('button', { name: /choose theme/i }).and(page.locator(':visible')).click();
-    const lightButton = page.getByRole('button', { name: 'Light' }).and(page.locator(':visible'));
-    await expect(lightButton).toBeVisible();
-    await lightButton.click();
+    const themeBtn = page.locator('[data-theme-toggle]:visible');
+    await expect(themeBtn).toBeVisible();
+    await themeBtn.click();
     await expect.poll(() => page.locator('html').evaluate((node) => node.dataset.themeMode)).toBe('light');
     await expect.poll(() => page.locator('html').evaluate((node) => node.classList.contains('dark'))).toBe(false);
 
-    await page.getByRole('button', { name: /choose theme/i }).and(page.locator(':visible')).click();
-    await page.waitForTimeout(500);
-    await page.getByRole('button', { name: 'System' }).and(page.locator(':visible')).click();
-    await expect.poll(() => page.locator('html').evaluate((node) => node.dataset.themeMode)).toBe('system');
+    await themeBtn.click();
+    await expect.poll(() => page.locator('html').evaluate((node) => node.dataset.themeMode)).toBe('dark');
     await expect.poll(() => page.locator('html').evaluate((node) => node.classList.contains('dark'))).toBe(true);
 
     await context.close();

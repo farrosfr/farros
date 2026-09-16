@@ -62,11 +62,11 @@ const websiteSchema = {
     <meta name="viewport" content="width=device-width" />
     <link rel="canonical" href={canonicalURL} />
     <script is:inline>
-      const themeMode = localStorage.getItem('theme');
+      const storedTheme = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const shouldUseDark = themeMode === 'dark' || (!themeMode && prefersDark);
+      const shouldUseDark = storedTheme === 'dark' || (!storedTheme && prefersDark);
       document.documentElement.classList.toggle('dark', shouldUseDark);
-      document.documentElement.dataset.themeMode = themeMode || 'system';
+      document.documentElement.dataset.themeMode = shouldUseDark ? 'dark' : 'light';
     </script>
     <link rel="icon" sizes="any" href="/favicon.ico" />
     <link rel="icon" type="image/png" href="/favicon.png" />

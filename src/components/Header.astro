@@ -29,34 +29,15 @@ import { navItems, searchItems } from '../data/profile';
         <kbd class="hidden rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:inline-flex">Ctrl K</kbd>
       </button>
 
-      <div class="hidden md:block relative" data-theme-picker>
-        <button
-          type="button"
-          data-theme-toggle
-          class="flex h-10 w-10 items-center justify-center rounded-xl border border-border/70 bg-card/70 text-muted-foreground transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 lg:w-auto lg:px-3 lg:gap-2"
-          aria-label="Choose theme"
-          aria-expanded="false"
-        >
-          <span data-theme-icon class="i-lucide-monitor size-5"></span>
-          <span data-theme-label class="hidden lg:inline">System</span>
-        </button>
-        <div data-theme-menu class="glass absolute right-0 top-12 hidden w-40 rounded-xl p-1">
-          {[
-            { mode: 'system', label: 'System', icon: 'i-lucide-monitor' },
-            { mode: 'light', label: 'Light', icon: 'i-lucide-sun' },
-            { mode: 'dark', label: 'Dark', icon: 'i-lucide-moon' }
-          ].map((item) => (
-            <button
-              type="button"
-              data-theme-option={item.mode}
-              class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              <span class={`${item.icon} size-4`}></span>
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <button
+        type="button"
+        data-theme-toggle
+        class="hidden md:flex h-10 w-10 items-center justify-center rounded-xl border border-border/70 bg-card/70 text-muted-foreground transition-all hover:text-foreground hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
+        aria-label="Toggle theme"
+      >
+        <span data-theme-icon-sun class="hidden i-lucide-sun size-5 transition-transform duration-300"></span>
+        <span data-theme-icon-moon class="hidden i-lucide-moon size-5 transition-transform duration-300"></span>
+      </button>
 
       <button
         type="button"
@@ -97,34 +78,16 @@ import { navItems, searchItems } from '../data/profile';
           <span>Search</span>
         </button>
 
-        <div class="relative flex-1" data-theme-picker>
-          <button
-            type="button"
-            data-theme-toggle
-            class="flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-border/70 bg-card/70 font-bold text-foreground transition-all active:scale-95"
-            aria-label="Choose theme"
-            aria-expanded="false"
-          >
-            <span data-theme-icon class="i-lucide-monitor size-5"></span>
-            <span data-theme-label>System</span>
-          </button>
-          <div data-theme-menu class="glass absolute bottom-full left-0 right-0 z-10 mb-2 hidden flex-col rounded-2xl p-1">
-            {[
-              { mode: 'system', label: 'System', icon: 'i-lucide-monitor' },
-              { mode: 'light', label: 'Light', icon: 'i-lucide-sun' },
-              { mode: 'dark', label: 'Dark', icon: 'i-lucide-moon' }
-            ].map((item) => (
-              <button
-                type="button"
-                data-theme-option={item.mode}
-                class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                <span class={`${item.icon} size-5`}></span>
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        <button
+          type="button"
+          data-theme-toggle
+          class="flex h-14 flex-1 items-center justify-center gap-3 rounded-2xl border border-border/70 bg-card/70 font-bold text-foreground transition-all active:scale-95"
+          aria-label="Toggle theme"
+        >
+          <span data-theme-icon-sun class="hidden i-lucide-sun size-5"></span>
+          <span data-theme-icon-moon class="hidden i-lucide-moon size-5"></span>
+          <span data-theme-mobile-label>Theme</span>
+        </button>
       </div>
 
       <nav class="flex flex-col items-center gap-6 w-full">
@@ -181,90 +144,93 @@ import { navItems, searchItems } from '../data/profile';
   function setupHeaderControls() {
     const root = document.documentElement;
     const systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const themePickers = document.querySelectorAll('[data-theme-picker]');
+    const themeButtons = document.querySelectorAll('[data-theme-toggle]');
 
-    function getThemeMode() {
-      const mode = localStorage.getItem('theme');
-      return mode === 'light' || mode === 'dark' ? mode : 'system';
-    }
+    function syncUI(isDark: boolean) {
+      themeButtons.forEach((btn) => {
+        const sunIcon = btn.querySelector('[data-theme-icon-sun]');
+        const moonIcon = btn.querySelector('[data-theme-icon-moon]');
+        const mobileLabel = btn.querySelector('[data-theme-mobile-label]');
 
-    function applyTheme(mode = getThemeMode()) {
-      const shouldUseDark = mode === 'dark' || (mode === 'system' && systemQuery.matches);
-      root.classList.toggle('dark', shouldUseDark);
-      root.dataset.themeMode = mode;
-
-      if (mode === 'system') {
-        localStorage.removeItem('theme');
-      } else {
-        localStorage.setItem('theme', mode);
-      }
-
-      themePickers.forEach((picker) => {
-        const button = picker.querySelector('[data-theme-toggle]');
-        const label = button?.querySelector('[data-theme-label]');
-        const icon = button?.querySelector('[data-theme-icon]');
-        
-        if (label) label.textContent = mode === 'system' ? 'System' : mode === 'dark' ? 'Dark' : 'Light';
-        if (icon) {
-          icon.className = `${mode === 'system' ? 'i-lucide-monitor' : mode === 'dark' ? 'i-lucide-moon' : 'i-lucide-sun'} size-5`;
+        if (isDark) {
+          sunIcon?.classList.remove('hidden');
+          moonIcon?.classList.add('hidden');
+          if (mobileLabel) mobileLabel.textContent = 'Light Mode';
+          btn.setAttribute('aria-label', 'Switch to light theme');
+        } else {
+          sunIcon?.classList.add('hidden');
+          moonIcon?.classList.remove('hidden');
+          if (mobileLabel) mobileLabel.textContent = 'Dark Mode';
+          btn.setAttribute('aria-label', 'Switch to dark theme');
         }
-
-        picker.querySelectorAll('[data-theme-option]').forEach((option) => {
-          const isActive = option.getAttribute('data-theme-option') === mode;
-          option.setAttribute('aria-pressed', String(isActive));
-          option.classList.toggle('bg-muted', isActive);
-          option.classList.toggle('text-foreground', isActive);
-        });
       });
     }
 
-    themePickers.forEach((picker) => {
-      const button = picker.querySelector('[data-theme-toggle]');
-      const menu = picker.querySelector('[data-theme-menu]');
-      const options = picker.querySelectorAll('[data-theme-option]');
+    function applyTheme(isDark: boolean) {
+      root.classList.toggle('dark', isDark);
+      root.dataset.themeMode = isDark ? 'dark' : 'light';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      syncUI(isDark);
+    }
 
-      if (button && menu && button.getAttribute('data-bound') !== 'true') {
-        button.setAttribute('data-bound', 'true');
-        button.addEventListener('click', () => {
-          const isOpen = menu.classList.toggle('hidden') === false;
-          if (isOpen) {
-            menu.classList.add('flex');
-          } else {
-            menu.classList.remove('flex');
-          }
-          button.setAttribute('aria-expanded', String(isOpen));
-        });
+    function handleThemeToggle(event: Event) {
+      const isDark = root.classList.contains('dark');
+      const nextIsDark = !isDark;
 
-        document.addEventListener('click', (event) => {
-          if (event.target instanceof Node && !picker.contains(event.target)) {
-            menu.classList.add('hidden');
-            menu.classList.remove('flex');
-            button.setAttribute('aria-expanded', 'false');
-          }
-        });
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!('startViewTransition' in document) || prefersReduced) {
+        applyTheme(nextIsDark);
+        return;
       }
 
-      options.forEach((option) => {
-        if (option.getAttribute('data-bound') === 'true') return;
-        option.setAttribute('data-bound', 'true');
-        option.addEventListener('click', () => {
-          const mode = option.getAttribute('data-theme-option') || 'system';
-          applyTheme(mode);
-          menu?.classList.add('hidden');
-          menu?.classList.remove('flex');
-          button?.setAttribute('aria-expanded', 'false');
-        });
+      const mouseEvent = event as MouseEvent;
+      const target = (event.currentTarget || event.target) as HTMLElement | null;
+      const rect = target?.getBoundingClientRect?.();
+      const x = mouseEvent.clientX && mouseEvent.clientX > 0 ? mouseEvent.clientX : (rect ? rect.left + rect.width / 2 : window.innerWidth / 2);
+      const y = mouseEvent.clientY && mouseEvent.clientY > 0 ? mouseEvent.clientY : (rect ? rect.top + rect.height / 2 : 0);
+
+      const endRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      const transition = (document as any).startViewTransition(() => {
+        applyTheme(nextIsDark);
       });
+
+      transition.ready.then(() => {
+        root.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${endRadius}px at ${x}px ${y}px)`
+            ]
+          },
+          {
+            duration: 450,
+            easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+            pseudoElement: '::view-transition-new(root)'
+          }
+        );
+      });
+    }
+
+    themeButtons.forEach((btn) => {
+      if (btn.getAttribute('data-bound') === 'true') return;
+      btn.setAttribute('data-bound', 'true');
+      btn.addEventListener('click', handleThemeToggle);
     });
 
-    if (!window.__farrosSystemThemeBound) {
-      window.__farrosSystemThemeBound = true;
-      systemQuery.addEventListener('change', () => {
-        if (getThemeMode() === 'system') applyTheme('system');
+    if (!(window as any).__farrosSystemThemeBound) {
+      (window as any).__farrosSystemThemeBound = true;
+      systemQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          applyTheme(e.matches);
+        }
       });
     }
 
-    applyTheme(getThemeMode());
+    syncUI(root.classList.contains('dark'));
 
     const menuButton = document.querySelector('[data-menu-toggle]');
     const closeButton = document.querySelector('[data-menu-close]');
