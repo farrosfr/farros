@@ -4,7 +4,7 @@ export const profile = {
   title: 'System Architect · Frontend Engineering · Offensive Security',
   email: 'hello@farrosfr.com',
   cvPath: '/CV_Farros_2026.pdf',
-  website: 'https://porto.farrosfr.com',
+  website: 'https://farrosfr.com',
   github: 'https://github.com/farrosfr',
   linkedin: 'https://linkedin.com/in/farrosfr',
   x: 'https://x.com/farrosfr_',
@@ -575,9 +575,9 @@ export const featuredWork = [
     description: 'DOM-level keyword and content filtering browser extension.',
   },
   {
-    name: 'farrosfr.com',
+    name: 'blog.farrosfr.com',
     type: 'Writing',
-    href: 'https://farrosfr.com',
+    href: 'https://blog.farrosfr.com',
     description: 'Substack custom domain for cybersecurity and engineering writing.',
   },
 ];

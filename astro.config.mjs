@@ -4,7 +4,7 @@ import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://porto.farrosfr.com',
+  site: 'https://farrosfr.com',
   integrations: [
     UnoCSS({
       injectReset: true,
@@ -17,7 +17,7 @@ export default defineConfig({
       },
       serialize(item) {
         item.lastmod = new Date().toISOString();
-        if (item.url === 'https://porto.farrosfr.com/') {
+        if (item.url === 'https://farrosfr.com/') {
           item.priority = 1.0;
           item.changefreq = ChangeFreqEnum.WEEKLY;
         } else if (
