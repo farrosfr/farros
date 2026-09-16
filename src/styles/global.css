@@ -6,42 +6,42 @@
   --card-foreground: 220 28% 9%;
   --popover: 0 0% 100%;
   --popover-foreground: 220 28% 9%;
-  --primary: 215 92% 52%;
+  --primary: 348 83% 42%;
   --primary-foreground: 0 0% 100%;
   --secondary: 216 33% 94%;
   --secondary-foreground: 220 28% 12%;
   --muted: 214 32% 92%;
   --muted-foreground: 217 14% 40%;
-  --accent: 188 78% 42%;
+  --accent: 38 92% 45%;
   --accent-foreground: 210 40% 98%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
   --border: 215 28% 84%;
   --input: 215 28% 84%;
-  --ring: 215 92% 52%;
+  --ring: 348 83% 42%;
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: 220 32% 5%;
+  --background: 240 10% 4%;
   --foreground: 210 30% 96%;
-  --card: 220 30% 8%;
+  --card: 240 10% 7%;
   --card-foreground: 210 40% 98%;
-  --popover: 220 30% 8%;
+  --popover: 240 10% 7%;
   --popover-foreground: 210 40% 98%;
-  --primary: 211 100% 64%;
-  --primary-foreground: 220 32% 5%;
-  --secondary: 220 24% 13%;
+  --primary: 350 89% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 7% 12%;
   --secondary-foreground: 210 40% 98%;
-  --muted: 220 22% 16%;
+  --muted: 240 6% 14%;
   --muted-foreground: 217 16% 70%;
-  --accent: 188 86% 48%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 38 92% 50%;
+  --accent-foreground: 240 10% 4%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 210 40% 98%;
-  --border: 220 18% 22%;
-  --input: 220 18% 22%;
-  --ring: 211 100% 64%;
+  --border: 240 6% 18%;
+  --input: 240 6% 18%;
+  --ring: 350 89% 60%;
 }
 
 html {
@@ -169,5 +169,49 @@ body::before {
 ::view-transition-new(root) {
   z-index: 9999;
 }
+
+/* Ambient Mouse Cursor Spotlight */
+.cursor-spotlight {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.dark .cursor-spotlight {
+  background: radial-gradient(
+    650px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    rgba(251, 44, 54, 0.08),
+    transparent 65%
+  );
+}
+
+:root:not(.dark) .cursor-spotlight {
+  background: radial-gradient(
+    650px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+    rgba(190, 18, 60, 0.04),
+    transparent 65%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cursor-spotlight.is-active {
+    opacity: 1;
+  }
+}
+
+/* Glass Card Tactical Hover Glow */
+.glass-card {
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.dark .glass-card:hover {
+  border-color: rgba(251, 44, 54, 0.35);
+  box-shadow: 0 0 30px -10px rgba(251, 44, 54, 0.12);
+}
+
 
 

@@ -1,0 +1,154 @@
+---
+// Japanese Red-Team backdrop: Mount Fuji silhouette,
+// crimson mist aura, and Torii Gate (Gerbang Torii).
+// Rendered as a lightweight, scalable SVG with multi-depth parallax.
+---
+
+<div
+  class="torii-backdrop pointer-events-none absolute inset-0 z-0 overflow-hidden select-none"
+  aria-hidden="true"
+>
+  <div class="torii-parallax-container relative h-full w-full">
+    <!-- Crimson Sunrise Aura / Radial Mist Glow -->
+    <div
+      data-parallax-aura
+      class="absolute left-1/2 top-[10%] -translate-x-1/2 w-[700px] sm:w-[950px] h-[350px] sm:h-[450px] rounded-full blur-[80px] sm:blur-[120px] transition-transform duration-700 ease-out pointer-events-none"
+      style="background: radial-gradient(ellipse at center, rgba(251, 44, 54, 0.22) 0%, rgba(244, 63, 94, 0.12) 40%, rgba(251, 44, 54, 0.02) 70%, transparent 85%);"
+    ></div>
+
+    <!-- Mountain & Torii Gate Layered SVG -->
+    <svg
+      class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1440px] h-[480px] sm:h-[580px] opacity-75 dark:opacity-85 transition-opacity duration-500"
+      viewBox="0 0 1440 600"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMax meet"
+    >
+      <defs>
+        <!-- Gradients for Mountain Slopes -->
+        <linearGradient id="fujiGrad" x1="720" y1="120" x2="720" y2="550" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="var(--fuji-top, #251218)" stop-opacity="0.9" />
+          <stop offset="60%" stop-color="var(--fuji-mid, #140b0e)" stop-opacity="0.85" />
+          <stop offset="100%" stop-color="var(--fuji-base, #09090b)" stop-opacity="0.95" />
+        </linearGradient>
+
+        <linearGradient id="ridgeGrad1" x1="0" y1="280" x2="0" y2="600" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1f1216" stop-opacity="0.6" />
+          <stop offset="100%" stop-color="#09090b" stop-opacity="0.95" />
+        </linearGradient>
+
+        <linearGradient id="ridgeGrad2" x1="0" y1="350" x2="0" y2="600" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#180e12" stop-opacity="0.8" />
+          <stop offset="100%" stop-color="#09090b" stop-opacity="1" />
+        </linearGradient>
+
+        <!-- Torii Gate Crimson Edge Glow -->
+        <linearGradient id="toriiCrimson" x1="720" y1="260" x2="720" y2="520" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fb2c36" stop-opacity="0.95" />
+          <stop offset="40%" stop-color="#e11d48" stop-opacity="0.85" />
+          <stop offset="100%" stop-color="#881337" stop-opacity="0.75" />
+        </linearGradient>
+
+        <!-- Soft Vertical Gradient Mask to seamlessly bleed into background -->
+        <linearGradient id="verticalFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="white" stop-opacity="0" />
+          <stop offset="25%" stop-color="white" stop-opacity="0.8" />
+          <stop offset="70%" stop-color="white" stop-opacity="1" />
+          <stop offset="100%" stop-color="white" stop-opacity="0" />
+        </linearGradient>
+
+        <mask id="fadeMask">
+          <rect width="1440" height="600" fill="url(#verticalFade)" />
+        </mask>
+      </defs>
+
+      <g mask="url(#fadeMask)">
+        <!-- Layer 1: Distant Mount Fuji (drifts with 0.015x parallax) -->
+        <g data-parallax-mountain class="transition-transform duration-700 ease-out">
+          <!-- Mount Fuji Peak & Sweeping Slopes -->
+          <path
+            d="M540 500 C 620 420 670 240 700 160 C 708 140 715 130 720 130 C 725 130 732 140 740 160 C 770 240 820 420 900 500 Z"
+            fill="url(#fujiGrad)"
+          />
+          <!-- Snowcap subtle highlight edge -->
+          <path
+            d="M685 200 C 705 180 715 150 720 145 C 725 150 735 180 755 200 C 745 205 738 198 732 208 C 726 215 722 205 720 206 C 717 206 712 215 707 208 C 700 198 693 205 685 200 Z"
+            fill="rgba(255, 255, 255, 0.12)"
+          />
+        </g>
+
+        <!-- Layer 2: Middle Atmospheric Mountain Ridges -->
+        <g data-parallax-ridges class="transition-transform duration-500 ease-out">
+          <path
+            d="M0 450 Q 250 360 480 430 Q 720 480 960 400 Q 1200 340 1440 430 L 1440 600 L 0 600 Z"
+            fill="url(#ridgeGrad1)"
+          />
+          <path
+            d="M0 500 Q 300 440 620 490 Q 940 530 1200 460 Q 1340 430 1440 480 L 1440 600 L 0 600 Z"
+            fill="url(#ridgeGrad2)"
+          />
+        </g>
+
+        <!-- Layer 3: Japanese Torii Gate (Gerbang Torii) -->
+        <g data-parallax-torii class="transition-transform duration-300 ease-out">
+          <!-- Torii Subtle Ambient Silhouette Glow -->
+          <g filter="drop-shadow(0 0 16px rgba(251, 44, 54, 0.4))">
+            <!-- Kasagi / Top Curved Lintel -->
+            <path
+              d="M640 285 Q 720 273 800 285 L 806 295 Q 720 283 634 295 Z"
+              fill="url(#toriiCrimson)"
+            />
+            <!-- Shimaki / Second Upper Beam -->
+            <rect x="650" y="295" width="140" height="9" rx="1.5" fill="url(#toriiCrimson)" />
+
+            <!-- Nuki / Lower Horizontal Beam -->
+            <rect x="646" y="322" width="148" height="7.5" rx="1" fill="url(#toriiCrimson)" />
+
+            <!-- Gakuzuka / Center Tablet Spacer -->
+            <rect x="716" y="304" width="8" height="18" rx="1" fill="url(#toriiCrimson)" />
+
+            <!-- Hashira / Left Pillar (slight inward tilt) -->
+            <path
+              d="M670 295 L 666 450 L 676 450 L 678 295 Z"
+              fill="url(#toriiCrimson)"
+            />
+            <!-- Left Pillar Base Stone (Kamebara) -->
+            <rect x="663" y="448" width="16" height="6" rx="2" fill="#180e12" />
+
+            <!-- Hashira / Right Pillar (slight inward tilt) -->
+            <path
+              d="M770 295 L 772 450 L 762 450 L 760 295 Z"
+              fill="url(#toriiCrimson)"
+            />
+            <!-- Right Pillar Base Stone (Kamebara) -->
+            <rect x="759" y="448" width="16" height="6" rx="2" fill="#180e12" />
+          </g>
+
+          <!-- Torii Soft Inner Accent Line -->
+          <path
+            d="M644 287 Q 720 276 796 287"
+            stroke="rgba(255, 255, 255, 0.35)"
+            stroke-width="1"
+            fill="none"
+          />
+        </g>
+      </g>
+    </svg>
+
+    <!-- Bottom Seamless Obsidian Blend -->
+    <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --fuji-top: #381a24;
+    --fuji-mid: #201016;
+    --fuji-base: #f8fafc;
+  }
+  :root.dark {
+    --fuji-top: #251218;
+    --fuji-mid: #140b0e;
+    --fuji-base: #09090b;
+  }
+</style>

@@ -51,12 +51,12 @@ export const GET: APIRoute = async ({ url }) => {
   // an explicit display. We keep the template tight: every parent div is
   // display:flex and every text child lives in its own inline-flex div.
   const tree = satoriHtml(`
-    <div style="display:flex;flex-direction:column;width:${WIDTH}px;height:${HEIGHT}px;background:linear-gradient(135deg,#070b12 0%,#0a0e17 60%,#0d1118 100%);color:#e6edf3;font-family:Inter;position:relative;overflow:hidden;">
-      <div style="display:flex;position:absolute;top:-180px;right:-180px;width:520px;height:520px;border-radius:50%;border:1px solid rgba(120,170,210,0.12);"></div>
-      <div style="display:flex;position:absolute;top:-100px;right:-100px;width:360px;height:360px;border-radius:50%;border:1px solid rgba(120,170,210,0.08);"></div>
-      <div style="display:flex;position:absolute;bottom:0;left:0;width:240px;height:6px;background:linear-gradient(90deg,#3b82f6,#22d3ee);"></div>
+    <div style="display:flex;flex-direction:column;width:${WIDTH}px;height:${HEIGHT}px;background:linear-gradient(135deg,#09090b 0%,#111115 60%,#171014 100%);color:#e6edf3;font-family:Inter;position:relative;overflow:hidden;">
+      <div style="display:flex;position:absolute;top:-180px;right:-180px;width:520px;height:520px;border-radius:50%;border:1px solid rgba(251,44,54,0.15);"></div>
+      <div style="display:flex;position:absolute;top:-100px;right:-100px;width:360px;height:360px;border-radius:50%;border:1px solid rgba(251,44,54,0.1);"></div>
+      <div style="display:flex;position:absolute;bottom:0;left:0;width:240px;height:6px;background:linear-gradient(90deg,#fb2c36,#f43f5e);"></div>
       <div style="display:flex;align-items:center;gap:14px;padding:64px 72px 0 72px;">
-        <div style="display:flex;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#22d3ee);box-shadow:0 0 24px rgba(59,130,246,0.5);"></div>
+        <div style="display:flex;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#fb2c36,#f43f5e);box-shadow:0 0 24px rgba(251,44,54,0.6);"></div>
         <div style="display:flex;font-size:28px;font-weight:600;letter-spacing:0.18em;color:#e6edf3;">FARROS</div>
       </div>
       <div style="display:flex;flex-direction:column;flex:1;justify-content:center;padding:0 72px;">

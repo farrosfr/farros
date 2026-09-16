@@ -100,7 +100,7 @@ const websiteSchema = {
     <meta name="twitter:image" content={ogImageURL} />
     <meta name="twitter:image:alt" content={title} />
 
-    <meta name="theme-color" content="#070b12" />
+    <meta name="theme-color" content="#09090b" />
 
     <!-- Cloudflare Web Analytics (opt-in via PUBLIC_CF_ANALYTICS_TOKEN).
          Privacy-friendly: no cookies, no personal data, no fingerprinting.
@@ -156,16 +156,98 @@ const websiteSchema = {
         targets.forEach((el) => observer.observe(el));
       }
 
+      function setupInteractions() {
+        const spotlight = document.querySelector('.cursor-spotlight');
+        const mountain = document.querySelector('[data-parallax-mountain]');
+        const torii = document.querySelector('[data-parallax-torii]');
+        const ridges = document.querySelector('[data-parallax-ridges]');
+        const aura = document.querySelector('[data-parallax-aura]');
+
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let targetMouseX = mouseX;
+        let targetMouseY = mouseY;
+        let scrollY = window.scrollY;
+        let ticking = false;
+
+        document.addEventListener('pointermove', (e) => {
+          targetMouseX = e.clientX;
+          targetMouseY = e.clientY;
+          if (spotlight && !spotlight.classList.contains('is-active')) {
+            spotlight.classList.add('is-active');
+          }
+          requestTick();
+        }, { passive: true });
+
+        window.addEventListener('scroll', () => {
+          scrollY = window.scrollY;
+          requestTick();
+        }, { passive: true });
+
+        function requestTick() {
+          if (!ticking) {
+            requestAnimationFrame(update);
+            ticking = true;
+          }
+        }
+
+        function update() {
+          ticking = false;
+          mouseX += (targetMouseX - mouseX) * 0.22;
+          mouseY += (targetMouseY - mouseY) * 0.22;
+
+          document.documentElement.style.setProperty('--mouse-x', `${mouseX.toFixed(1)}px`);
+          document.documentElement.style.setProperty('--mouse-y', `${mouseY.toFixed(1)}px`);
+
+          if (scrollY < 900) {
+            const centerX = window.innerWidth / 2;
+            const diffX = (mouseX - centerX) / centerX;
+
+            if (mountain) {
+              const mx = (diffX * -10).toFixed(1);
+              const my = (scrollY * 0.14).toFixed(1);
+              mountain.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+            }
+            if (ridges) {
+              const rx = (diffX * -16).toFixed(1);
+              const ry = (scrollY * 0.2).toFixed(1);
+              ridges.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+            }
+            if (torii) {
+              const tx = (diffX * -26).toFixed(1);
+              const ty = (scrollY * 0.3).toFixed(1);
+              torii.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+            }
+            if (aura) {
+              const ax = (diffX * -12).toFixed(1);
+              const ay = (scrollY * 0.16).toFixed(1);
+              aura.style.transform = `translate3d(calc(-50% + ${ax}px), ${ay}px, 0)`;
+            }
+          }
+        }
+      }
+
       // Run once on initial load and again after every Astro view transition.
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupReveal);
+        document.addEventListener('DOMContentLoaded', () => {
+          setupReveal();
+          setupInteractions();
+        });
       } else {
         setupReveal();
+        setupInteractions();
       }
-      document.addEventListener('astro:page-load', setupReveal);
+      document.addEventListener('astro:page-load', () => {
+        setupReveal();
+        setupInteractions();
+      });
     </script>
   </head>
   <body class="bg-background text-foreground font-sans antialiased flex flex-col min-h-screen selection:bg-primary/30 selection:text-foreground">
+    <div class="cursor-spotlight" aria-hidden="true"></div>
     <Header />
     <main class="flex-grow mx-auto max-w-screen-xl px-5 sm:px-6 md:px-10 lg:px-16 w-full">
       <slot />
