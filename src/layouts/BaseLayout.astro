@@ -158,11 +158,6 @@ const websiteSchema = {
 
       function setupInteractions() {
         const spotlight = document.querySelector('.cursor-spotlight');
-        const mountain = document.querySelector('[data-parallax-mountain]');
-        const torii = document.querySelector('[data-parallax-torii]');
-        const ridges = document.querySelector('[data-parallax-ridges]');
-        const aura = document.querySelector('[data-parallax-aura]');
-
         if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -170,7 +165,6 @@ const websiteSchema = {
         let mouseY = window.innerHeight / 2;
         let targetMouseX = mouseX;
         let targetMouseY = mouseY;
-        let scrollY = window.scrollY;
         let ticking = false;
 
         document.addEventListener('pointermove', (e) => {
@@ -179,54 +173,19 @@ const websiteSchema = {
           if (spotlight && !spotlight.classList.contains('is-active')) {
             spotlight.classList.add('is-active');
           }
-          requestTick();
-        }, { passive: true });
-
-        window.addEventListener('scroll', () => {
-          scrollY = window.scrollY;
-          requestTick();
-        }, { passive: true });
-
-        function requestTick() {
           if (!ticking) {
             requestAnimationFrame(update);
             ticking = true;
           }
-        }
+        }, { passive: true });
 
         function update() {
           ticking = false;
-          mouseX += (targetMouseX - mouseX) * 0.22;
-          mouseY += (targetMouseY - mouseY) * 0.22;
+          mouseX += (targetMouseX - mouseX) * 0.25;
+          mouseY += (targetMouseY - mouseY) * 0.25;
 
           document.documentElement.style.setProperty('--mouse-x', `${mouseX.toFixed(1)}px`);
           document.documentElement.style.setProperty('--mouse-y', `${mouseY.toFixed(1)}px`);
-
-          if (scrollY < 900) {
-            const centerX = window.innerWidth / 2;
-            const diffX = (mouseX - centerX) / centerX;
-
-            if (mountain) {
-              const mx = (diffX * -10).toFixed(1);
-              const my = (scrollY * 0.14).toFixed(1);
-              mountain.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
-            }
-            if (ridges) {
-              const rx = (diffX * -16).toFixed(1);
-              const ry = (scrollY * 0.2).toFixed(1);
-              ridges.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-            }
-            if (torii) {
-              const tx = (diffX * -26).toFixed(1);
-              const ty = (scrollY * 0.3).toFixed(1);
-              torii.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
-            }
-            if (aura) {
-              const ax = (diffX * -12).toFixed(1);
-              const ay = (scrollY * 0.16).toFixed(1);
-              aura.style.transform = `translate3d(calc(-50% + ${ax}px), ${ay}px, 0)`;
-            }
-          }
         }
       }
 
