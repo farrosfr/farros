@@ -18,11 +18,11 @@ test.describe('web portfolio page', () => {
     await expect(page.getByRole('tablist', { name: /Filter projects by category/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /^All\b/ })).toHaveAttribute('aria-selected', 'true');
 
-    // Project cards: we ship 13, with the filter chip count attesting.
+    // Project cards: we ship 15, with the filter chip count attesting.
     const cards = page.locator('[data-project-card]');
-    expect(await cards.count()).toBe(13);
+    expect(await cards.count()).toBe(15);
     const allChip = page.getByRole('tab', { name: /^All\b/ });
-    await expect(allChip.locator('[data-filter-count-badge]')).toHaveText('13');
+    await expect(allChip.locator('[data-filter-count-badge]')).toHaveText('15');
 
     // Every project image must have a srcset (astro:assets generates one)
     const firstImg = page.locator('img[alt*="screenshot"]').first();
@@ -45,8 +45,8 @@ test.describe('web portfolio page', () => {
     await page.goto('/web-porto/');
     const cards = page.locator('[data-project-card]:not([hidden])');
 
-    // Default: all 13 visible
-    await expect(cards).toHaveCount(13);
+    // Default: all 15 visible
+    await expect(cards).toHaveCount(15);
 
     // Click "Education" — only education projects (3) should remain
     await page.getByRole('tab', { name: /^Education\b/ }).click();
@@ -54,21 +54,21 @@ test.describe('web portfolio page', () => {
     await expect(page.getByRole('tab', { name: /^Education\b/ })).toHaveAttribute('aria-selected', 'true');
     await expect(page).toHaveURL(/#filter=education$/);
 
-    // Click "Commerce" — 5 projects
+    // Click "Commerce" — 6 projects
     await page.getByRole('tab', { name: /^Commerce\b/ }).click();
-    await expect(cards).toHaveCount(5);
+    await expect(cards).toHaveCount(6);
 
     // Click "Energy" — 3 projects
     await page.getByRole('tab', { name: /^Energy\b/ }).click();
     await expect(cards).toHaveCount(3);
 
-    // Click "Other" — 2 projects
+    // Click "Other" — 3 projects
     await page.getByRole('tab', { name: /^Other\b/ }).click();
-    await expect(cards).toHaveCount(2);
+    await expect(cards).toHaveCount(3);
 
-    // Back to "All" — 13
+    // Back to "All" — 15
     await page.getByRole('tab', { name: /^All\b/ }).click();
-    await expect(cards).toHaveCount(13);
+    await expect(cards).toHaveCount(15);
     await expect(page).toHaveURL(/^[^#]*$/);
   });
 
@@ -144,6 +144,6 @@ test.describe('web portfolio page', () => {
     await page.goto('/web-porto/');
     await page.getByRole('link', { name: /Farros logo/i }).first().click();
     await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole('heading', { name: /Building fast web products/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Full-Stack Developer & Security Researcher/i })).toBeVisible();
   });
 });
