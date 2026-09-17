@@ -8,9 +8,9 @@ test.describe('writing page', () => {
       page.getByRole('heading', { name: /Notes on security/i })
     ).toBeVisible();
 
-    // The Substack "farrosfr.com" link appears in the lede + the CTA
+    // The Substack link appears in the lede
     await expect(
-      page.getByRole('link', { name: /farrosfr\.com/i }).first()
+      page.getByRole('link', { name: /Substack/i }).first()
     ).toBeVisible();
 
     await expect(
@@ -18,9 +18,8 @@ test.describe('writing page', () => {
     ).toBeVisible();
 
     // At least 3 article cards rendered. Each card links to a /p/<slug>
-    // Substack URL. The real feed has 4 posts at the time of writing;
-    // the fallback has 3 placeholders. Either is acceptable.
-    const cards = page.locator('a[href*="farrosfr.com/p/"], a[href*="farrosfr.com"]');
+    // Substack URL.
+    const cards = page.locator('a[href*="substack.com/p/"], a[href*="farrosfr.substack.com"]');
     await expect.poll(async () => await cards.count()).toBeGreaterThanOrEqual(3);
   });
 

@@ -18,7 +18,7 @@ export type FeedResult = {
   fetchedAt: number;
 };
 
-const FEED_URL = 'https://farrosfr.com/feed';
+const FEED_URL = 'https://farrosfr.substack.com/feed';
 const CACHE_PATH = '.data/writing-cache.json';
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
@@ -116,7 +116,7 @@ function parseFeed(xml: string): Post[] {
       url: String(url).trim(),
       pubDate: String(e.pubDate ?? e.published ?? e.updated ?? '').trim(),
       description,
-      source: 'farrosfr.com',
+      source: 'Substack',
     });
   });
 }

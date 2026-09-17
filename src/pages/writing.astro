@@ -21,7 +21,7 @@ const { posts } = await getLatestPosts(9);
 
 <BaseLayout
   title={`Writing | ${profile.name}`}
-  description={`Essays and field notes on cybersecurity, AI threats, and engineering, syndicated from ${profile.name}'s Substack at farrosfr.com.`}
+  description={`Essays and field notes on cybersecurity, AI threats, and engineering, syndicated from ${profile.name}'s Substack.`}
 >
   <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Writing' }]} class="pt-10 md:pt-14" />
   <section class="py-8 md:py-10" data-reveal>
@@ -34,7 +34,7 @@ const { posts } = await getLatestPosts(9);
       </div>
       <p class="max-w-2xl text-lg leading-8 text-muted-foreground lg:justify-self-end">
         A mix of long-form essays published here, and shorter field notes
-        <a href="https://farrosfr.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">syndicated from farrosfr.com</a>.
+        <a href="https://farrosfr.substack.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">syndicated from Substack</a>.
       </p>
     </div>
   </section>
@@ -46,7 +46,7 @@ const { posts } = await getLatestPosts(9);
           <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Long-form</p>
           <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Essays</h2>
         </div>
-        <a href="https://farrosfr.com" target="_blank" rel="noreferrer" class="hidden text-sm font-semibold text-muted-foreground transition-colors hover:text-primary sm:inline">
+        <a href="https://farrosfr.substack.com/archive" target="_blank" rel="noreferrer" class="hidden text-sm font-semibold text-muted-foreground transition-colors hover:text-primary sm:inline">
           Notes archive ↗
         </a>
       </div>
@@ -117,10 +117,10 @@ const { posts } = await getLatestPosts(9);
     <div class="mb-6 flex items-end justify-between gap-4">
       <div>
         <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Recent</p>
-        <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Field notes from farrosfr.com</h2>
+        <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Field notes from Substack</h2>
       </div>
       <a
-        href="https://farrosfr.com"
+        href="https://farrosfr.substack.com/archive"
         target="_blank"
         rel="noreferrer"
         class="text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"

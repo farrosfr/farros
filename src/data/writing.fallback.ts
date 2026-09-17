@@ -6,24 +6,24 @@
 
 export const writingFallback = [
   {
-    title: 'Writing archive at farrosfr.com',
-    url: 'https://farrosfr.com',
+    title: 'Writing archive at Substack',
+    url: 'https://farrosfr.substack.com',
     pubDate: '2026-01-01T00:00:00Z',
     description: 'Full archive of cybersecurity, data, and engineering notes. Subscribed via Substack.',
-    source: 'farrosfr.com',
+    source: 'Substack',
   },
   {
-    title: 'Writing archive at farrosfr.com',
-    url: 'https://farrosfr.com',
+    title: 'Writing archive at Substack',
+    url: 'https://farrosfr.substack.com',
     pubDate: '2026-01-01T00:00:00Z',
     description: 'Full archive of cybersecurity, data, and engineering notes. Subscribed via Substack.',
-    source: 'farrosfr.com',
+    source: 'Substack',
   },
   {
-    title: 'Writing archive at farrosfr.com',
-    url: 'https://farrosfr.com',
+    title: 'Writing archive at Substack',
+    url: 'https://farrosfr.substack.com',
     pubDate: '2026-01-01T00:00:00Z',
     description: 'Full archive of cybersecurity, data, and engineering notes. Subscribed via Substack.',
-    source: 'farrosfr.com',
+    source: 'Substack',
   },
 ];

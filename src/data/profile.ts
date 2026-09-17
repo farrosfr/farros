@@ -575,10 +575,10 @@ export const featuredWork = [
     description: 'DOM-level keyword and content filtering browser extension.',
   },
   {
-    name: 'blog.farrosfr.com',
+    name: 'Substack',
     type: 'Writing',
-    href: 'https://blog.farrosfr.com',
-    description: 'Substack custom domain for cybersecurity and engineering writing.',
+    href: 'https://farrosfr.substack.com',
+    description: 'Field notes and research on cybersecurity, red teaming, and engineering.',
   },
 ];
 
