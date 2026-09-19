@@ -2,8 +2,16 @@
 import { navItems, searchItems } from '../data/profile';
 ---
 
-<header class="sticky top-0 z-50 w-full px-4 py-3 sm:py-4">
-  <div class="glass mx-auto flex min-h-14 sm:min-h-16 max-w-screen-xl items-center justify-between gap-2 rounded-2xl px-4 py-3 sm:px-6">
+<header
+  data-header
+  data-header-hidden="false"
+  class="sticky top-0 z-50 w-full px-4 py-3 sm:py-4"
+>
+  <div
+    data-header-container
+    data-scrolled="false"
+    class="mx-auto flex min-h-14 sm:min-h-16 w-full items-center justify-between gap-2 rounded-2xl px-4 py-3 sm:px-6"
+  >
     <a href="/" class="group flex items-center gap-2 font-bold tracking-tight shrink-0">
       <img src="/logo.png" alt="Farros logo" class="size-8 rounded-lg ring-1 ring-white/10 transition-transform group-hover:scale-105 sm:size-9" />
       <span class="hidden text-lg text-foreground sm:block font-bold">Farros <span class="text-primary">FR</span></span>
@@ -52,6 +60,7 @@ import { navItems, searchItems } from '../data/profile';
       </button>
     </div>
   </div>
+</header>
 
   <div
     data-mobile-menu
@@ -116,7 +125,6 @@ import { navItems, searchItems } from '../data/profile';
       </p>
     </div>
   </div>
-</header>
 
 <div
   data-search-palette
@@ -268,6 +276,70 @@ import { navItems, searchItems } from '../data/profile';
       closeButton.setAttribute('data-bound', 'true');
       closeButton.addEventListener('click', closeMobileMenu);
     }
+
+    const header = document.querySelector('[data-header]') as HTMLElement | null;
+    const headerContainer = document.querySelector('[data-header-container]') as HTMLElement | null;
+
+    if (header && headerContainer) {
+      let lastScrollY = window.scrollY;
+
+      const updateScrollState = () => {
+        const currentScrollY = window.scrollY;
+        const isMobileMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+        const isScrolled = currentScrollY > 20;
+        headerContainer.setAttribute('data-scrolled', isScrolled ? 'true' : 'false');
+
+        if (isMobileMenuOpen) {
+          header.setAttribute('data-header-hidden', 'false');
+        } else if (currentScrollY > 300 && currentScrollY > lastScrollY) {
+          header.setAttribute('data-header-hidden', 'true');
+        } else if (currentScrollY < lastScrollY || currentScrollY <= 20) {
+          header.setAttribute('data-header-hidden', 'false');
+        }
+
+        lastScrollY = Math.max(0, currentScrollY);
+      };
+
+      header.addEventListener('focusin', () => {
+        header.setAttribute('data-header-hidden', 'false');
+      });
+
+      if (!(window as any).__farrosHeaderScrollBound) {
+        (window as any).__farrosHeaderScrollBound = true;
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              const activeHeader = document.querySelector('[data-header]') as HTMLElement | null;
+              const activeContainer = document.querySelector('[data-header-container]') as HTMLElement | null;
+              const activeMobileMenu = document.querySelector('[data-mobile-menu]') as HTMLElement | null;
+              if (activeHeader && activeContainer) {
+                const currentScrollY = window.scrollY;
+                const isMobileMenuOpen = activeMobileMenu && !activeMobileMenu.classList.contains('hidden');
+
+                const isScrolled = currentScrollY > 20;
+                activeContainer.setAttribute('data-scrolled', isScrolled ? 'true' : 'false');
+
+                if (isMobileMenuOpen) {
+                  activeHeader.setAttribute('data-header-hidden', 'false');
+                } else if (currentScrollY > 300 && currentScrollY > lastScrollY) {
+                  activeHeader.setAttribute('data-header-hidden', 'true');
+                } else if (currentScrollY < lastScrollY || currentScrollY <= 20) {
+                  activeHeader.setAttribute('data-header-hidden', 'false');
+                }
+
+                lastScrollY = Math.max(0, currentScrollY);
+              }
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+      }
+
+      updateScrollState();
+    }
   }
 
   setupHeaderControls();
@@ -350,3 +422,55 @@ import { navItems, searchItems } from '../data/profile';
   setupSearchPalette();
   document.addEventListener('astro:page-load', setupSearchPalette);
 </script>
+
+<style>
+  [data-header] {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-header][data-header-hidden="true"] {
+    transform: translateY(-100%);
+  }
+
+  [data-header-container] {
+    max-width: 80rem; /* max-w-screen-xl (1280px) */
+    background-color: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition:
+      max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      backdrop-filter 0.25s ease,
+      -webkit-backdrop-filter 0.25s ease;
+  }
+
+  [data-header-container][data-scrolled="true"] {
+    max-width: 56rem; /* max-w-4xl (896px) on desktop */
+    background-color: hsl(var(--card) / 0.75);
+    border-color: hsl(var(--border) / 0.7);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.08),
+      0 8px 10px -6px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  :global(.dark) [data-header-container][data-scrolled="true"] {
+    background-color: hsl(var(--card) / 0.7);
+    border-color: hsl(var(--border) / 0.6);
+    box-shadow:
+      0 12px 30px -8px rgba(0, 0, 0, 0.35),
+      0 8px 10px -6px rgba(0, 0, 0, 0.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-header],
+    [data-header-container] {
+      transition: none !important;
+    }
+  }
+</style>
+
