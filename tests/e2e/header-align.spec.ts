@@ -70,4 +70,30 @@ test.describe('Header Responsive Multi-Stage Width and Scroll Transitions', () =
     const backToTopHeaderBox = await headerContainer.boundingBox();
     expect(Math.abs(backToTopHeaderBox!.width - footerBox!.width)).toBeLessThanOrEqual(1);
   });
+
+  test('header menu and controls remain visible across tablet viewports', async ({ page }) => {
+    const tabletWidths = [768, 834, 956];
+
+    for (const width of tabletWidths) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto('/');
+
+      const nav = page.locator('header nav');
+      const search = page.locator('header [data-search-toggle]');
+      const theme = page.locator('header [data-theme-toggle]');
+      const logoText = page.locator('header a span.text-lg');
+
+      await expect(nav).toBeVisible();
+      await expect(search).toBeVisible();
+      await expect(theme).toBeVisible();
+      await expect(logoText).toBeVisible();
+
+      // Check all nav links are visible
+      const links = nav.locator('a');
+      expect(await links.count()).toBe(4);
+      for (let i = 0; i < 4; i++) {
+        await expect(links.nth(i)).toBeVisible();
+      }
+    }
+  });
 });

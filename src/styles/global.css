@@ -60,8 +60,7 @@ html.dark {
   color: hsl(var(--foreground));
 }
 
-[hidden],
-.hidden {
+[hidden] {
   display: none !important;
 }
 
