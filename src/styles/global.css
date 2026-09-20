@@ -60,6 +60,11 @@ html.dark {
   color: hsl(var(--foreground));
 }
 
+[hidden],
+.hidden {
+  display: none !important;
+}
+
 body {
   min-height: 100vh;
   background:

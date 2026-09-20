@@ -223,6 +223,7 @@ const countFor = (id: string) => (id === 'all' ? totalCount : filterCounts[id] ?
         const matches = filterId === 'all' || card.dataset.filterCategory === filterId;
         card.classList.toggle('hidden', !matches);
         card.toggleAttribute('hidden', !matches);
+        card.style.display = matches ? '' : 'none';
         if (matches) visibleCount += 1;
       });
       if (noResults) {

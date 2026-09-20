@@ -584,6 +584,19 @@ export const projects: ProjectEntry[] = [
     image: 'wincifdon-com.png',
     size: 'medium',
   },
+  {
+    name: 'WINUS finance',
+    domain: 'winus.finance',
+    category: 'Financial Education & Community',
+    filterCategory: 'education',
+    description: 'Open capital market research and financial education platform with real-time IDX quotes, curriculum modules, and DCA simulation tools.',
+    details: 'A comprehensive financial education platform and investor community for the Indonesian capital market. Features 4 modular learning tracks from financial statement analysis to risk management, an interactive compound interest/DCA calculator, and a real-time IDX ticker stream.',
+    stack: ['Astro', 'TypeScript', 'Tailwind CSS', 'Cloudflare'],
+    outcome: 'Interactive DCA calculator, real-time IDX ticker, modular stock curriculum, investor discussion stream',
+    href: 'https://winus.finance',
+    image: 'winus-finance.png',
+    size: 'medium',
+  },
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);

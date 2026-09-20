@@ -18,11 +18,11 @@ test.describe('web portfolio page', () => {
     await expect(page.getByRole('tablist', { name: /Filter projects by category/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /^All\b/ })).toHaveAttribute('aria-selected', 'true');
 
-    // Project cards: we ship 15, with the filter chip count attesting.
+    // Project cards: we ship 16, with the filter chip count attesting.
     const cards = page.locator('[data-project-card]');
-    expect(await cards.count()).toBe(15);
+    expect(await cards.count()).toBe(16);
     const allChip = page.getByRole('tab', { name: /^All\b/ });
-    await expect(allChip.locator('[data-filter-count-badge]')).toHaveText('15');
+    await expect(allChip.locator('[data-filter-count-badge]')).toHaveText('16');
 
     // Every project image must have a srcset (astro:assets generates one)
     const firstImg = page.locator('img[alt*="screenshot"]').first();
@@ -43,14 +43,14 @@ test.describe('web portfolio page', () => {
 
   test('filter chips narrow the visible cards and persist in URL hash', async ({ page }) => {
     await page.goto('/web-porto/');
-    const cards = page.locator('[data-project-card]:not([hidden])');
+    const cards = page.locator('[data-project-card]:visible');
 
-    // Default: all 15 visible
-    await expect(cards).toHaveCount(15);
+    // Default: all 16 visible
+    await expect(cards).toHaveCount(16);
 
-    // Click "Education" — only education projects (3) should remain
+    // Click "Education" — now 4 education projects including WINUS finance
     await page.getByRole('tab', { name: /^Education\b/ }).click();
-    await expect(cards).toHaveCount(3);
+    await expect(cards).toHaveCount(4);
     await expect(page.getByRole('tab', { name: /^Education\b/ })).toHaveAttribute('aria-selected', 'true');
     await expect(page).toHaveURL(/#filter=education$/);
 
@@ -66,15 +66,15 @@ test.describe('web portfolio page', () => {
     await page.getByRole('tab', { name: /^Other\b/ }).click();
     await expect(cards).toHaveCount(3);
 
-    // Back to "All" — 15
+    // Back to "All" — 16
     await page.getByRole('tab', { name: /^All\b/ }).click();
-    await expect(cards).toHaveCount(15);
+    await expect(cards).toHaveCount(16);
     await expect(page).toHaveURL(/^[^#]*$/);
   });
 
   test('filter survives a page reload via URL hash', async ({ page }) => {
     await page.goto('/web-porto/#filter=energy');
-    const cards = page.locator('[data-project-card]:not([hidden])');
+    const cards = page.locator('[data-project-card]:visible');
     await expect(cards).toHaveCount(3);
     await expect(page.getByRole('tab', { name: /^Energy\b/ })).toHaveAttribute('aria-selected', 'true');
   });
