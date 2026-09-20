@@ -67,7 +67,7 @@ test('services/[slug] page renders breadcrumb with service title', async ({ page
   expect(await items.count()).toBe(3);
   expect((await items.nth(0).innerText()).trim()).toContain('Home');
   expect((await items.nth(1).innerText()).trim()).toContain('Services');
-  expect((await items.nth(2).innerText()).trim()).toContain('High-Performance Web Architecture');
+  expect((await items.nth(2).innerText()).trim()).toContain('Astro & Web Development');
 
   // JSON-LD
   const jsonLdScripts = await page.locator('script[type="application/ld+json"]').allTextContents();
@@ -78,7 +78,7 @@ test('services/[slug] page renders breadcrumb with service title', async ({ page
     .filter((obj): obj is Record<string, unknown> => obj !== null && obj['@type'] === 'BreadcrumbList');
   expect(breadcrumb.length).toBeGreaterThan(0);
   const list = (breadcrumb[0].itemListElement) as Array<Record<string, unknown>>;
-  expect(list[2].name).toBe('High-Performance Web Architecture');
+  expect(list[2].name).toBe('Astro & Web Development');
 });
 
 test('essays/[slug] page renders breadcrumb with essay title', async ({ page }) => {

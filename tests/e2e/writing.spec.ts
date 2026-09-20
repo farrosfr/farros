@@ -43,7 +43,7 @@ test.describe('writing page', () => {
     // and getByRole excludes display:none elements. We expect at least
     // one match (desktop nav) and at most two (desktop + mobile drawer).
     await expect(
-      page.locator('header a[href="/writing"]')
+      page.locator('header a[href="/writing"], [data-mobile-menu] a[href="/writing"]')
     ).toHaveCount(2);
   });
 
