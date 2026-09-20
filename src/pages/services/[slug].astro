@@ -11,7 +11,7 @@ export function getStaticPaths() {
 }
 
 const { service } = Astro.props;
-const whatsappBase = "https://wa.me/6282234057613";
+const whatsappBase = `https://wa.me/${profile.whatsapp}`;
 const message = encodeURIComponent(`Hello Farros, I am interested in your ${service.title} service. Can we discuss this further?`);
 const whatsappLink = `${whatsappBase}?text=${message}`;
 

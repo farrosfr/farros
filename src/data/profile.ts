@@ -9,7 +9,7 @@ export const profile = {
   linkedin: 'https://linkedin.com/in/farrosfr',
   x: 'https://x.com/farrosfr_',
   medium: 'https://farrosfr.medium.com',
-  whatsapp: '6282234057613',
+  whatsapp: '6289676943666',
   /**
    * Static availability signal. Used by the AvailabilityBadge component
    * on the home page and /contact. To go from "available" to "busy" or

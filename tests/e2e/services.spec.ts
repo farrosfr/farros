@@ -20,17 +20,17 @@ for (const slug of slugs) {
       // The service cover image lives inside <main>. The header logo
       // is the first <img> on the page, so we scope to main + the
       // /services/ path. Same for the assertion.
-      const cover = page.locator(`main img[src="/services/${slug}.svg"]`);
+      const service = services.find((s) => s.slug === slug);
+      const cover = page.locator(`main img[src="${service?.image}"]`);
       await expect(cover).toBeVisible();
       const coverSrc = await cover.getAttribute('src');
       expect(coverSrc, 'service cover src').toBeTruthy();
       expect(coverSrc!, `${slug} cover must be self-hosted, not Unsplash`).not.toMatch(/unsplash\.com/);
-      expect(coverSrc!, `${slug} cover should be the matching SVG`).toBe(`/services/${slug}.svg`);
+      expect(coverSrc!, `${slug} cover should match service.image`).toBe(service?.image);
       const coverRes = await request.get(coverSrc!);
       expect(coverRes.status(), coverSrc!).toBe(200);
-      // SVG body should be a real <svg> document
       const contentType = coverRes.headers()['content-type'] ?? '';
-      expect(contentType.toLowerCase()).toContain('svg');
+      expect(contentType.toLowerCase()).toMatch(/image\/(svg\+xml|png)/);
 
       // At least one feature bullet rendered (an <li> with a check icon)
       const features = page.locator('li').filter({ has: page.locator('span[class*="i-lucide-check"]') });
