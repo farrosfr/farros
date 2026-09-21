@@ -1,7 +1,10 @@
 # Cloudflare Pages Redirects
 /sitemap.xml    /sitemap-index.xml    301
 
-# Substack Article & Feed Redirects (preserves existing Google Search traffic)
-/p/*            https://farrosfr.substack.com/p/:splat    301
-/feed           https://farrosfr.substack.com/feed        301
-/archive        https://farrosfr.substack.com/archive     301
+# Blog Article, Feed & Vanity Redirects (points to active custom domain)
+/p/*            https://blog.farrosfr.com/p/:splat        301
+/feed           https://blog.farrosfr.com/feed            301
+/archive        https://blog.farrosfr.com/archive         301
+/blog           https://blog.farrosfr.com/                301
+/blog/*         https://blog.farrosfr.com/:splat          301
+/newsletter     https://blog.farrosfr.com/                301

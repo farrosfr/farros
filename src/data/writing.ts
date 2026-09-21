@@ -1,7 +1,19 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
-import { dirname } from 'node:path';
+import { resolve, dirname } from 'node:path';
 import { XMLParser } from 'fast-xml-parser';
 import { writingFallback } from './writing.fallback';
+
+export type BlogPost = {
+  id: number | string;
+  slug: string;
+  title: string;
+  description: string;
+  url: string;
+  pubDate: string;
+  year: number;
+  category: 'security' | 'systems' | 'data' | 'ai' | 'notes';
+  coverImage: string | null;
+};
 
 export type Post = {
   title: string;
@@ -18,7 +30,7 @@ export type FeedResult = {
   fetchedAt: number;
 };
 
-const FEED_URL = 'https://farrosfr.substack.com/feed';
+const FEED_URL = 'https://blog.farrosfr.com/feed';
 const CACHE_PATH = '.data/writing-cache.json';
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
@@ -166,3 +178,16 @@ export async function getLatestPosts(limit = 9): Promise<FeedResult> {
     };
   }
 }
+
+export function getAllBlogPosts(): BlogPost[] {
+  try {
+    const blogJsonPath = resolve('src/data/blog-posts.json');
+    if (existsSync(blogJsonPath)) {
+      return JSON.parse(readFileSync(blogJsonPath, 'utf-8')) as BlogPost[];
+    }
+  } catch (err) {
+    console.warn('[writing] Failed to load blog-posts.json:', err);
+  }
+  return [];
+}
+

@@ -8,40 +8,29 @@ test.describe('writing page', () => {
       page.getByRole('heading', { name: /Notes on security/i })
     ).toBeVisible();
 
-    // The Substack link appears in the lede
+    // The blog link appears in the lede
     await expect(
-      page.getByRole('link', { name: /Substack/i }).first()
+      page.getByRole('link', { name: /blog\.farrosfr\.com/i }).first()
     ).toBeVisible();
 
+    // Archive CTA button
     await expect(
-      page.getByRole('link', { name: /Browse the full archive/i })
+      page.getByRole('link', { name: /Open blog archive/i })
     ).toBeVisible();
 
-    // At least 3 article cards rendered. Each card links to a /p/<slug>
-    // Substack URL.
-    const cards = page.locator('a[href*="substack.com/p/"], a[href*="farrosfr.substack.com"]');
-    await expect.poll(async () => await cards.count()).toBeGreaterThanOrEqual(3);
+    // Cards link to blog.farrosfr.com/p/<slug>
+    const cards = page.locator('a[href*="blog.farrosfr.com/p/"]');
+    await expect.poll(async () => await cards.count()).toBeGreaterThanOrEqual(24);
   });
 
   test('uses BaseLayout shell (header, footer, title)', async ({ page }) => {
     await page.goto('/writing');
 
-    // The site header (semantic role "banner") must be present. The Astro
-    // DevTools panel injects extra <header> elements in dev mode, so we
-    // target by role rather than tag. A previous version of this page
-    // rendered as a bare <section> with no nav, no footer, no <title>,
-    // and broken SEO — these assertions lock that regression out.
     await expect(page.getByRole('banner')).toBeVisible();
     await expect(page.locator('footer')).toBeVisible();
 
-    // Title tag should be set (not the Astro default)
     await expect(page).toHaveTitle(/Writing/i);
 
-    // Writing nav link is wired somewhere in the header (desktop nav
-    // on wider viewports, hidden mobile drawer on smaller). Use
-    // href-based lookup because the mobile drawer is hidden by default
-    // and getByRole excludes display:none elements. We expect at least
-    // one match (desktop nav) and at most two (desktop + mobile drawer).
     await expect(
       page.locator('header a[href="/writing"], [data-mobile-menu] a[href="/writing"]')
     ).toHaveCount(2);
@@ -50,10 +39,8 @@ test.describe('writing page', () => {
   test('strips platform brand names and trigger words from post text', async ({ page }) => {
     await page.goto('/writing');
 
-    // Visible page body — anything banned must not appear in text content
     const bodyText = (await page.locator('main').innerText()).toLowerCase();
 
-    // Banned brand names (case-insensitive on the body text)
     for (const banned of [
       'tryhackme', 'try hack me', 'htb', 'hackerrank', 'hacker rank',
       'cyber skyline', 'cyberskyline', 'security blue team', 'hackviser',
@@ -61,9 +48,42 @@ test.describe('writing page', () => {
       expect(bodyText, `banned term "${banned}" appeared in page text`).not.toContain(banned);
     }
 
-    // Banned trigger words
     for (const banned of ['write-up', 'writeup', 'walkthrough']) {
       expect(bodyText, `trigger word "${banned}" appeared in page text`).not.toContain(banned);
     }
+  });
+
+  test('topic filter chips, year pills, instant search, and load more work', async ({ page }) => {
+    await page.goto('/writing');
+
+    const visibleCards = page.locator('[data-blog-card]:visible');
+
+    // Default batch size: 24 visible cards
+    await expect(visibleCards).toHaveCount(24);
+
+    // Click "Cybersecurity" topic tab
+    await page.getByRole('tab', { name: /^Cybersecurity\b/ }).click();
+    expect(await visibleCards.count()).toBeGreaterThan(0);
+    expect(await visibleCards.count()).toBeLessThanOrEqual(24);
+
+    // Click "All" tab to reset
+    await page.getByRole('tab', { name: /^All\b/ }).click();
+    await expect(visibleCards).toHaveCount(24);
+
+    // Search for a keyword
+    const searchInput = page.locator('[data-blog-search]');
+    await searchInput.fill('Firefox');
+    expect(await visibleCards.count()).toBeGreaterThanOrEqual(1);
+
+    // Clear search
+    await searchInput.fill('');
+    await expect(visibleCards).toHaveCount(24);
+
+    // Test Load More button
+    const loadMore = page.locator('[data-load-more]');
+    await expect(loadMore).toBeVisible();
+    await loadMore.click();
+    // After load more, count should now be 48
+    await expect(visibleCards).toHaveCount(48);
   });
 });

@@ -615,14 +615,16 @@ export const featuredWork = [
     description: 'DOM-level keyword and content filtering browser extension.',
   },
   {
-    name: 'Substack',
+    name: 'Blog',
     type: 'Writing',
-    href: 'https://farrosfr.substack.com',
+    href: 'https://blog.farrosfr.com',
     description: 'Field notes and research on cybersecurity, red teaming, and engineering.',
   },
 ];
 
 export const certificates = [
+  { year: '2026', name: 'AI Security', issuer: 'TryHackMe', group: 'Cybersecurity' },
+  { year: '2026', name: 'Hacker Holidays', issuer: 'TryHackMe', group: 'Cybersecurity' },
   { year: '2026', name: 'Intermediate SQL Server', issuer: 'DataCamp', group: 'Data/SQL' },
   { year: '2026', name: 'Introduction to SQL Server', issuer: 'DataCamp', group: 'Data/SQL' },
   { year: '2025', name: 'Cyber Security 101', issuer: 'TryHackMe', group: 'Cybersecurity' },

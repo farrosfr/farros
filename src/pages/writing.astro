@@ -2,8 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
-import { getLatestPosts } from '../data/writing';
-import WritingCard from '../components/WritingCard.astro';
+import { getAllBlogPosts } from '../data/writing';
 import { profile } from '../data/profile';
 
 // Native long-form essays from src/content/writing (Astro content
@@ -15,13 +14,37 @@ const allEssays = (await getCollection('writing')).sort(
 const featuredEssays = allEssays.filter((e) => e.data.featured);
 const otherEssays = allEssays.filter((e) => !e.data.featured);
 
-// Substack-derived short notes (live in the data/writing.ts RSS fetcher).
-const { posts } = await getLatestPosts(9);
+// Full archive of synchronized blog posts from blog.farrosfr.com
+const blogPosts = getAllBlogPosts();
+
+const filterChips = [
+  { id: 'all', label: 'All' },
+  { id: 'security', label: 'Cybersecurity' },
+  { id: 'ai', label: 'AI & Automation' },
+  { id: 'systems', label: 'Web & Systems' },
+  { id: 'data', label: 'Data' },
+  { id: 'notes', label: 'Notes' },
+] as const;
+
+function countFor(catId: string) {
+  if (catId === 'all') return blogPosts.length;
+  return blogPosts.filter((p) => p.category === catId).length;
+}
+
+const availableYears = [...new Set(blogPosts.map((p) => p.year))].sort((a, b) => b - a);
+
+const categoryLabels: Record<string, string> = {
+  security: 'Cybersecurity',
+  ai: 'AI & Systems',
+  systems: 'Web & Systems',
+  data: 'Data',
+  notes: 'Field Notes',
+};
 ---
 
 <BaseLayout
   title={`Writing | ${profile.name}`}
-  description={`Essays and field notes on cybersecurity, AI threats, and engineering, syndicated from ${profile.name}'s Substack.`}
+  description={`Essays and field notes on cybersecurity, AI, and systems engineering, published at blog.farrosfr.com.`}
 >
   <Breadcrumbs items={[{ name: 'Home', href: '/' }, { name: 'Writing' }]} class="pt-10 md:pt-14" />
   <section class="py-8 md:py-10" data-reveal>
@@ -33,8 +56,8 @@ const { posts } = await getLatestPosts(9);
         </h1>
       </div>
       <p class="max-w-2xl text-lg leading-8 text-muted-foreground lg:justify-self-end">
-        A mix of long-form essays published here, and shorter field notes
-        <a href="https://farrosfr.substack.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">syndicated from Substack</a>.
+        A mix of long-form essays published here, and shorter field notes from
+        <a href="https://blog.farrosfr.com" target="_blank" rel="noreferrer" class="font-semibold text-primary hover:underline">blog.farrosfr.com</a>.
       </p>
     </div>
   </section>
@@ -46,7 +69,7 @@ const { posts } = await getLatestPosts(9);
           <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Long-form</p>
           <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Essays</h2>
         </div>
-        <a href="https://farrosfr.substack.com/archive" target="_blank" rel="noreferrer" class="hidden text-sm font-semibold text-muted-foreground transition-colors hover:text-primary sm:inline">
+        <a href="https://blog.farrosfr.com/archive" target="_blank" rel="noreferrer" class="hidden text-sm font-semibold text-muted-foreground transition-colors hover:text-primary sm:inline">
           Notes archive ↗
         </a>
       </div>
@@ -113,23 +136,271 @@ const { posts } = await getLatestPosts(9);
     </section>
   )}
 
+  <!-- Full Blog Posts Archive from blog.farrosfr.com -->
   <section class="pb-20 md:pb-28" data-reveal data-section="rss-notes">
-    <div class="mb-6 flex items-end justify-between gap-4">
+    <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Recent</p>
-        <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Field notes from Substack</h2>
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Archive</p>
+        <h2 class="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">Field notes from blog.farrosfr.com</h2>
       </div>
       <a
-        href="https://farrosfr.substack.com/archive"
+        href="https://blog.farrosfr.com/archive"
         target="_blank"
         rel="noreferrer"
         class="text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"
       >
-        Browse the full archive ↗
+        Open blog archive ↗
       </a>
     </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="mb-8 space-y-4">
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <!-- Topic Filter Tabs -->
+        <div
+          role="tablist"
+          aria-label="Filter notes by topic"
+          class="flex flex-wrap items-center gap-2"
+          data-blog-filter-bar
+        >
+          <span class="mr-1 text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Topic</span>
+          {filterChips.map((chip) => (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={chip.id === 'all' ? 'true' : 'false'}
+              data-blog-filter={chip.id}
+              class="rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-foreground transition-all hover:border-primary/50 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 aria-selected:border-primary aria-selected:bg-primary aria-selected:text-primary-foreground"
+            >
+              {chip.label}
+              <span class="ml-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-background/80 px-1 font-mono text-[9px] text-muted-foreground aria-selected:bg-primary-foreground/20 aria-selected:text-primary-foreground" data-filter-count-badge>
+                {countFor(chip.id)}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <!-- Instant Search Box -->
+        <div class="relative w-full md:w-72">
+          <span class="i-lucide-search pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"></span>
+          <input
+            type="search"
+            data-blog-search
+            placeholder="Search all 181 notes..."
+            aria-label="Search all blog posts"
+            class="h-10 w-full rounded-full border border-border/70 bg-card/70 pl-9 pr-8 text-xs text-foreground placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+        </div>
+      </div>
+
+      <!-- Quick Jump Year Pills -->
+      <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-border/40" data-year-bar>
+        <span class="mr-1 text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Year</span>
+        <button
+          type="button"
+          data-year-filter="all"
+          aria-selected="true"
+          class="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1 text-[11px] font-mono font-bold text-muted-foreground transition-all hover:text-foreground hover:border-primary/40 aria-selected:border-primary aria-selected:bg-primary/10 aria-selected:text-primary"
+        >
+          All ({blogPosts.length})
+        </button>
+        {availableYears.map((year) => {
+          const yearCount = blogPosts.filter((p) => p.year === year).length;
+          return (
+            <button
+              type="button"
+              data-year-filter={year}
+              aria-selected="false"
+              class="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1 text-[11px] font-mono font-bold text-muted-foreground transition-all hover:text-foreground hover:border-primary/40 aria-selected:border-primary aria-selected:bg-primary/10 aria-selected:text-primary"
+            >
+              {year} ({yearCount})
+            </button>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Active Filter Counter Summary -->
+    <div class="mb-4 flex items-center justify-between text-xs text-muted-foreground">
+      <p data-result-counter>Showing all {blogPosts.length} articles</p>
+    </div>
+
+    <!-- 181 Articles Grid -->
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3" data-rss-grid>
-      {posts.map((post) => <WritingCard post={post} />)}
+      {blogPosts.map((post) => {
+        const date = new Date(post.pubDate);
+        const dateLabel = isNaN(date.getTime())
+          ? ''
+          : date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        const catLabel = categoryLabels[post.category] || 'Field Notes';
+
+        return (
+          <a
+            href={post.url}
+            target="_blank"
+            rel="noreferrer"
+            data-blog-card
+            data-category={post.category}
+            data-year={post.year}
+            data-title={post.title.toLowerCase()}
+            data-desc={post.description.toLowerCase()}
+            class="group glass-card flex h-full flex-col rounded-[1.5rem] p-6 transition-all hover:-translate-y-1 hover:border-primary/40"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <span class="rounded-full border border-border/70 bg-background/80 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-primary">
+                {catLabel}
+              </span>
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-[10px] text-muted-foreground">{dateLabel}</span>
+                <span class="i-lucide-arrow-up-right size-4 text-muted-foreground transition-colors group-hover:text-primary"></span>
+              </div>
+            </div>
+            <h3 class="mt-4 text-lg font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+              {post.title}
+            </h3>
+            <p class="mt-3 flex-1 text-sm leading-6 text-muted-foreground transition-colors group-hover:text-foreground">
+              {post.description}
+            </p>
+            <div class="mt-5 flex items-center justify-between border-t border-border/40 pt-3 text-[10px] font-mono text-muted-foreground/80">
+              <span>blog.farrosfr.com</span>
+              <span>{post.year}</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Empty State -->
+    <div data-no-results class="hidden rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+      No articles matched your search and filter criteria.
+    </div>
+
+    <!-- Load More Button -->
+    <div class="mt-10 flex justify-center" data-load-more-wrap>
+      <button
+        type="button"
+        data-load-more
+        class="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95"
+      >
+        <span>Show more articles</span>
+        <span class="font-mono text-xs text-muted-foreground" data-remaining-count></span>
+      </button>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  function setupWritingFilter() {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-blog-card]'));
+    if (cards.length === 0) return;
+
+    const topicButtons = document.querySelectorAll<HTMLButtonElement>('[data-blog-filter]');
+    const yearButtons = document.querySelectorAll<HTMLButtonElement>('[data-year-filter]');
+    const searchInput = document.querySelector<HTMLInputElement>('[data-blog-search]');
+    const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-load-more]');
+    const loadMoreWrap = document.querySelector<HTMLElement>('[data-load-more-wrap]');
+    const remainingCountSpan = document.querySelector<HTMLElement>('[data-remaining-count]');
+    const counterText = document.querySelector<HTMLElement>('[data-result-counter]');
+    const noResults = document.querySelector<HTMLElement>('[data-no-results]');
+
+    const BATCH_SIZE = 24;
+    let currentLimit = BATCH_SIZE;
+    let activeCategory = 'all';
+    let activeYear = 'all';
+    let searchQuery = '';
+
+    function applyFilters() {
+      const normalizedQuery = searchQuery.trim().toLowerCase();
+
+      // Find matching items
+      const matchingCards = cards.filter((card) => {
+        const catMatch = activeCategory === 'all' || card.dataset.category === activeCategory;
+        const yearMatch = activeYear === 'all' || card.dataset.year === activeYear;
+        const searchMatch = !normalizedQuery || 
+          (card.dataset.title?.includes(normalizedQuery) || card.dataset.desc?.includes(normalizedQuery));
+        return catMatch && yearMatch && searchMatch;
+      });
+
+      const totalMatches = matchingCards.length;
+
+      // Toggle display
+      cards.forEach((card) => {
+        const isMatch = matchingCards.includes(card);
+        if (!isMatch) {
+          card.style.display = 'none';
+        }
+      });
+
+      matchingCards.forEach((card, index) => {
+        if (index < currentLimit) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Update counter
+      if (counterText) {
+        if (totalMatches === cards.length) {
+          counterText.textContent = `Showing ${Math.min(currentLimit, totalMatches)} of ${totalMatches} articles`;
+        } else {
+          counterText.textContent = `Showing ${Math.min(currentLimit, totalMatches)} of ${totalMatches} filtered articles`;
+        }
+      }
+
+      // Update load more button
+      const remaining = totalMatches - currentLimit;
+      if (loadMoreWrap && loadMoreBtn && remainingCountSpan) {
+        if (remaining > 0) {
+          loadMoreWrap.style.display = '';
+          remainingCountSpan.textContent = `(${remaining} remaining)`;
+        } else {
+          loadMoreWrap.style.display = 'none';
+        }
+      }
+
+      // Empty state
+      if (noResults) {
+        noResults.classList.toggle('hidden', totalMatches > 0);
+      }
+    }
+
+    topicButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeCategory = btn.dataset.blogFilter || 'all';
+        currentLimit = BATCH_SIZE;
+        topicButtons.forEach((b) => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+        applyFilters();
+      });
+    });
+
+    yearButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeYear = btn.dataset.yearFilter || 'all';
+        currentLimit = BATCH_SIZE;
+        yearButtons.forEach((b) => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+        applyFilters();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        searchQuery = searchInput.value;
+        currentLimit = BATCH_SIZE;
+        applyFilters();
+      });
+    }
+
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => {
+        currentLimit += BATCH_SIZE;
+        applyFilters();
+      });
+    }
+
+    applyFilters();
+  }
+
+  setupWritingFilter();
+  document.addEventListener('astro:page-load', setupWritingFilter);
+</script>
