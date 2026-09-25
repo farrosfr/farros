@@ -1,5 +1,16 @@
 [
   {
+    "id": 217209332,
+    "slug": "junior-pentester-complete-nmap-network-scanning-guide",
+    "title": "Junior PenTester: Complete Nmap Network Scanning Guide",
+    "description": "Complete 4-in-1 guide to Nmap: Live host discovery, basic and advanced port scans, OS fingerprinting, and the Nmap Scripting Engine (NSE).",
+    "url": "https://blog.farrosfr.com/p/junior-pentester-complete-nmap-network-scanning-guide",
+    "pubDate": "2026-09-21T00:00:00.830Z",
+    "year": 2026,
+    "category": "security",
+    "coverImage": "https://substack-post-media.s3.amazonaws.com/public/images/4aefa623-743a-41dd-9f2b-f936de9cf818_1376x768.png"
+  },
+  {
     "id": 216539500,
     "slug": "fix-firefox-dev-edition-sign-out-loop-on-shutdown",
     "title": "Fix Firefox Dev Edition Sign-Out Loop on Shutdown",
