@@ -60,7 +60,7 @@ export const services = [
     image: '/services/web-architecture.png',
     category: 'Development',
     cta: 'Discuss your project',
-    priceRange: 'Project-based, typically $1.5k–$8k',
+    priceRange: 'Project-based, typically $400–$2,000',
     duration: '2–6 weeks per engagement',
     process: [
       { step: '01', title: 'Discovery call', description: 'We map your goals, audience, and current bottlenecks in a 30-minute conversation. No slides, just your stack and where you want to go.' },
@@ -102,7 +102,7 @@ export const services = [
     image: '/services/security-review.png',
     category: 'Security',
     cta: 'Secure your assets',
-    priceRange: 'Project-based, typically $1k–$6k',
+    priceRange: 'Project-based, typically $350–$1,800',
     duration: '1–4 weeks per engagement',
     process: [
       { step: '01', title: 'Scope definition', description: 'We agree on the targets in writing: which apps, which infrastructure, and which kinds of issues you want surfaced. No vague "test everything" briefs.' },
@@ -144,7 +144,7 @@ export const services = [
     image: '/services/data-engineering.png',
     category: 'Data',
     cta: 'Optimize your data',
-    priceRange: 'Project-based, typically $2k–$12k',
+    priceRange: 'Project-based, typically $500–$2,500',
     duration: '3–8 weeks per engagement',
     process: [
       { step: '01', title: 'Data audit', description: 'We inventory your current sources, schemas, and reporting tools. I produce a one-page map that names every moving piece and where it tends to break.' },
@@ -186,7 +186,7 @@ export const services = [
     image: '/services/ai-automation.svg',
     category: 'AI',
     cta: 'Automate your workflow',
-    priceRange: 'Project-based, typically $1.5k–$10k',
+    priceRange: 'Project-based, typically $400–$2,200',
     duration: '2–6 weeks per engagement',
     process: [
       { step: '01', title: 'Workflow audit', description: 'We sit with the people who actually do the work and list the top five repetitive tasks. I write them up as a short list of candidate automations.' },
@@ -227,7 +227,7 @@ export const services = [
     image: '/services/browser-extensions.svg',
     category: 'Automation',
     cta: 'Build your tool',
-    priceRange: 'Project-based, typically $1.5k–$7k',
+    priceRange: 'Project-based, typically $300–$1,500',
     duration: '2–5 weeks per engagement',
     process: [
       { step: '01', title: 'Behaviour spec', description: 'We agree on the exact behaviour the extension will and will not have, the sites it must work on, and the permissions it will request from the browser.' },
