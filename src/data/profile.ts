@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Mochammad Farros Fatchur Roji',
   shortName: 'Farros',
-  title: 'Full-Stack Developer & Security Researcher',
+  title: 'System Architect, Full-Stack Developer & Security Researcher',
   email: 'hello@farrosfr.com',
   cvPath: '/CV_Farros_2026.pdf',
   website: 'https://farrosfr.com',
