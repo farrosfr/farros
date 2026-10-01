@@ -1,5 +1,16 @@
 [
   {
+    "id": 218158117,
+    "slug": "junior-pentester-web-recon-and-server-exploitation-guide",
+    "title": "Junior PenTester: Web Recon and Server Exploitation Guide",
+    "description": "Manual browser inspection, OSINT and Gobuster discovery, Linux server hardening flaws, modern web stack CVEs, and IIS WebDAV shell execution.",
+    "url": "https://blog.farrosfr.com/p/junior-pentester-web-recon-and-server-exploitation-guide",
+    "pubDate": "2026-09-24T00:00:00.703Z",
+    "year": 2026,
+    "category": "security",
+    "coverImage": "https://substack-post-media.s3.amazonaws.com/public/images/2620f34d-5bf0-44a0-abe5-3e672a75afe1_1376x768.png"
+  },
+  {
     "id": 217209332,
     "slug": "junior-pentester-complete-nmap-network-scanning-guide",
     "title": "Junior PenTester: Complete Nmap Network Scanning Guide",
