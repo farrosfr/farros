@@ -1,14 +1,17 @@
 import { defineConfig } from 'astro/config';
-import UnoCSS from 'unocss/astro';
+import tailwindcss from '@tailwindcss/vite';
 import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://farrosfr.com',
+  build: {
+    inlineStylesheets: 'always',
+  },
+  vite: {
+    plugins: [tailwindcss()],
+  },
   integrations: [
-    UnoCSS({
-      injectReset: true,
-    }),
     sitemap({
       xslURL: '/sitemap.xsl',
       namespaces: {

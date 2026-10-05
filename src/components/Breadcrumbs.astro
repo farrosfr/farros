@@ -1,7 +1,14 @@
 ---
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from '@/components/starwind/breadcrumb';
 import { profile } from '../data/profile';
 
-interface BreadcrumbItem {
+interface BreadcrumbEntry {
   /** Display name of the crumb. */
   name: string;
   /** Full URL. Omit on the last (current) crumb. */
@@ -10,7 +17,7 @@ interface BreadcrumbItem {
 
 interface Props {
   /** Crumbs in order from root to current page. The last entry is the current page. */
-  items: BreadcrumbItem[];
+  items: BreadcrumbEntry[];
   /** Optional CSS class for the visible breadcrumb nav. */
   class?: string;
 }
@@ -36,25 +43,25 @@ const breadcrumbSchema = {
 };
 ---
 
-<nav aria-label="Breadcrumb" class={className} data-breadcrumb>
-  <ol class="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+<Breadcrumb aria-label="Breadcrumb" class={className} data-breadcrumb>
+  <BreadcrumbList class="gap-1.5 text-xs font-semibold text-muted-foreground">
     {items.map((item, i) => {
       const isLast = i === lastIndex;
       return (
-        <li class="flex items-center gap-1.5">
+        <BreadcrumbItem class="gap-1.5">
           {isLast || !item.href ? (
-            <span class="text-foreground" aria-current="page">{item.name}</span>
+            <BreadcrumbPage class="font-semibold text-foreground">{item.name}</BreadcrumbPage>
           ) : (
-            <a
+            <BreadcrumbLink
               href={item.href}
               class="transition-colors hover:text-primary"
-            >{item.name}</a>
+            >{item.name}</BreadcrumbLink>
           )}
           {!isLast && <span class="i-lucide-chevron-right size-3 text-muted-foreground/60" aria-hidden="true"></span>}
-        </li>
+        </BreadcrumbItem>
       );
     })}
-  </ol>
-</nav>
+  </BreadcrumbList>
+</Breadcrumb>
 
 <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />

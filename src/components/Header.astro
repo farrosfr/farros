@@ -1,4 +1,5 @@
 ---
+import { Kbd } from '@/components/starwind/kbd';
 import { navItems, searchItems } from '../data/profile';
 ---
 
@@ -13,7 +14,7 @@ import { navItems, searchItems } from '../data/profile';
     class="mx-auto flex min-h-14 sm:min-h-16 w-full items-center justify-between gap-2 rounded-2xl px-4 py-3 sm:px-6"
   >
     <a href="/" class="group flex items-center gap-2 font-bold tracking-tight shrink-0">
-      <img src="/logo.png" alt="Farros logo" width="36" height="36" class="size-8 rounded-lg ring-1 ring-white/10 transition-transform group-hover:scale-105 sm:size-9" />
+      <img src="/logo.png" alt="Farros logo" width="36" height="36" fetchpriority="high" decoding="async" class="size-8 rounded-lg ring-1 ring-white/10 transition-transform group-hover:scale-105 sm:size-9" />
       <span class="hidden text-lg text-foreground sm:block font-bold">Farros <span class="text-primary">FR</span></span>
     </a>
 
@@ -34,7 +35,7 @@ import { navItems, searchItems } from '../data/profile';
       >
         <span class="i-lucide-search size-4"></span>
         <span class="hidden lg:inline">Search</span>
-        <kbd class="hidden rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:inline-flex">Ctrl K</kbd>
+        <Kbd class="hidden rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:inline-flex">Ctrl K</Kbd>
       </button>
 
       <button
@@ -151,6 +152,10 @@ import { navItems, searchItems } from '../data/profile';
 <script>
   function setupHeaderControls() {
     const root = document.documentElement;
+    // Read scroll offset FIRST before any DOM mutations to avoid forced synchronous reflow
+    const initialScrollY = window.scrollY;
+    const isInitiallyDark = root.classList.contains('dark');
+
     const systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const themeButtons = document.querySelectorAll('[data-theme-toggle]');
 
@@ -194,12 +199,14 @@ import { navItems, searchItems } from '../data/profile';
       const mouseEvent = event as MouseEvent;
       const target = (event.currentTarget || event.target) as HTMLElement | null;
       const rect = target?.getBoundingClientRect?.();
-      const x = mouseEvent.clientX && mouseEvent.clientX > 0 ? mouseEvent.clientX : (rect ? rect.left + rect.width / 2 : window.innerWidth / 2);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const x = mouseEvent.clientX && mouseEvent.clientX > 0 ? mouseEvent.clientX : (rect ? rect.left + rect.width / 2 : vw / 2);
       const y = mouseEvent.clientY && mouseEvent.clientY > 0 ? mouseEvent.clientY : (rect ? rect.top + rect.height / 2 : 0);
 
       const endRadius = Math.hypot(
-        Math.max(x, window.innerWidth - x),
-        Math.max(y, window.innerHeight - y)
+        Math.max(x, vw - x),
+        Math.max(y, vh - y)
       );
 
       const transition = (document as any).startViewTransition(() => {
@@ -238,7 +245,8 @@ import { navItems, searchItems } from '../data/profile';
       });
     }
 
-    syncUI(root.classList.contains('dark'));
+    // Batch all DOM writes together after initial reads
+    syncUI(isInitiallyDark);
 
     const menuButton = document.querySelector('[data-menu-toggle]');
     const closeButton = document.querySelector('[data-menu-close]');
@@ -281,29 +289,19 @@ import { navItems, searchItems } from '../data/profile';
     const headerContainer = document.querySelector('[data-header-container]') as HTMLElement | null;
 
     if (header && headerContainer) {
-      let lastScrollY = window.scrollY;
+      let lastScrollY = initialScrollY;
 
-      const updateScrollState = () => {
-        const currentScrollY = window.scrollY;
-        const isMobileMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
-
-        const isScrolled = currentScrollY > 20;
-        headerContainer.setAttribute('data-scrolled', isScrolled ? 'true' : 'false');
-
-        if (isMobileMenuOpen) {
-          header.setAttribute('data-header-hidden', 'false');
-        } else if (currentScrollY > 300 && currentScrollY > lastScrollY) {
-          header.setAttribute('data-header-hidden', 'true');
-        } else if (currentScrollY < lastScrollY || currentScrollY <= 20) {
-          header.setAttribute('data-header-hidden', 'false');
-        }
-
-        lastScrollY = Math.max(0, currentScrollY);
-      };
-
-      header.addEventListener('focusin', () => {
+      headerContainer.setAttribute('data-scrolled', initialScrollY > 20 ? 'true' : 'false');
+      if (initialScrollY <= 20) {
         header.setAttribute('data-header-hidden', 'false');
-      });
+      }
+
+      if (header.getAttribute('data-focus-bound') !== 'true') {
+        header.setAttribute('data-focus-bound', 'true');
+        header.addEventListener('focusin', () => {
+          header.setAttribute('data-header-hidden', 'false');
+        });
+      }
 
       if (!(window as any).__farrosHeaderScrollBound) {
         (window as any).__farrosHeaderScrollBound = true;
@@ -311,13 +309,12 @@ import { navItems, searchItems } from '../data/profile';
         window.addEventListener('scroll', () => {
           if (!ticking) {
             window.requestAnimationFrame(() => {
+              const currentScrollY = window.scrollY;
               const activeHeader = document.querySelector('[data-header]') as HTMLElement | null;
               const activeContainer = document.querySelector('[data-header-container]') as HTMLElement | null;
               const activeMobileMenu = document.querySelector('[data-mobile-menu]') as HTMLElement | null;
               if (activeHeader && activeContainer) {
-                const currentScrollY = window.scrollY;
                 const isMobileMenuOpen = activeMobileMenu && !activeMobileMenu.classList.contains('hidden');
-
                 const isScrolled = currentScrollY > 20;
                 activeContainer.setAttribute('data-scrolled', isScrolled ? 'true' : 'false');
 
@@ -337,12 +334,9 @@ import { navItems, searchItems } from '../data/profile';
           }
         }, { passive: true });
       }
-
-      updateScrollState();
     }
   }
 
-  setupHeaderControls();
   document.addEventListener('astro:page-load', setupHeaderControls);
 </script>
 
@@ -388,7 +382,6 @@ import { navItems, searchItems } from '../data/profile';
       palette.classList.add('hidden');
       document.body.style.overflow = '';
       input.value = '';
-      render();
     }
 
     if (palette.getAttribute('data-bound') !== 'true') {
@@ -399,12 +392,18 @@ import { navItems, searchItems } from '../data/profile';
         if (target) closePalette();
       });
       backdrop?.addEventListener('click', closePalette);
+    }
+
+    if (!window.__farrosSearchKeyBound) {
+      window.__farrosSearchKeyBound = true;
       window.addEventListener('keydown', (event) => {
+        const activePalette = document.querySelector('[data-search-palette]');
+        if (!activePalette) return;
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
           event.preventDefault();
           openPalette();
         }
-        if (event.key === 'Escape' && !palette.classList.contains('hidden')) {
+        if (event.key === 'Escape' && !activePalette.classList.contains('hidden')) {
           closePalette();
         }
       });
@@ -415,11 +414,8 @@ import { navItems, searchItems } from '../data/profile';
       button.setAttribute('data-bound', 'true');
       button.addEventListener('click', openPalette);
     });
-
-    render();
   }
 
-  setupSearchPalette();
   document.addEventListener('astro:page-load', setupSearchPalette);
 </script>
 
@@ -450,8 +446,8 @@ import { navItems, searchItems } from '../data/profile';
 
   [data-header-container][data-scrolled="true"] {
     max-width: calc(100vw - 2.5rem);
-    background-color: hsl(var(--card) / 0.75);
-    border-color: hsl(var(--border) / 0.7);
+    background-color: color-mix(in srgb, var(--card) 75%, transparent);
+    border-color: color-mix(in srgb, var(--border) 70%, transparent);
     box-shadow:
       0 10px 25px -5px rgba(0, 0, 0, 0.08),
       0 8px 10px -6px rgba(0, 0, 0, 0.06);
@@ -478,8 +474,8 @@ import { navItems, searchItems } from '../data/profile';
   }
 
   :global(.dark) [data-header-container][data-scrolled="true"] {
-    background-color: hsl(var(--card) / 0.7);
-    border-color: hsl(var(--border) / 0.6);
+    background-color: color-mix(in srgb, var(--card) 70%, transparent);
+    border-color: color-mix(in srgb, var(--border) 60%, transparent);
     box-shadow:
       0 12px 30px -8px rgba(0, 0, 0, 0.35),
       0 8px 10px -6px rgba(0, 0, 0, 0.25);

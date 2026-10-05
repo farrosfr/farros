@@ -1,4 +1,6 @@
 ---
+import { Button } from '@/components/starwind/button';
+import { Card } from '@/components/starwind/card';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { services, profile } from '../../data/profile';
@@ -82,7 +84,7 @@ const jsonLd = {
           <p class="mt-6 text-lg leading-8 text-muted-foreground">{service.detailedDescription}</p>
         </div>
 
-        <div class="glass-card rounded-[2rem] p-8">
+        <Card class="glass-card rounded-[2rem] p-8">
           <h2 class="text-xl font-bold text-foreground">Service inclusions</h2>
           <ul class="mt-6 space-y-4">
             {service.features.map((feature) => (
@@ -92,26 +94,26 @@ const jsonLd = {
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
 
         <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div class="glass-card rounded-2xl p-5">
+          <Card class="glass-card rounded-2xl p-5">
             <dt class="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Engagement</dt>
             <dd class="mt-2 text-sm font-semibold text-foreground">{service.duration}</dd>
-          </div>
-          <div class="glass-card rounded-2xl p-5">
+          </Card>
+          <Card class="glass-card rounded-2xl p-5">
             <dt class="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Investment</dt>
             <dd class="mt-2 text-sm font-semibold text-foreground">{service.priceRange}</dd>
-          </div>
+          </Card>
         </dl>
 
         <div class="flex flex-col gap-4 sm:flex-row">
-          <a href={whatsappLink} target="_blank" rel="noreferrer" class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20">
+          <Button href={whatsappLink} target="_blank" rel="noreferrer" variant="primary" size="lg" class="h-14 rounded-full px-10 text-sm font-bold transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20">
             {service.cta}
-          </a>
-          <a href={`mailto:${profile.email}`} class="inline-flex h-14 items-center justify-center rounded-full border border-border bg-card/70 px-10 text-sm font-bold text-foreground transition-all hover:-translate-y-1 hover:border-primary/40">
+          </Button>
+          <Button href={`mailto:${profile.email}`} variant="outline" size="lg" class="h-14 rounded-full border-border bg-card/70 px-10 text-sm font-bold text-foreground transition-all hover:-translate-y-1 hover:border-primary/40">
             Send email
-          </a>
+          </Button>
         </div>
       </div>
 

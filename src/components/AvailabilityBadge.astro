@@ -1,12 +1,6 @@
 ---
-/**
- * AvailabilityBadge — small pill with a status dot. Reads from
- * profile.availability (configured statically in src/data/profile.ts).
- * Three status values: 'available' (green), 'limited' (amber), 'busy' (red).
- *
- * The 'size' prop lets callers choose between 'sm' (inline in a tight
- * card header) and 'md' (standalone on a page section).
- */
+import { Badge } from '@/components/starwind/badge';
+
 type Availability = {
   status: 'available' | 'limited' | 'busy';
   label: string;
@@ -21,13 +15,14 @@ interface Props {
 
 const { availability, size = 'sm', showNextSlot = false } = Astro.props;
 
-const colorMap: Record<Availability['status'], { dot: string; ping: string; text: string; border: string; bg: string }> = {
+const colorMap: Record<Availability['status'], { dot: string; ping: string; text: string; border: string; bg: string; tone: 'success' | 'warning' | 'error' }> = {
   available: {
     dot: 'bg-emerald-500',
     ping: 'bg-emerald-400',
     text: 'text-emerald-600 dark:text-emerald-300',
     border: 'border-emerald-500/30',
     bg: 'bg-emerald-500/10',
+    tone: 'success',
   },
   limited: {
     dot: 'bg-amber-500',
@@ -35,6 +30,7 @@ const colorMap: Record<Availability['status'], { dot: string; ping: string; text
     text: 'text-amber-600 dark:text-amber-300',
     border: 'border-amber-500/30',
     bg: 'bg-amber-500/10',
+    tone: 'warning',
   },
   busy: {
     dot: 'bg-rose-500',
@@ -42,6 +38,7 @@ const colorMap: Record<Availability['status'], { dot: string; ping: string; text
     text: 'text-rose-600 dark:text-rose-300',
     border: 'border-rose-500/30',
     bg: 'bg-rose-500/10',
+    tone: 'error',
   },
 };
 
@@ -51,7 +48,11 @@ const padding = size === 'md' ? 'px-4 py-2 text-xs' : 'px-3 py-1 text-[10px]';
 const dotSize = size === 'md' ? 'h-2.5 w-2.5' : 'h-2 w-2';
 ---
 
-<span
+<Badge
+  tone={colors.tone}
+  appearance="soft"
+  size={size}
+  eyebrow
   data-availability-badge
   data-status={availability.status}
   class:list={[
@@ -67,7 +68,7 @@ const dotSize = size === 'md' ? 'h-2.5 w-2.5' : 'h-2 w-2';
     <span class:list={['relative inline-flex h-full w-full rounded-full', colors.dot]}></span>
   </span>
   {availability.label}
-</span>
+</Badge>
 
 {showNextSlot && availability.nextSlot && (
   <p class:list={['mt-3 text-sm leading-6 text-muted-foreground']}>

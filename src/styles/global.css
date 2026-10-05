@@ -1,48 +1,4 @@
-/* Theme */
-:root {
-  --background: 210 40% 98%;
-  --foreground: 220 28% 9%;
-  --card: 0 0% 100%;
-  --card-foreground: 220 28% 9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 220 28% 9%;
-  --primary: 348 83% 42%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 216 33% 94%;
-  --secondary-foreground: 220 28% 12%;
-  --muted: 214 32% 92%;
-  --muted-foreground: 217 14% 40%;
-  --accent: 38 92% 45%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 215 28% 84%;
-  --input: 215 28% 84%;
-  --ring: 348 83% 42%;
-  --radius: 0.75rem;
-}
-
-.dark {
-  --background: 240 10% 4%;
-  --foreground: 210 30% 96%;
-  --card: 240 10% 7%;
-  --card-foreground: 210 40% 98%;
-  --popover: 240 10% 7%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 350 89% 60%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 240 7% 12%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 240 6% 14%;
-  --muted-foreground: 217 16% 70%;
-  --accent: 38 92% 50%;
-  --accent-foreground: 240 10% 4%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 240 6% 18%;
-  --input: 240 6% 18%;
-  --ring: 350 89% 60%;
-}
+@import "./starwind.css";
 
 html {
   -webkit-tap-highlight-color: transparent;
@@ -56,8 +12,8 @@ html.dark {
 }
 
 ::selection {
-  background-color: hsl(var(--primary) / 0.3);
-  color: hsl(var(--foreground));
+  background-color: color-mix(in srgb, var(--primary) 30%, transparent);
+  color: var(--foreground);
 }
 
 [hidden] {
@@ -67,10 +23,10 @@ html.dark {
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 20% 0%, hsl(var(--primary) / 0.12), transparent 28rem),
-    radial-gradient(circle at 80% 12%, hsl(var(--accent) / 0.09), transparent 24rem),
-    hsl(var(--background));
-  color: hsl(var(--foreground));
+    radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 28rem),
+    radial-gradient(circle at 80% 12%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 24rem),
+    var(--background);
+  color: var(--foreground);
   position: relative;
 }
 
@@ -86,8 +42,8 @@ body::before {
   z-index: 9999;
   pointer-events: none;
   background-image:
-    linear-gradient(hsl(var(--foreground) / 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(var(--foreground) / 0.035) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--foreground) 3.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--foreground) 3.5%, transparent) 1px, transparent 1px);
   background-size: 28px 28px;
   mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
 }
@@ -106,13 +62,13 @@ body::before {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
-  border: 3px solid hsl(var(--background));
+  background: var(--muted);
+  border: 3px solid var(--background);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
+  background: var(--muted-foreground);
 }
 
 /* Animation */
@@ -127,15 +83,17 @@ body::before {
   }
 }
 
-.animate {
-  animation: reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--reveal-delay, 0ms) forwards;
-  opacity: 0;
+@media (min-width: 768px) {
+  .animate {
+    animation: reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--reveal-delay, 0ms) forwards;
+    opacity: 0;
+  }
 }
 
-/* Scroll-reveal: elements with [data-reveal] start hidden, then .animate is
+/* Scroll-reveal: elements with [data-reveal] start hidden, then .is-revealed is
    added by the IntersectionObserver in BaseLayout when they enter the
    viewport. Keeps the bundle tiny (no animation library) and respects
-   prefers-reduced-motion via the global rule above. */
+   prefers-reduced-motion via the global rule below. */
 [data-reveal] {
   opacity: 0;
   transform: translateY(20px);
@@ -216,6 +174,3 @@ body::before {
   border-color: rgba(251, 44, 54, 0.35);
   box-shadow: 0 0 30px -10px rgba(251, 44, 54, 0.12);
 }
-
-
-

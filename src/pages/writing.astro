@@ -1,4 +1,6 @@
 ---
+import { Button } from '@/components/starwind/button';
+import { Input } from '@/components/starwind/input';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
@@ -182,13 +184,14 @@ const categoryLabels: Record<string, string> = {
 
         <!-- Instant Search Box -->
         <div class="relative w-full md:w-72">
-          <span class="i-lucide-search pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"></span>
-          <input
+          <span class="i-lucide-search pointer-events-none absolute left-3.5 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground"></span>
+          <Input
             type="search"
+            size="sm"
             data-blog-search
             placeholder="Search all 181 notes..."
             aria-label="Search all blog posts"
-            class="h-10 w-full rounded-full border border-border/70 bg-card/70 pl-9 pr-8 text-xs text-foreground placeholder:text-muted-foreground/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
+            class="h-10 w-full rounded-full border-border/70 bg-card/70 pl-9 pr-8 text-xs text-foreground placeholder:text-muted-foreground/70"
           />
         </div>
       </div>
@@ -277,14 +280,16 @@ const categoryLabels: Record<string, string> = {
 
     <!-- Load More Button -->
     <div class="mt-10 flex justify-center" data-load-more-wrap>
-      <button
+      <Button
         type="button"
+        variant="outline"
+        size="lg"
         data-load-more
-        class="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95"
+        class="h-12 rounded-full border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary active:scale-95"
       >
         <span>Show more articles</span>
         <span class="font-mono text-xs text-muted-foreground" data-remaining-count></span>
-      </button>
+      </Button>
     </div>
   </section>
 </BaseLayout>

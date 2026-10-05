@@ -80,6 +80,7 @@ const websiteSchema = {
         applyTheme(document);
       });
     </script>
+    <link rel="preload" href="/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="icon" sizes="any" href="/favicon.ico" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -115,15 +116,25 @@ const websiteSchema = {
     <meta name="theme-color" content="#09090b" />
 
     <!-- Cloudflare Web Analytics (opt-in via PUBLIC_CF_ANALYTICS_TOKEN).
-         Privacy-friendly: no cookies, no personal data, no fingerprinting.
-         Get your beacon token at https://dash.cloudflare.com/?to=/:account/web-analytics -->
+         Loaded during browser idle time after window.load to avoid extending critical path latency. -->
     {cfBeaconToken && (
-      <script
-        is:inline
-        defer
-        src="https://static.cloudflareinsights.com/beacon.min.js"
-        data-cf-beacon={`{"token": "${cfBeaconToken}"}`}
-      ></script>
+      <script is:inline define:vars={{ cfBeaconToken }}>
+        window.addEventListener('load', () => {
+          const loadBeacon = () => {
+            if (document.querySelector('script[data-cf-beacon]')) return;
+            const s = document.createElement('script');
+            s.defer = true;
+            s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+            s.setAttribute('data-cf-beacon', JSON.stringify({ token: cfBeaconToken }));
+            document.head.appendChild(s);
+          };
+          if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(loadBeacon, { timeout: 3500 });
+          } else {
+            setTimeout(loadBeacon, 2500);
+          }
+        }, { once: true });
+      </script>
     )}
 
     <!-- Person schema: author identity for knowledge panels and rich results -->
@@ -143,10 +154,6 @@ const websiteSchema = {
 
     <ClientRouter />
     <script is:inline>
-      // Scroll-reveal: adds .is-revealed to [data-reveal] elements when
-      // they enter the viewport. Tiny vanilla IntersectionObserver, no
-      // animation library. Stagger is controlled per-element via the
-      // --reveal-delay CSS custom property (e.g. style="--reveal-delay: 120ms").
       function setupReveal() {
         const targets = document.querySelectorAll('[data-reveal]:not(.is-revealed)');
         if (!targets.length) return;
@@ -169,19 +176,27 @@ const websiteSchema = {
       }
 
       function setupInteractions() {
-        const spotlight = document.querySelector('.cursor-spotlight');
+        if (window.__farrosSpotlightBound) return;
         if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        window.__farrosSpotlightBound = true;
 
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let targetMouseX = mouseX;
-        let targetMouseY = mouseY;
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetMouseX = 0;
+        let targetMouseY = 0;
+        let initialized = false;
         let ticking = false;
 
         document.addEventListener('pointermove', (e) => {
           targetMouseX = e.clientX;
           targetMouseY = e.clientY;
+          if (!initialized) {
+            mouseX = targetMouseX;
+            mouseY = targetMouseY;
+            initialized = true;
+          }
+          const spotlight = document.querySelector('.cursor-spotlight');
           if (spotlight && !spotlight.classList.contains('is-active')) {
             spotlight.classList.add('is-active');
           }
@@ -201,16 +216,6 @@ const websiteSchema = {
         }
       }
 
-      // Run once on initial load and again after every Astro view transition.
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-          setupReveal();
-          setupInteractions();
-        });
-      } else {
-        setupReveal();
-        setupInteractions();
-      }
       document.addEventListener('astro:page-load', () => {
         setupReveal();
         setupInteractions();

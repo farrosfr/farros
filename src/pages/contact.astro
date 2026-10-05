@@ -1,4 +1,10 @@
 ---
+import { Button } from '@/components/starwind/button';
+import { Card } from '@/components/starwind/card';
+import { Input } from '@/components/starwind/input';
+import { Label } from '@/components/starwind/label';
+import { NativeSelect } from '@/components/starwind/native-select';
+import { Textarea } from '@/components/starwind/textarea';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AvailabilityBadge from '../components/AvailabilityBadge.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
@@ -69,53 +75,53 @@ const directLinks = [
         </div>
 
         <div class="grid gap-5 sm:grid-cols-2">
-          <label class="flex flex-col gap-2 text-sm font-semibold text-foreground">
+          <Label class="flex flex-col items-start gap-2 text-sm font-semibold text-foreground">
             <span>Name</span>
-            <input
+            <Input
               name="name"
               type="text"
               required
               autocomplete="name"
               placeholder="Your full name"
-              class="h-12 rounded-2xl border border-border/70 bg-background/65 px-4 text-sm font-medium text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
+              class="h-12 rounded-2xl border-border/70 bg-background/65 px-4 text-sm font-medium text-foreground"
             />
-          </label>
-          <label class="flex flex-col gap-2 text-sm font-semibold text-foreground">
+          </Label>
+          <Label class="flex flex-col items-start gap-2 text-sm font-semibold text-foreground">
             <span>Email</span>
-            <input
+            <Input
               name="email"
               type="email"
               required
               autocomplete="email"
               placeholder="you@company.com"
-              class="h-12 rounded-2xl border border-border/70 bg-background/65 px-4 text-sm font-medium text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
+              class="h-12 rounded-2xl border-border/70 bg-background/65 px-4 text-sm font-medium text-foreground"
             />
-          </label>
+          </Label>
         </div>
 
-        <label class="flex flex-col gap-2 text-sm font-semibold text-foreground">
+        <Label class="flex flex-col items-start gap-2 text-sm font-semibold text-foreground">
           <span>Subject</span>
-          <select
+          <NativeSelect
             name="subject"
             required
-            class="h-12 rounded-2xl border border-border/70 bg-background/65 px-4 text-sm font-medium text-foreground outline-none transition-colors focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
+            class="h-12 rounded-2xl border-border/70 bg-background/65 px-4 text-sm font-medium text-foreground"
           >
             <option value="" disabled selected>Pick a topic</option>
             {subjects.map((subject) => <option value={subject}>{subject}</option>)}
             <option value="__custom__">Something else (write it in the message)</option>
-          </select>
-        </label>
+          </NativeSelect>
+        </Label>
 
-        <label class="flex flex-col gap-2 text-sm font-semibold text-foreground">
+        <Label class="flex flex-col items-start gap-2 text-sm font-semibold text-foreground">
           <span>Message</span>
-          <textarea
+          <Textarea
             name="message"
             required
-            rows="6"
+            rows={6}
             placeholder="A short summary of what you need, key constraints, and a realistic timeline."
-            class="rounded-2xl border border-border/70 bg-background/65 px-4 py-3 text-sm font-medium text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/60 focus:ring-2 focus:ring-primary/30"
-          ></textarea>
-        </label>
+            class="rounded-2xl border-border/70 bg-background/65 px-4 py-3 text-sm font-medium text-foreground"
+          />
+        </Label>
 
         {/* Honeypot: hidden from real users, irresistible to bots. */}
         <div aria-hidden="true" class="hidden">
@@ -131,14 +137,16 @@ const directLinks = [
               ? 'Powered by Web3Forms. Replies usually within two business days.'
               : `No backend configured — the form will open your email client addressed to ${profile.email}.`}
           </p>
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            size="lg"
             data-submit-button
-            class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:cursor-not-allowed disabled:opacity-60"
+            class="h-12 rounded-full px-8 text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/20"
           >
             <span data-submit-label>Send message</span>
             <span data-submit-spinner class="i-lucide-loader-circle ml-2 hidden size-4 animate-spin"></span>
-          </button>
+          </Button>
         </div>
 
         <p
@@ -150,7 +158,7 @@ const directLinks = [
       </form>
 
       <aside class="flex flex-col gap-4">
-        <div class="glass-card rounded-[1.5rem] p-6">
+        <Card class="glass-card rounded-[1.5rem] p-6">
           <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Direct lines</p>
           <p class="mt-2 text-base font-bold text-foreground">Reach me without filling the form.</p>
           <ul class="mt-5 flex flex-col gap-2">
@@ -174,14 +182,14 @@ const directLinks = [
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
 
-        <div class="glass-card rounded-[1.5rem] p-6">
+        <Card class="glass-card rounded-[1.5rem] p-6">
           <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Response time</p>
           <p class="mt-3 text-sm leading-6 text-muted-foreground">
             Most replies land within two business days. If something is urgent, WhatsApp is the fastest path during working hours (WIB, UTC+7).
           </p>
-        </div>
+        </Card>
       </aside>
     </section>
   </main>

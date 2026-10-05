@@ -1,4 +1,6 @@
 ---
+import { Button } from '@/components/starwind/button';
+import { Card } from '@/components/starwind/card';
 import { awards, capabilities, experience, featuredWork, profile } from '../data/profile';
 
 const links = [
@@ -11,7 +13,7 @@ const links = [
 
 <section id="about" class="py-20 md:py-28" data-reveal>
   <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10">
-    <div class="glass-card rounded-[1.5rem] p-6 sm:p-8">
+    <Card class="glass-card rounded-[1.5rem] p-6 sm:p-8">
       <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Profile</p>
       <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">Building secure web systems from first principles.</h2>
       <div class="mt-7 text-base leading-7 text-muted-foreground">
@@ -26,15 +28,15 @@ const links = [
           </div>
         ))}
       </div>
-    </div>
+    </Card>
 
-    <div class="glass-card rounded-[1.5rem] p-6 sm:p-8">
+    <Card class="glass-card rounded-[1.5rem] p-6 sm:p-8">
       <div class="mb-8 flex items-center justify-between gap-4">
         <div>
           <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Trajectory</p>
           <h3 class="mt-2 text-2xl font-bold tracking-tight">Professional record</h3>
         </div>
-        <img src="/logo.png" alt="Farros logo" width="48" height="48" class="hidden size-12 rounded-xl ring-1 ring-white/10 sm:block" />
+        <img src="/logo.png" alt="Farros logo" width="48" height="48" loading="lazy" decoding="async" class="hidden size-12 rounded-xl ring-1 ring-white/10 sm:block" />
       </div>
 
       <div class="space-y-7 border-l border-border/70 pl-6">
@@ -48,11 +50,11 @@ const links = [
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   </div>
 
   <div class="mt-4 grid gap-4 lg:grid-cols-[1fr_1fr]">
-    <div class="glass-card rounded-[1.5rem] p-6">
+    <Card class="glass-card rounded-[1.5rem] p-6">
       <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Featured builds</p>
       <div class="mt-5 grid gap-3">
         {featuredWork.map((item) => (
@@ -65,8 +67,8 @@ const links = [
           </a>
         ))}
       </div>
-    </div>
-    <div class="glass-card rounded-[1.5rem] p-6">
+    </Card>
+    <Card class="glass-card rounded-[1.5rem] p-6">
       <p class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Awards</p>
       <div class="mt-5 grid gap-3">
         {awards.slice(0, 3).map((item) => (
@@ -76,7 +78,7 @@ const links = [
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   </div>
 
   <div class="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -95,11 +97,21 @@ const links = [
   </div>
 
   <div class="flex flex-col gap-3 py-10 sm:flex-row sm:justify-center">
-    <a href="/cv" class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-sm font-bold text-primary-foreground transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50">
+    <Button
+      href="/cv"
+      variant="primary"
+      size="lg"
+      class="h-14 rounded-full px-8 text-sm font-bold transition-all hover:-translate-y-0.5"
+    >
       View CV
-    </a>
-    <a href={profile.cvPath} class="inline-flex h-14 items-center justify-center rounded-full border border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50">
+    </Button>
+    <Button
+      href={profile.cvPath}
+      variant="outline"
+      size="lg"
+      class="h-14 rounded-full border-border bg-card/70 px-8 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
+    >
       Download PDF
-    </a>
+    </Button>
   </div>
 </section>

@@ -1,4 +1,7 @@
 ---
+import { Button } from '@/components/starwind/button';
+import { Card } from '@/components/starwind/card';
+import { Kbd } from '@/components/starwind/kbd';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
 
@@ -25,30 +28,34 @@ const quickLinks = [
       <p class="mt-6 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
         The page you are looking for does not exist, has moved, or the link is stale.
         Use one of the routes below or hit
-        <kbd class="mx-1 rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground">Ctrl K</kbd>
+        <Kbd class="mx-1 rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground">Ctrl K</Kbd>
         to search the site.
       </p>
 
       <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-        <a
+        <Button
           href="/"
-          class="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-bold text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          variant="primary"
+          size="lg"
+          class="h-14 rounded-full px-7 text-sm font-bold shadow-xl shadow-primary/20 transition-all hover:-translate-y-0.5"
         >
           <span class="i-lucide-arrow-left size-4"></span>
           Back to home
-        </a>
-        <a
+        </Button>
+        <Button
           href="/web-porto/"
-          class="inline-flex h-14 items-center justify-center rounded-full border border-border bg-card/70 px-7 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+          variant="outline"
+          size="lg"
+          class="h-14 rounded-full border-border bg-card/70 px-7 text-sm font-bold text-foreground transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary"
         >
           Review work
-        </a>
+        </Button>
       </div>
     </div>
   </section>
 
   <section class="pb-20 md:pb-28" data-reveal>
-    <div class="glass-card rounded-[1.5rem] p-6 sm:p-8">
+    <Card class="glass-card rounded-[1.5rem] p-6 sm:p-8">
       <p class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-primary">Common routes</p>
       <ul class="grid gap-3 sm:grid-cols-2">
         {quickLinks.map((link) => (
@@ -71,6 +78,6 @@ const quickLinks = [
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   </section>
 </BaseLayout>
