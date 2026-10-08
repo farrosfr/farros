@@ -152,8 +152,6 @@ import { navItems, searchItems } from '../data/profile';
 <script>
   function setupHeaderControls() {
     const root = document.documentElement;
-    // Read scroll offset FIRST before any DOM mutations to avoid forced synchronous reflow
-    const initialScrollY = window.scrollY;
     const isInitiallyDark = root.classList.contains('dark');
 
     const systemQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -289,12 +287,10 @@ import { navItems, searchItems } from '../data/profile';
     const headerContainer = document.querySelector('[data-header-container]') as HTMLElement | null;
 
     if (header && headerContainer) {
-      let lastScrollY = initialScrollY;
+      let lastScrollY = 0;
 
-      headerContainer.setAttribute('data-scrolled', initialScrollY > 20 ? 'true' : 'false');
-      if (initialScrollY <= 20) {
-        header.setAttribute('data-header-hidden', 'false');
-      }
+      headerContainer.setAttribute('data-scrolled', 'false');
+      header.setAttribute('data-header-hidden', 'false');
 
       if (header.getAttribute('data-focus-bound') !== 'true') {
         header.setAttribute('data-focus-bound', 'true');
@@ -337,7 +333,11 @@ import { navItems, searchItems } from '../data/profile';
     }
   }
 
-  document.addEventListener('astro:page-load', setupHeaderControls);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHeaderControls);
+  } else {
+    setupHeaderControls();
+  }
 </script>
 
 <script define:vars={{ searchItems }}>
@@ -416,7 +416,11 @@ import { navItems, searchItems } from '../data/profile';
     });
   }
 
-  document.addEventListener('astro:page-load', setupSearchPalette);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupSearchPalette);
+  } else {
+    setupSearchPalette();
+  }
 </script>
 
 <style>

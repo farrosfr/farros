@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { profile } from '../data/profile';
@@ -71,16 +70,9 @@ const websiteSchema = {
       }
 
       applyTheme();
-
-      document.addEventListener('astro:before-swap', (event) => {
-        applyTheme(event.newDocument);
-      });
-
-      document.addEventListener('astro:after-swap', () => {
-        applyTheme(document);
-      });
     </script>
     <link rel="preload" href="/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/fira-code-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="icon" sizes="any" href="/favicon.ico" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -152,7 +144,6 @@ const websiteSchema = {
     <!-- WebSite schema: site-level metadata + author link -->
     <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
-    <ClientRouter />
     <script is:inline>
       function setupReveal() {
         const targets = document.querySelectorAll('[data-reveal]:not(.is-revealed)');
@@ -216,10 +207,16 @@ const websiteSchema = {
         }
       }
 
-      document.addEventListener('astro:page-load', () => {
+      const initUI = () => {
         setupReveal();
         setupInteractions();
-      });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initUI);
+      } else {
+        initUI();
+      }
     </script>
   </head>
   <body class="bg-background text-foreground font-sans antialiased flex flex-col min-h-screen selection:bg-primary/30 selection:text-foreground">

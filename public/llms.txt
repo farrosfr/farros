@@ -1,0 +1,30 @@
+# Farros FR
+
+> System Architect, Full-Stack Developer & Security Researcher based in Surabaya, Indonesia. Statistics graduate from Institut Teknologi Sepuluh Nopember (ITS). Specializing in fast, accessible web frontend architectures, defensive engineering, and offensive cybersecurity research.
+
+## Core Pages
+- [/](https://farrosfr.com/): Homepage with portfolio highlights, featured production systems, capabilities, and professional trajectory.
+- [/cv](https://farrosfr.com/cv): Complete curriculum vitae, technical skill proficiencies, certifications, education, and career record.
+- [/web-porto/](https://farrosfr.com/web-porto/): Curated portfolio of production web applications and client systems with technical architecture summaries.
+- [/writing](https://farrosfr.com/writing): Engineering notes, deep-dive cybersecurity essays, and syndicated security analysis.
+- [/contact](https://farrosfr.com/contact): Contact inquiry form and direct communication channels.
+
+## Advisory Services
+- [/services/web-architecture/](https://farrosfr.com/services/web-architecture/): Astro & modern frontend architecture consulting, Core Web Vitals optimization, and static-first web design.
+- [/services/security-review/](https://farrosfr.com/services/security-review/): Web application vulnerability assessments, source code security audits, and penetration testing.
+- [/services/data-engineering/](https://farrosfr.com/services/data-engineering/): Analytics pipelines, ELT workflows, SQL optimization, and automated reporting systems.
+- [/services/ai-automation/](https://farrosfr.com/services/ai-automation/): LLM integrations, intelligent workflow automation, and custom agent development.
+- [/services/browser-extensions/](https://farrosfr.com/services/browser-extensions/): Manifest V3 Chrome extension development, productivity tools, and security sidecars.
+- [/services/it-operations/](https://farrosfr.com/services/it-operations/): Cloud infrastructure hardening, CI/CD pipeline design, and reliable web hosting architecture.
+
+## Deep-Dive Essays
+- [/essays/building-for-the-long-term/](https://farrosfr.com/essays/building-for-the-long-term/): Building for the long term when every dependency wants to break.
+- [/essays/practical-red-team-notes/](https://farrosfr.com/essays/practical-red-team-notes/): Practical red team notes: reconnaissance to report.
+- [/essays/data-engineering-without-a-team/](https://farrosfr.com/essays/data-engineering-without-a-team/): Data engineering without a data team.
+
+## Direct Contact
+- Email: hello@farrosfr.com
+- GitHub: https://github.com/farrosfr
+- LinkedIn: https://linkedin.com/in/farrosfr
+- Medium: https://farrosfr.medium.com
+- X: https://x.com/farrosfr_

@@ -75,3 +75,15 @@ const dotSize = size === 'md' ? 'h-2.5 w-2.5' : 'h-2 w-2';
     {availability.nextSlot}
   </p>
 )}
+
+<style>
+  :global(:root:not(.dark)) [data-availability-badge][data-status="available"] {
+    color: #065f46; /* emerald-800 for >= 5.5:1 WCAG AA contrast in light mode */
+  }
+  :global(:root:not(.dark)) [data-availability-badge][data-status="limited"] {
+    color: #92400e; /* amber-800 for >= 5.5:1 WCAG AA contrast in light mode */
+  }
+  :global(:root:not(.dark)) [data-availability-badge][data-status="busy"] {
+    color: #9f1239; /* rose-800 for >= 5.5:1 WCAG AA contrast in light mode */
+  }
+</style>
