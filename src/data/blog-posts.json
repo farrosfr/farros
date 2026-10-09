@@ -1,5 +1,16 @@
 [
   {
+    "id": 219375569,
+    "slug": "aoc-25-days-4-8-ai-idor-malware-sandbox-nmap",
+    "title": "AOC 25 Days 4-8: AI, IDOR, Malware Sandbox, & Nmap",
+    "description": "",
+    "url": "https://blog.farrosfr.com/p/aoc-25-days-4-8-ai-idor-malware-sandbox-nmap",
+    "pubDate": "2026-10-07T00:00:00.399Z",
+    "year": 2026,
+    "category": "ai",
+    "coverImage": "https://substack-post-media.s3.amazonaws.com/public/images/ac41367b-ec8d-4c34-8860-dad866f29bc4_1376x768.png"
+  },
+  {
     "id": 218158117,
     "slug": "junior-pentester-web-recon-and-server-exploitation-guide",
     "title": "Junior PenTester: Web Recon and Server Exploitation Guide",
