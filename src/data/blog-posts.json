@@ -1,5 +1,16 @@
 [
   {
+    "id": 220499412,
+    "slug": "aoc-25-days-9-13-hashcat-sentinel-xss-yara",
+    "title": "AOC 25 Days 9-13: Hashcat, Sentinel, XSS, & YARA",
+    "description": "Crack encrypted PDF/ZIP archives, triage Linux privilege escalation in Microsoft Sentinel, exploit reflected/stored XSS, inspect phishing, and run YARA rules.",
+    "url": "https://blog.farrosfr.com/p/aoc-25-days-9-13-hashcat-sentinel-xss-yara",
+    "pubDate": "2026-10-09T00:00:00.718Z",
+    "year": 2026,
+    "category": "security",
+    "coverImage": "https://substack-post-media.s3.amazonaws.com/public/images/4e3abe04-9385-47b0-99d2-36a2bd2f8fe9_1376x768.png"
+  },
+  {
     "id": 219375569,
     "slug": "aoc-25-days-4-8-ai-idor-malware-sandbox-nmap",
     "title": "AOC 25 Days 4-8: AI, IDOR, Malware Sandbox, & Nmap",
