@@ -1,5 +1,16 @@
 [
   {
+    "id": 221448843,
+    "slug": "aoc-25-days-14-18-docker-web-dfir-registry-hives",
+    "title": "AOC 25 Days 14-18: Docker, Web DFIR, & Registry Hives",
+    "description": "Escape Docker containers via UNIX sockets, triage Apache web attacks in Splunk, parse Windows registry hives, solve CyberChef locks, and deobfuscate C2 scripts.",
+    "url": "https://blog.farrosfr.com/p/aoc-25-days-14-18-docker-web-dfir-registry-hives",
+    "pubDate": "2026-10-15T00:00:00.350Z",
+    "year": 2026,
+    "category": "systems",
+    "coverImage": "https://substack-post-media.s3.amazonaws.com/public/images/b8908261-a8aa-4f65-8b33-966c39e6fd9a_1376x768.png"
+  },
+  {
     "id": 220499412,
     "slug": "aoc-25-days-9-13-hashcat-sentinel-xss-yara",
     "title": "AOC 25 Days 9-13: Hashcat, Sentinel, XSS, & YARA",
