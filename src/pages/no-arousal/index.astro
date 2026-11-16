@@ -1,0 +1,378 @@
+---
+// NoArousal - Page Implementation (Astro)
+import Navigation from '../../components/no-arousal/Navigation.astro';
+import HeroSection from '../../components/no-arousal/HeroSection.astro';
+import MilestoneProgress from '../../components/no-arousal/MilestoneProgress.astro';
+import MilestoneGrid from '../../components/no-arousal/MilestoneGrid.astro';
+import PrincipleCards from '../../components/no-arousal/PrincipleCards.astro';
+import DailyCheckIn from '../../components/no-arousal/DailyCheckIn.astro';
+import StreakTimeline from '../../components/no-arousal/StreakTimeline.astro';
+import Footer from '../../components/no-arousal/Footer.astro';
+
+const pageTitle = 'NoArousal — Personal Streak Tracker';
+const pageDescription = 'A quiet commitment. One moment at a time. Live streak counter, milestones, daily check-ins, and personal history.';
+const canonicalURL = new URL('/no-arousal/', Astro.site ?? 'https://farrosfr.com');
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Google Fonts: Cormorant Garamond & Cinzel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+
+    <style is:global>
+      :root {
+        --na-bg: #071116;
+        --na-surface: #0D191D;
+        --na-primary: #D6B17A;
+        --na-text: #E9DDC9;
+        --na-muted: #A99D8A;
+        --na-border: #746047;
+        --na-divider: #554936;
+      }
+
+      body {
+        background-color: #071116;
+        color: #E9DDC9;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        overflow-x: hidden;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .font-cinzel {
+        font-family: 'Cinzel', serif;
+      }
+
+      .font-serif {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+      }
+
+      /* Custom Oceanic Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #071116;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #554936;
+        border-radius: 2px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #746047;
+      }
+    </style>
+  </head>
+
+  <body class="relative min-h-screen selection:bg-[#D6B17A]/30 selection:text-[#E9DDC9]">
+    
+    <!-- Atmospheric Underwater Background -->
+    <div
+      class="pointer-events-none fixed inset-0 z-0 opacity-100"
+      aria-hidden="true"
+      style="
+        background:
+          radial-gradient(ellipse 90% 55% at 50% -5%, rgba(38, 76, 92, 0.32), rgba(16, 38, 48, 0.18) 45%, transparent 75%),
+          radial-gradient(ellipse 70% 40% at 50% 30%, rgba(24, 52, 64, 0.16), transparent 60%),
+          radial-gradient(ellipse at 50% 100%, rgba(4, 9, 12, 0.95), #071116),
+          #071116;
+      "
+    >
+      <!-- Subtle Caustic Water Texture Overlay -->
+      <div
+        class="absolute inset-0 opacity-[0.035] mix-blend-screen"
+        style="
+          background-image: radial-gradient(circle at 50% 50%, rgba(214, 177, 122, 0.3) 1px, transparent 1px);
+          background-size: 32px 32px;
+        "
+      ></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 flex min-h-screen flex-col">
+      <!-- Navigation Bar -->
+      <Navigation />
+
+      <!-- Page Content -->
+      <main class="flex-grow w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
+        <HeroSection />
+        <MilestoneProgress />
+        <MilestoneGrid />
+        <PrincipleCards />
+        <DailyCheckIn />
+        <StreakTimeline />
+      </main>
+
+      <!-- Minimal Footer -->
+      <Footer />
+    </div>
+
+    <!-- Client-side Interactive Application Script -->
+    <script>
+      import { calculateElapsed, formatDisplayDate, formatDateKey, DEFAULT_START_TIMESTAMP } from '../../lib/no-arousal/counter';
+      import { calculateMilestoneProgress, MILESTONES } from '../../lib/no-arousal/milestones';
+      import { loadNoArousalState, saveDailyCheckIn, executeStreakReset, type CheckInStatus } from '../../lib/no-arousal/storage';
+      import { generateTimeline } from '../../lib/no-arousal/history';
+
+      // Application State
+      let state = loadNoArousalState();
+      let selectedOption: CheckInStatus | null = null;
+
+      // DOM Elements Cache
+      const elDays = document.getElementById('counter-days');
+      const elHours = document.getElementById('counter-hours');
+      const elMinutes = document.getElementById('counter-minutes');
+      const elSeconds = document.getElementById('counter-seconds');
+
+      const elNextMilestoneTitle = document.getElementById('next-milestone-title');
+      const elNextMilestoneRemaining = document.getElementById('next-milestone-remaining');
+      const elMilestonePctText = document.getElementById('milestone-percentage-text');
+      const elMilestoneProgressBar = document.getElementById('milestone-progress-bar');
+
+      const elCheckinDate = document.getElementById('checkin-date-display');
+      const checkinButtons = document.querySelectorAll<HTMLButtonElement>('.na-checkin-btn');
+      const btnSaveReflection = document.getElementById('btn-save-reflection');
+      const elCheckinFeedback = document.getElementById('checkin-feedback');
+
+      const modalReset = document.getElementById('reset-confirm-modal');
+      const btnModalCancel = document.getElementById('btn-modal-cancel');
+      const btnModalConfirm = document.getElementById('btn-modal-confirm');
+
+      const elTimelineList = document.getElementById('timeline-list');
+
+      /**
+       * 1. Updates real-time streak timer and milestone progress
+       */
+      function tick() {
+        const now = new Date();
+        const elapsed = calculateElapsed(state.startDate, now);
+
+        // Update Counter Display
+        if (elDays) elDays.textContent = elapsed.daysStr;
+        if (elHours) elHours.textContent = elapsed.hoursStr;
+        if (elMinutes) elMinutes.textContent = elapsed.minutesStr;
+        if (elSeconds) elSeconds.textContent = elapsed.secondsStr;
+
+        // Update Next Milestone Card
+        const progress = calculateMilestoneProgress(elapsed.elapsedSeconds);
+        if (elNextMilestoneTitle) elNextMilestoneTitle.textContent = progress.nextMilestone.title;
+        if (elNextMilestoneRemaining) {
+          elNextMilestoneRemaining.textContent = progress.isAllCompleted
+            ? 'All milestones achieved'
+            : `${progress.remainingDays} days to go`;
+        }
+        if (elMilestonePctText) elMilestonePctText.textContent = `${progress.percentage}% COMPLETE`;
+        if (elMilestoneProgressBar) {
+          elMilestoneProgressBar.style.width = `${progress.percentage}%`;
+          elMilestoneProgressBar.setAttribute('aria-valuenow', String(progress.percentage));
+        }
+
+        // Update Milestones Grid Icons & Accents
+        MILESTONES.forEach((m) => {
+          const card = document.getElementById(`milestone-card-${m.id}`);
+          if (!card) return;
+
+          const isAchieved = progress.completedMilestoneIds.includes(m.id);
+          const iconLocked = card.querySelector('.icon-locked');
+          const iconUnlocked = card.querySelector('.icon-unlocked');
+
+          if (isAchieved) {
+            iconLocked?.classList.add('hidden');
+            iconUnlocked?.classList.remove('hidden');
+            card.classList.add('border-[#D6B17A]/60', 'bg-[#0D191D]');
+          } else {
+            iconLocked?.classList.remove('hidden');
+            iconUnlocked?.classList.add('hidden');
+            card.classList.remove('border-[#D6B17A]/60');
+          }
+        });
+      }
+
+      /**
+       * 2. Renders the Streak Log Timeline
+       */
+      function renderTimeline() {
+        if (!elTimelineList) return;
+
+        const timelineItems = generateTimeline(state, new Date());
+        elTimelineList.innerHTML = '';
+
+        timelineItems.forEach((item) => {
+          const row = document.createElement('div');
+          row.className = 'relative flex items-center gap-3 sm:gap-6 text-xs sm:text-sm';
+
+          // Node Marker
+          const dot = document.createElement('span');
+          if (item.isReset) {
+            dot.className = 'absolute -left-6 sm:-left-8 w-3 h-3 rounded-full border border-amber-500 bg-[#071116] -translate-x-[2.5px] shadow-[0_0_8px_rgba(245,158,11,0.5)]';
+          } else {
+            dot.className = 'absolute -left-6 sm:-left-8 w-3 h-3 rounded-full border border-[#D6B17A] bg-[#071116] -translate-x-[2.5px]';
+          }
+          row.appendChild(dot);
+
+          // Date
+          const dateSpan = document.createElement('span');
+          dateSpan.className = 'font-cinzel tracking-wider text-[#E9DDC9] min-w-[95px] sm:min-w-[110px] select-none';
+          dateSpan.textContent = item.displayDate;
+          row.appendChild(dateSpan);
+
+          // Dash
+          const dash = document.createElement('span');
+          dash.className = 'text-[#746047] select-none';
+          dash.innerHTML = '&mdash;';
+          row.appendChild(dash);
+
+          // Label
+          const labelSpan = document.createElement('span');
+          if (item.isReset) {
+            labelSpan.className = 'font-serif text-amber-300/90 italic';
+          } else if (item.isInProgress) {
+            labelSpan.className = 'font-serif text-[#E9DDC9] font-medium';
+          } else {
+            labelSpan.className = 'font-serif text-[#A99D8A]';
+          }
+          labelSpan.textContent = item.label;
+          row.appendChild(labelSpan);
+
+          // Status Badge if available
+          if (item.statusBadge) {
+            const badge = document.createElement('span');
+            badge.className = 'font-cinzel text-[10px] tracking-wider px-2 py-0.5 border border-[#746047] text-[#D6B17A] bg-[#071116] ml-2 select-none uppercase';
+            badge.textContent = item.statusBadge;
+            row.appendChild(badge);
+          }
+
+          elTimelineList.appendChild(row);
+        });
+      }
+
+      /**
+       * 3. Syncs Daily Check-in Form
+       */
+      function syncCheckInState() {
+        const todayKey = formatDateKey(new Date());
+        if (elCheckinDate) {
+          elCheckinDate.textContent = formatDisplayDate(new Date());
+        }
+
+        const existing = state.checkIns.find((c) => c.date === todayKey);
+        if (existing) {
+          selectedOption = existing.status;
+        }
+
+        updateCheckinButtons();
+      }
+
+      function updateCheckinButtons() {
+        checkinButtons.forEach((btn) => {
+          const opt = btn.getAttribute('data-option') as CheckInStatus;
+          const isSelected = opt === selectedOption;
+          btn.setAttribute('aria-checked', String(isSelected));
+
+          if (isSelected) {
+            if (opt === 'reset') {
+              btn.className = 'na-checkin-btn border border-amber-600 bg-amber-950/40 px-4 py-1.5 font-cinzel text-xs tracking-wider text-amber-200 ring-1 ring-amber-500/50';
+            } else {
+              btn.className = 'na-checkin-btn border border-[#D6B17A] bg-[#D6B17A]/15 px-4 py-1.5 font-cinzel text-xs tracking-wider text-[#E9DDC9] ring-1 ring-[#D6B17A]/40';
+            }
+          } else {
+            btn.className = 'na-checkin-btn border border-[#554936] bg-[#071116]/60 px-4 py-1.5 font-cinzel text-xs tracking-wider text-[#A99D8A] transition-all hover:border-[#D6B17A] hover:text-[#E9DDC9]';
+          }
+        });
+      }
+
+      // Handle Option Button Clicks
+      checkinButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const opt = btn.getAttribute('data-option') as CheckInStatus;
+          selectedOption = opt;
+          updateCheckinButtons();
+        });
+      });
+
+      // Save Reflection Button Click
+      btnSaveReflection?.addEventListener('click', () => {
+        if (!selectedOption) {
+          if (elCheckinFeedback) {
+            elCheckinFeedback.textContent = 'Please choose an option';
+            elCheckinFeedback.className = 'font-serif italic text-xs text-amber-400 opacity-100 transition-opacity duration-300';
+            setTimeout(() => {
+              elCheckinFeedback.className = 'font-serif italic text-xs text-amber-400 opacity-0 transition-opacity duration-300';
+            }, 2500);
+          }
+          return;
+        }
+
+        if (selectedOption === 'reset') {
+          // Open confirmation modal
+          modalReset?.classList.remove('hidden');
+          modalReset?.classList.add('flex');
+          return;
+        }
+
+        // Save normal reflection
+        state = saveDailyCheckIn(selectedOption);
+        renderTimeline();
+
+        if (elCheckinFeedback) {
+          elCheckinFeedback.textContent = 'Reflection saved';
+          elCheckinFeedback.className = 'font-serif italic text-xs text-[#D6B17A] opacity-100 transition-opacity duration-300';
+          setTimeout(() => {
+            elCheckinFeedback.className = 'font-serif italic text-xs text-[#D6B17A] opacity-0 transition-opacity duration-300';
+          }, 3000);
+        }
+      });
+
+      // Reset Modal Handlers
+      btnModalCancel?.addEventListener('click', () => {
+        modalReset?.classList.add('hidden');
+        modalReset?.classList.remove('flex');
+      });
+
+      btnModalConfirm?.addEventListener('click', () => {
+        modalReset?.classList.add('hidden');
+        modalReset?.classList.remove('flex');
+
+        state = executeStreakReset();
+        tick();
+        renderTimeline();
+        syncCheckInState();
+
+        if (elCheckinFeedback) {
+          elCheckinFeedback.textContent = 'Streak reset recorded';
+          elCheckinFeedback.className = 'font-serif italic text-xs text-amber-300 opacity-100 transition-opacity duration-300';
+          setTimeout(() => {
+            elCheckinFeedback.className = 'font-serif italic text-xs text-amber-300 opacity-0 transition-opacity duration-300';
+          }, 3500);
+        }
+      });
+
+      // Initial Bootstrap
+      tick();
+      setInterval(tick, 1000);
+      syncCheckInState();
+      renderTimeline();
+    </script>
+  </body>
+</html>

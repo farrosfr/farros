@@ -1,0 +1,135 @@
+---
+// NoArousal - Daily Check-in Section with Reset Confirmation Modal
+import { formatDisplayDate } from '../../lib/no-arousal/counter';
+
+const todayDisplay = formatDisplayDate(new Date());
+---
+
+<section id="check-in" class="w-full max-w-4xl mx-auto mb-14 sm:mb-16">
+  <!-- Section Title with Horizontal Rule -->
+  <div class="flex items-center gap-4 mb-6">
+    <h2 class="font-serif text-2xl sm:text-[26px] text-[#E9DDC9] font-normal tracking-tight">
+      Daily check-in
+    </h2>
+    <div class="h-[1px] flex-1 bg-[#554936]" aria-hidden="true"></div>
+  </div>
+
+  <!-- Check-in Panel -->
+  <div class="relative bg-[#0D191D]/85 border border-[#554936] p-5 sm:p-6 md:p-7 backdrop-blur-sm">
+    <div class="grid grid-cols-1 md:grid-cols-[auto_1px_1fr_1px_auto] items-center gap-5 md:gap-6">
+      
+      <!-- Date Display -->
+      <div class="flex items-center justify-start md:justify-center">
+        <span id="checkin-date-display" class="font-cinzel text-xs sm:text-sm tracking-[0.18em] uppercase text-[#E9DDC9] font-medium select-none">
+          {todayDisplay}
+        </span>
+      </div>
+
+      <!-- Divider 1 -->
+      <div class="hidden md:block w-[1px] h-12 bg-[#554936]" aria-hidden="true"></div>
+
+      <!-- Center: Question & Options -->
+      <div class="flex flex-col gap-3 text-left">
+        <p class="font-serif text-base sm:text-lg text-[#E9DDC9] font-normal">
+          How did you show up today?
+        </p>
+
+        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5" role="radiogroup" aria-label="Daily Check-in Options">
+          <button
+            type="button"
+            role="radio"
+            aria-checked="false"
+            data-option="focused"
+            class="na-checkin-btn border border-[#554936] bg-[#071116]/60 px-4 py-1.5 font-cinzel text-xs tracking-wider text-[#A99D8A] transition-all hover:border-[#D6B17A] hover:text-[#E9DDC9] focus:outline-none focus:ring-1 focus:ring-[#D6B17A]"
+          >
+            Focused
+          </button>
+
+          <button
+            type="button"
+            role="radio"
+            aria-checked="false"
+            data-option="resisted"
+            class="na-checkin-btn border border-[#554936] bg-[#071116]/60 px-4 py-1.5 font-cinzel text-xs tracking-wider text-[#A99D8A] transition-all hover:border-[#D6B17A] hover:text-[#E9DDC9] focus:outline-none focus:ring-1 focus:ring-[#D6B17A]"
+          >
+            Resisted
+          </button>
+
+          <button
+            type="button"
+            role="radio"
+            aria-checked="false"
+            data-option="reset"
+            class="na-checkin-btn border border-[#554936] bg-[#071116]/60 px-4 py-1.5 font-cinzel text-xs tracking-wider text-[#A99D8A] transition-all hover:border-amber-600/70 hover:text-[#E9DDC9] focus:outline-none focus:ring-1 focus:ring-amber-500"
+          >
+            Reset & learned
+          </button>
+        </div>
+      </div>
+
+      <!-- Divider 2 -->
+      <div class="hidden md:block w-[1px] h-12 bg-[#554936]" aria-hidden="true"></div>
+
+      <!-- Right: Save Button & Status -->
+      <div class="flex flex-col items-start md:items-end justify-center gap-2">
+        <button
+          type="button"
+          id="btn-save-reflection"
+          class="border border-[#746047] bg-[#0D191D] px-5 py-2 font-cinzel text-xs tracking-[0.16em] uppercase text-[#E9DDC9] transition-all hover:border-[#D6B17A] hover:bg-[#D6B17A]/10 hover:text-white focus:outline-none focus:ring-1 focus:ring-[#D6B17A] active:scale-[0.98]"
+        >
+          Save reflection
+        </button>
+        <span id="checkin-feedback" class="font-serif italic text-xs text-[#D6B17A] opacity-0 transition-opacity duration-300">
+          Saved
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Reset Confirmation Modal Dialog -->
+  <div
+    id="reset-confirm-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="reset-modal-title"
+  >
+    <div class="relative w-full max-w-md bg-[#0D191D] border border-[#746047] p-6 sm:p-8 shadow-2xl text-center">
+      <!-- Sword Icon -->
+      <div class="flex justify-center mb-4 text-[#D6B17A]">
+        <svg viewBox="0 0 20 28" fill="none" class="h-8 w-auto">
+          <circle cx="10" cy="2.5" r="1.5" fill="currentColor" />
+          <rect x="9.25" y="4" width="1.5" height="4" rx="0.5" fill="currentColor" />
+          <path d="M4 8.5C5.5 8.5 7 8 10 8C13 8 14.5 8.5 16 8.5C16.5 8.5 16.5 9.5 16 9.5C13 9.5 11.5 9 10 9C8.5 9 7 9.5 4 9.5C3.5 9.5 3.5 8.5 4 8.5Z" fill="currentColor" />
+          <path d="M9.25 9.5L9.5 24.5L10 27L10.5 24.5L10.75 9.5H9.25Z" fill="currentColor" />
+        </svg>
+      </div>
+
+      <h3 id="reset-modal-title" class="font-serif text-2xl text-[#E9DDC9] font-normal mb-3">
+        Confirm Streak Reset
+      </h3>
+
+      <p class="font-serif text-sm text-[#A99D8A] font-light leading-relaxed mb-6">
+        This will restart the live counter from this exact moment. A reset event will be inscribed in your journey log, while your original commitment date remains honored.
+      </p>
+
+      <div class="flex items-center justify-center gap-3">
+        <button
+          type="button"
+          id="btn-modal-cancel"
+          class="border border-[#554936] bg-[#071116] px-5 py-2 font-cinzel text-xs tracking-wider uppercase text-[#A99D8A] hover:text-[#E9DDC9] hover:border-[#746047] transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          id="btn-modal-confirm"
+          class="border border-amber-600 bg-amber-950/40 px-5 py-2 font-cinzel text-xs tracking-wider uppercase text-amber-200 hover:bg-amber-900/60 transition-colors"
+        >
+          Confirm Reset
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

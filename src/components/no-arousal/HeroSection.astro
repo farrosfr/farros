@@ -1,0 +1,58 @@
+---
+// NoArousal - Hero Section & Real-time Counter
+import StreakCounter from './StreakCounter.astro';
+---
+
+<section id="overview" class="relative pt-12 pb-14 sm:pt-16 sm:pb-18 lg:pt-20 lg:pb-22 text-center">
+  <!-- Subtle Light Beam Cone behind hero -->
+  <div class="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(45,85,105,0.22),transparent_75%)] opacity-80" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
+    <!-- Top Meta Label -->
+    <p class="font-cinzel text-[11px] sm:text-xs tracking-[0.24em] uppercase text-[#D6B17A] mb-3.5 select-none font-medium">
+      PERSONAL STREAK &bull; EST. 12 NOV 2026
+    </p>
+
+    <!-- Main Title -->
+    <h1 class="font-serif text-6xl sm:text-7xl lg:text-8xl font-normal text-[#E9DDC9] tracking-tight leading-[1] mb-3 select-none">
+      NoArousal
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="font-serif italic text-lg sm:text-xl text-[#A99D8A] font-light max-w-lg mx-auto mb-7 sm:mb-8">
+      A quiet commitment. One moment at a time.
+    </p>
+
+    <!-- Decorative Sword Divider -->
+    <div class="flex items-center justify-center gap-4 sm:gap-6 max-w-md mx-auto mb-8 sm:mb-10 text-[#746047]" aria-hidden="true">
+      <span class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-[#746047] to-[#746047]"></span>
+      <svg viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-6 w-auto text-[#D6B17A]">
+        <circle cx="10" cy="2.5" r="1.5" fill="currentColor" />
+        <rect x="9.25" y="4" width="1.5" height="4" rx="0.5" fill="currentColor" />
+        <path d="M4 8.5C5.5 8.5 7 8 10 8C13 8 14.5 8.5 16 8.5C16.5 8.5 16.5 9.5 16 9.5C13 9.5 11.5 9 10 9C8.5 9 7 9.5 4 9.5C3.5 9.5 3.5 8.5 4 8.5Z" fill="currentColor" />
+        <path d="M9.25 9.5L9.5 24.5L10 27L10.5 24.5L10.75 9.5H9.25Z" fill="currentColor" />
+      </svg>
+      <span class="h-[1px] flex-1 bg-gradient-to-l from-transparent via-[#746047] to-[#746047]"></span>
+    </div>
+
+    <!-- Countdown Display -->
+    <StreakCounter />
+
+    <!-- 4-point Star Accent -->
+    <div class="flex items-center justify-center my-4 sm:my-5" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-[#D6B17A]">
+        <path d="M12 0L14.2 9.8L24 12L14.2 14.2L12 24L9.8 14.2L0 12L9.8 9.8L12 0Z" />
+      </svg>
+    </div>
+
+    <!-- Since Date -->
+    <p class="font-serif italic text-sm sm:text-base text-[#E9DDC9] mb-4 sm:mb-5 tracking-wide">
+      Since 12 November 2026
+    </p>
+
+    <!-- Quote -->
+    <blockquote class="font-serif italic text-sm sm:text-base text-[#A99D8A] max-w-xl mx-auto px-4 font-light leading-relaxed">
+      &ldquo;A man who cannot control himself is unfit to control anything at all.&rdquo;
+    </blockquote>
+  </div>
+</section>

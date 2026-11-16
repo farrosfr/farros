@@ -1,0 +1,87 @@
+---
+// NoArousal - Real-time Streak Countdown Boxes
+---
+
+<div class="w-full max-w-4xl mx-auto my-6 sm:my-8">
+  <div class="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-3 sm:gap-4 md:gap-5">
+    
+    <!-- DAYS BOX -->
+    <div class="relative group flex flex-col items-center justify-center p-5 sm:p-6 md:p-7 bg-[#0D191D]/90 backdrop-blur-sm min-w-[125px] sm:min-w-[135px] md:min-w-[150px] aspect-[1.12/1] transition-all duration-300 hover:bg-[#0D191D]">
+      <!-- Ornate Notched Corner Frame -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none text-[#746047]" preserveAspectRatio="none" viewBox="0 0 140 120" fill="none">
+        <path d="M 12 1 H 128 M 139 12 V 108 M 128 119 H 12 M 1 108 V 12" stroke="currentColor" stroke-width="1" />
+        <path d="M 1 12 H 9 V 1 M 139 12 H 131 V 1 M 1 108 H 9 V 119 M 139 108 H 131 V 119" stroke="currentColor" stroke-width="1" />
+      </svg>
+      <span id="counter-days" class="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#E9DDC9] tracking-tight leading-none mb-2.5 select-none">
+        00
+      </span>
+      <span class="font-cinzel text-[10px] sm:text-[11px] tracking-[0.25em] text-[#A99D8A] uppercase select-none">
+        DAYS
+      </span>
+    </div>
+
+    <!-- COLON SEPARATOR 1 (Desktop) -->
+    <div class="hidden sm:flex flex-col items-center justify-center gap-2.5 px-1 pb-3 text-[#D6B17A] select-none" aria-hidden="true">
+      <span class="w-1.5 h-1.5 rotate-45 bg-[#D6B17A]/80 shadow-[0_0_6px_rgba(214,177,122,0.4)]"></span>
+      <span class="w-1.5 h-1.5 rotate-45 bg-[#D6B17A]/80 shadow-[0_0_6px_rgba(214,177,122,0.4)]"></span>
+    </div>
+
+    <!-- HOURS BOX -->
+    <div class="relative group flex flex-col items-center justify-center p-5 sm:p-6 md:p-7 bg-[#0D191D]/90 backdrop-blur-sm min-w-[125px] sm:min-w-[135px] md:min-w-[150px] aspect-[1.12/1] transition-all duration-300 hover:bg-[#0D191D]">
+      <!-- Ornate Notched Corner Frame -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none text-[#746047]" preserveAspectRatio="none" viewBox="0 0 140 120" fill="none">
+        <path d="M 12 1 H 128 M 139 12 V 108 M 128 119 H 12 M 1 108 V 12" stroke="currentColor" stroke-width="1" />
+        <path d="M 1 12 H 9 V 1 M 139 12 H 131 V 1 M 1 108 H 9 V 119 M 139 108 H 131 V 119" stroke="currentColor" stroke-width="1" />
+      </svg>
+      <span id="counter-hours" class="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#E9DDC9] tracking-tight leading-none mb-2.5 select-none">
+        00
+      </span>
+      <span class="font-cinzel text-[10px] sm:text-[11px] tracking-[0.25em] text-[#A99D8A] uppercase select-none">
+        HOURS
+      </span>
+    </div>
+
+    <!-- COLON SEPARATOR 2 (Desktop) -->
+    <div class="hidden sm:flex flex-col items-center justify-center gap-2.5 px-1 pb-3 text-[#D6B17A] select-none" aria-hidden="true">
+      <span class="w-1.5 h-1.5 rotate-45 bg-[#D6B17A]/80 shadow-[0_0_6px_rgba(214,177,122,0.4)]"></span>
+      <span class="w-1.5 h-1.5 rotate-45 bg-[#D6B17A]/80 shadow-[0_0_6px_rgba(214,177,122,0.4)]"></span>
+    </div>
+
+    <!-- MINUTES BOX -->
+    <div class="relative group flex flex-col items-center justify-center p-5 sm:p-6 md:p-7 bg-[#0D191D]/90 backdrop-blur-sm min-w-[125px] sm:min-w-[135px] md:min-w-[150px] aspect-[1.12/1] transition-all duration-300 hover:bg-[#0D191D]">
+      <!-- Ornate Notched Corner Frame -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none text-[#746047]" preserveAspectRatio="none" viewBox="0 0 140 120" fill="none">
+        <path d="M 12 1 H 128 M 139 12 V 108 M 128 119 H 12 M 1 108 V 12" stroke="currentColor" stroke-width="1" />
+        <path d="M 1 12 H 9 V 1 M 139 12 H 131 V 1 M 1 108 H 9 V 119 M 139 108 H 131 V 119" stroke="currentColor" stroke-width="1" />
+      </svg>
+      <span id="counter-minutes" class="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#E9DDC9] tracking-tight leading-none mb-2.5 select-none">
+        00
+      </span>
+      <span class="font-cinzel text-[10px] sm:text-[11px] tracking-[0.25em] text-[#A99D8A] uppercase select-none">
+        MINUTES
+      </span>
+    </div>
+
+    <!-- COLON SEPARATOR 3 (Desktop) -->
+    <div class="hidden sm:flex flex-col items-center justify-center gap-2.5 px-1 pb-3 text-[#D6B17A] select-none" aria-hidden="true">
+      <span class="w-1.5 h-1.5 rotate-45 bg-[#D6B17A]/80 shadow-[0_0_6px_rgba(214,177,122,0.4)]"></span>
+      <span class="w-1.5 h-1.5 rotate-45 bg-[#D6B17A]/80 shadow-[0_0_6px_rgba(214,177,122,0.4)]"></span>
+    </div>
+
+    <!-- SECONDS BOX -->
+    <div class="relative group flex flex-col items-center justify-center p-5 sm:p-6 md:p-7 bg-[#0D191D]/90 backdrop-blur-sm min-w-[125px] sm:min-w-[135px] md:min-w-[150px] aspect-[1.12/1] transition-all duration-300 hover:bg-[#0D191D]">
+      <!-- Ornate Notched Corner Frame -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none text-[#746047]" preserveAspectRatio="none" viewBox="0 0 140 120" fill="none">
+        <path d="M 12 1 H 128 M 139 12 V 108 M 128 119 H 12 M 1 108 V 12" stroke="currentColor" stroke-width="1" />
+        <path d="M 1 12 H 9 V 1 M 139 12 H 131 V 1 M 1 108 H 9 V 119 M 139 108 H 131 V 119" stroke="currentColor" stroke-width="1" />
+      </svg>
+      <span id="counter-seconds" class="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal text-[#E9DDC9] tracking-tight leading-none mb-2.5 select-none">
+        00
+      </span>
+      <span class="font-cinzel text-[10px] sm:text-[11px] tracking-[0.25em] text-[#A99D8A] uppercase select-none">
+        SECONDS
+      </span>
+    </div>
+
+  </div>
+</div>
