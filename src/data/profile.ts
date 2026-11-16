@@ -704,7 +704,7 @@ export const searchItems = [
   { title: 'Services', description: 'View professional advisory services.', href: '/#services', type: 'Services' },
   { title: 'Writing', description: 'Notes on security, data, and engineering from farrosfr.com.', href: '/writing', type: 'Writing' },
   { title: 'Web Portfolio', description: 'See the full website portfolio.', href: '/web-porto/', type: 'Portfolio' },
-  { title: 'NoArousal', description: 'Personal streak tracker and commitment log.', href: '/no-arousal/', type: 'Tracker' },
+  { title: 'NoArousal', description: 'Personal streak tracker and commitment log.', href: '/noa', type: 'Tracker' },
   { title: 'Contact', description: 'Send a message or find direct lines (email, WhatsApp, social).', href: '/contact', type: 'Contact' },
   ...services.map((item) => ({ title: item.title, description: item.description, href: `/services/${item.slug}`, type: 'Service' })),
   { title: 'View CV', description: 'Open the designed web CV page.', href: '/cv', type: 'CV' },
