@@ -43,7 +43,7 @@ export function getDefaultState(): NoArousalState {
   return {
     startDate: streakData.activeStartDate,
     initialCommitmentDate: streakData.initialCommitmentDate,
-    checkIns: (streakData.checkIns as CheckInEntry[]) || [],
+    checkIns: ((streakData as any).checkIns as CheckInEntry[]) || [],
     history: (streakData.history as HistoryEvent[]) || [],
   };
 }

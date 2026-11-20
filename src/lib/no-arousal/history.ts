@@ -131,13 +131,20 @@ export function generateTimeline(state: NoArousalState, currentDate: Date = new 
     for (const h of state.history) {
       if (h.event === 'reset_and_learned') {
         const checkIn = checkInMap.get(h.date);
+        const resetDate = new Date(h.timestamp);
+        const timeStr = !isNaN(resetDate.getTime())
+          ? resetDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }) + ' WIB'
+          : '03:00 WIB';
+
+        const displayWithTime = `${h.displayDate} · ${timeStr}`;
+
         items.push({
           id: `reset-${h.date}-${h.timestamp}`,
           dateKey: h.date,
-          displayDate: h.displayDate,
-          label: h.title || 'Streak reset · Learned & returned',
+          displayDate: displayWithTime,
+          label: h.title || `Streak reset at ${timeStr} · Learned & returned`,
           isReset: true,
-          statusBadge: 'Reset & learned',
+          statusBadge: h.statusBadge || `${timeStr} · Reset & learned`,
           note: h.note || checkIn?.reflection,
           checkIn,
         });

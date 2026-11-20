@@ -7,7 +7,7 @@ import type { NoArousalState, CheckInEntry, HistoryEvent } from '../../lib/no-ar
 const initialState: NoArousalState = {
   startDate: streakData.activeStartDate,
   initialCommitmentDate: streakData.initialCommitmentDate,
-  checkIns: (streakData.checkIns as CheckInEntry[]) || [],
+  checkIns: ((streakData as any).checkIns as CheckInEntry[]) || [],
   history: (streakData.history as HistoryEvent[]) || [],
 };
 

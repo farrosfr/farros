@@ -7,7 +7,6 @@ import HeroSection from '../components/no-arousal/HeroSection.astro';
 import MilestoneProgress from '../components/no-arousal/MilestoneProgress.astro';
 import MilestoneGrid from '../components/no-arousal/MilestoneGrid.astro';
 import PrincipleCards from '../components/no-arousal/PrincipleCards.astro';
-import DailyCheckIn from '../components/no-arousal/DailyCheckIn.astro';
 import StreakTimeline from '../components/no-arousal/StreakTimeline.astro';
 import Footer from '../components/no-arousal/Footer.astro';
 
@@ -128,7 +127,6 @@ const canonicalURL = new URL('/noa', Astro.site ?? 'https://farrosfr.com');
         <MilestoneProgress />
         <MilestoneGrid />
         <PrincipleCards />
-        <DailyCheckIn />
         <StreakTimeline />
       </main>
 
@@ -138,14 +136,13 @@ const canonicalURL = new URL('/noa', Astro.site ?? 'https://farrosfr.com');
 
     <!-- Client-side Interactive Application Script -->
     <script>
-      import { calculateElapsed, formatDisplayDate, formatDateKey } from '../lib/no-arousal/counter';
+      import { calculateElapsed } from '../lib/no-arousal/counter';
       import { calculateMilestoneProgress, MILESTONES } from '../lib/no-arousal/milestones';
-      import { loadNoArousalState, saveDailyCheckIn, executeStreakReset, type CheckInStatus } from '../lib/no-arousal/storage';
+      import { loadNoArousalState } from '../lib/no-arousal/storage';
       import { generateTimeline } from '../lib/no-arousal/history';
 
       // Application State
       let state = loadNoArousalState();
-      let selectedOption: CheckInStatus | null = null;
 
       // DOM Elements Cache
       const elDays = document.getElementById('counter-days');
@@ -157,15 +154,6 @@ const canonicalURL = new URL('/noa', Astro.site ?? 'https://farrosfr.com');
       const elNextMilestoneRemaining = document.getElementById('next-milestone-remaining');
       const elMilestonePctText = document.getElementById('milestone-percentage-text');
       const elMilestoneProgressBar = document.getElementById('milestone-progress-bar');
-
-      const elCheckinDate = document.getElementById('checkin-date-display');
-      const checkinButtons = document.querySelectorAll<HTMLButtonElement>('.na-checkin-btn');
-      const btnSaveReflection = document.getElementById('btn-save-reflection');
-      const elCheckinFeedback = document.getElementById('checkin-feedback');
-
-      const modalReset = document.getElementById('reset-confirm-modal');
-      const btnModalCancel = document.getElementById('btn-modal-cancel');
-      const btnModalConfirm = document.getElementById('btn-modal-confirm');
 
       const elTimelineList = document.getElementById('timeline-list');
       const elHeroSinceDate = document.getElementById('hero-since-date');
@@ -297,113 +285,10 @@ const canonicalURL = new URL('/noa', Astro.site ?? 'https://farrosfr.com');
         });
       }
 
-      /**
-       * 3. Syncs Daily Check-in Form
-       */
-      function syncCheckInState() {
-        const todayKey = formatDateKey(new Date());
-        if (elCheckinDate) {
-          elCheckinDate.textContent = formatDisplayDate(new Date());
-        }
-
-        const existing = state.checkIns.find((c) => c.date === todayKey);
-        if (existing) {
-          selectedOption = existing.status;
-        }
-
-        updateCheckinButtons();
-      }
-
-      function updateCheckinButtons() {
-        checkinButtons.forEach((btn) => {
-          const opt = btn.getAttribute('data-option') as CheckInStatus;
-          const isSelected = opt === selectedOption;
-          btn.setAttribute('aria-checked', String(isSelected));
-
-          if (isSelected) {
-            if (opt === 'reset') {
-              btn.className = 'na-checkin-btn border border-amber-600 bg-amber-950/40 px-4 py-1.5 font-cinzel text-xs tracking-wider text-amber-200 ring-1 ring-amber-500/50';
-            } else {
-              btn.className = 'na-checkin-btn border border-[#D6B17A] bg-[#D6B17A]/15 px-4 py-1.5 font-cinzel text-xs tracking-wider text-[#E9DDC9] ring-1 ring-[#D6B17A]/40';
-            }
-          } else {
-            btn.className = 'na-checkin-btn border border-[#554936] bg-[#071116]/60 px-4 py-1.5 font-cinzel text-xs tracking-wider text-[#A99D8A] transition-all hover:border-[#D6B17A] hover:text-[#E9DDC9]';
-          }
-        });
-      }
-
-      // Handle Option Button Clicks
-      checkinButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const opt = btn.getAttribute('data-option') as CheckInStatus;
-          selectedOption = opt;
-          updateCheckinButtons();
-        });
-      });
-
-      // Save Reflection Button Click
-      btnSaveReflection?.addEventListener('click', () => {
-        if (!selectedOption) {
-          if (elCheckinFeedback) {
-            elCheckinFeedback.textContent = 'Please choose an option';
-            elCheckinFeedback.className = 'font-serif italic text-xs text-amber-400 opacity-100 transition-opacity duration-300';
-            setTimeout(() => {
-              elCheckinFeedback.className = 'font-serif italic text-xs text-amber-400 opacity-0 transition-opacity duration-300';
-            }, 2500);
-          }
-          return;
-        }
-
-        if (selectedOption === 'reset') {
-          // Open confirmation modal
-          modalReset?.classList.remove('hidden');
-          modalReset?.classList.add('flex');
-          return;
-        }
-
-        // Save normal reflection
-        state = saveDailyCheckIn(selectedOption);
-        renderTimeline();
-
-        if (elCheckinFeedback) {
-          elCheckinFeedback.textContent = 'Reflection saved';
-          elCheckinFeedback.className = 'font-serif italic text-xs text-[#D6B17A] opacity-100 transition-opacity duration-300';
-          setTimeout(() => {
-            elCheckinFeedback.className = 'font-serif italic text-xs text-[#D6B17A] opacity-0 transition-opacity duration-300';
-          }, 3000);
-        }
-      });
-
-      // Reset Modal Handlers
-      btnModalCancel?.addEventListener('click', () => {
-        modalReset?.classList.add('hidden');
-        modalReset?.classList.remove('flex');
-      });
-
-      btnModalConfirm?.addEventListener('click', () => {
-        modalReset?.classList.add('hidden');
-        modalReset?.classList.remove('flex');
-
-        state = executeStreakReset();
-        tick();
-        updateHeroSinceDate();
-        renderTimeline();
-        syncCheckInState();
-
-        if (elCheckinFeedback) {
-          elCheckinFeedback.textContent = 'Streak reset recorded';
-          elCheckinFeedback.className = 'font-serif italic text-xs text-amber-300 opacity-100 transition-opacity duration-300';
-          setTimeout(() => {
-            elCheckinFeedback.className = 'font-serif italic text-xs text-amber-300 opacity-0 transition-opacity duration-300';
-          }, 3500);
-        }
-      });
-
       // Initial Bootstrap
       tick();
       updateHeroSinceDate();
       setInterval(tick, 1000);
-      syncCheckInState();
       renderTimeline();
     </script>
   </body>
