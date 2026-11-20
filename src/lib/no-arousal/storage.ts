@@ -3,6 +3,7 @@
  */
 
 import { DEFAULT_START_TIMESTAMP, formatDateKey, formatDisplayDate } from './counter';
+import streakData from '../../data/no-arousal/streak.json';
 
 export type CheckInStatus = 'focused' | 'resisted' | 'reset';
 
@@ -20,6 +21,7 @@ export interface HistoryEvent {
   timestamp: string; // ISO
   event: 'commitment_started' | 'day_milestone' | 'reset_and_learned';
   title: string;
+  statusBadge?: string;
   note?: string;
 }
 
@@ -34,45 +36,15 @@ export const STORAGE_KEY = 'noarousal_app_state_v3';
 export const STORAGE_KEY_V2 = 'noarousal_app_state_v2';
 export const STORAGE_KEY_V1 = 'noarousal_app_state_v1';
 
-export const INITIAL_COMMITMENT_TIMESTAMP = '2026-11-12T23:00:00+07:00';
-export const LATEST_RELAPSE_TIMESTAMP = '2026-11-19T03:00:00+07:00';
-
-export const RELAPSE_NOTE_NOV19 = `Tbh, this is a very hard war, so I will choose this feeling of hard to use for productivity of other hard things, like doing 200 push-ups a day becomes feeling easy, making a business becomes easy, managing family also becomes easy, Bismillah.
-
-Because the access is likely very instant, internet access is so fast, so the speed is maybe faster than I can think or consider.
-
-Considering it needs structural flow and effort, needing to imagine how it will give so much destruction to what I want to see, but currently tech is very fast, so the deeper I learn about the NoArousal method, maybe it will be made as anti-tech or anti-AI.`;
+export const INITIAL_COMMITMENT_TIMESTAMP = streakData.initialCommitmentDate || '2026-11-12T23:00:00+07:00';
+export const LATEST_RELAPSE_TIMESTAMP = streakData.activeStartDate || '2026-11-19T03:00:00+07:00';
 
 export function getDefaultState(): NoArousalState {
   return {
-    startDate: LATEST_RELAPSE_TIMESTAMP,
-    initialCommitmentDate: INITIAL_COMMITMENT_TIMESTAMP,
-    checkIns: [
-      {
-        date: '2026-11-19',
-        displayDate: '19 NOV 2026',
-        status: 'reset',
-        timestamp: LATEST_RELAPSE_TIMESTAMP,
-        reflection: RELAPSE_NOTE_NOV19,
-      },
-    ],
-    history: [
-      {
-        date: '2026-11-12',
-        displayDate: '12 NOV 2026',
-        timestamp: INITIAL_COMMITMENT_TIMESTAMP,
-        event: 'commitment_started',
-        title: 'Commitment started',
-      },
-      {
-        date: '2026-11-19',
-        displayDate: '19 NOV 2026',
-        timestamp: LATEST_RELAPSE_TIMESTAMP,
-        event: 'reset_and_learned',
-        title: 'Streak reset · Learned & returned',
-        note: RELAPSE_NOTE_NOV19,
-      },
-    ],
+    startDate: streakData.activeStartDate,
+    initialCommitmentDate: streakData.initialCommitmentDate,
+    checkIns: (streakData.checkIns as CheckInEntry[]) || [],
+    history: (streakData.history as HistoryEvent[]) || [],
   };
 }
 
@@ -84,59 +56,50 @@ export function loadNoArousalState(): NoArousalState {
     return getDefaultState();
   }
 
+  const initial = getDefaultState();
+
   try {
-    const rawV3 = localStorage.getItem(STORAGE_KEY);
-    if (rawV3) {
-      const parsed = JSON.parse(rawV3);
-      if (parsed && typeof parsed === 'object' && parsed.startDate) {
-        return {
-          startDate: parsed.startDate || LATEST_RELAPSE_TIMESTAMP,
-          initialCommitmentDate: parsed.initialCommitmentDate || INITIAL_COMMITMENT_TIMESTAMP,
-          checkIns: Array.isArray(parsed.checkIns) ? parsed.checkIns : [],
-          history: Array.isArray(parsed.history) ? parsed.history : [],
-        };
-      }
-    }
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY_V2) || localStorage.getItem(STORAGE_KEY_V1);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        // Merge check-ins with defaults from streak.json
+        const localCheckIns: CheckInEntry[] = Array.isArray(parsed.checkIns) ? parsed.checkIns : [];
+        const mergedCheckIns: CheckInEntry[] = [...localCheckIns];
 
-    // Auto-migrate from v2 or v1 if present
-    const rawPrev = localStorage.getItem(STORAGE_KEY_V2) || localStorage.getItem(STORAGE_KEY_V1);
-    const initial = getDefaultState();
-
-    if (rawPrev) {
-      try {
-        const parsedPrev = JSON.parse(rawPrev);
-        if (parsedPrev && typeof parsedPrev === 'object') {
-          const mergedCheckIns: CheckInEntry[] = Array.isArray(parsedPrev.checkIns) ? [...parsedPrev.checkIns] : [];
-          const checkInNov19 = mergedCheckIns.find((c) => c.date === '2026-11-19');
-          if (checkInNov19) {
-            checkInNov19.reflection = RELAPSE_NOTE_NOV19;
+        for (const defaultCheckIn of initial.checkIns) {
+          const idx = mergedCheckIns.findIndex((c) => c.date === defaultCheckIn.date);
+          if (idx >= 0) {
+            if (defaultCheckIn.reflection) {
+              mergedCheckIns[idx].reflection = defaultCheckIn.reflection;
+            }
           } else {
-            mergedCheckIns.push(initial.checkIns[0]);
+            mergedCheckIns.push(defaultCheckIn);
           }
-
-          const mergedHistory: HistoryEvent[] = Array.isArray(parsedPrev.history) && parsedPrev.history.length > 0
-            ? [...parsedPrev.history]
-            : [...initial.history];
-
-          const resetEventNov19 = mergedHistory.find((h) => h.date === '2026-11-19' && h.event === 'reset_and_learned');
-          if (resetEventNov19) {
-            resetEventNov19.note = RELAPSE_NOTE_NOV19;
-          } else {
-            mergedHistory.push(initial.history[1]);
-          }
-
-          const migratedState: NoArousalState = {
-            startDate: LATEST_RELAPSE_TIMESTAMP,
-            initialCommitmentDate: parsedPrev.initialCommitmentDate || INITIAL_COMMITMENT_TIMESTAMP,
-            checkIns: mergedCheckIns,
-            history: mergedHistory,
-          };
-
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(migratedState));
-          return migratedState;
         }
-      } catch (e) {
-        // Fallback to initial
+
+        // Merge history with defaults from streak.json
+        const localHistory: HistoryEvent[] = Array.isArray(parsed.history) ? parsed.history : [];
+        const mergedHistory: HistoryEvent[] = [...localHistory];
+
+        for (const defaultH of initial.history) {
+          const idx = mergedHistory.findIndex((h) => h.date === defaultH.date && h.event === defaultH.event);
+          if (idx >= 0) {
+            mergedHistory[idx] = { ...mergedHistory[idx], ...defaultH };
+          } else {
+            mergedHistory.push(defaultH);
+          }
+        }
+
+        const state: NoArousalState = {
+          startDate: streakData.activeStartDate || parsed.startDate || initial.startDate,
+          initialCommitmentDate: streakData.initialCommitmentDate || parsed.initialCommitmentDate || initial.initialCommitmentDate,
+          checkIns: mergedCheckIns,
+          history: mergedHistory,
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        return state;
       }
     }
 
@@ -144,7 +107,7 @@ export function loadNoArousalState(): NoArousalState {
     return initial;
   } catch (err) {
     console.error('[NoArousal] Error loading state from localStorage:', err);
-    return getDefaultState();
+    return initial;
   }
 }
 

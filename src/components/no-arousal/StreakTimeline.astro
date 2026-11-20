@@ -1,5 +1,17 @@
 ---
 // NoArousal - Streak Log Timeline
+import streakData from '../../data/no-arousal/streak.json';
+import { generateTimeline } from '../../lib/no-arousal/history';
+import type { NoArousalState, CheckInEntry, HistoryEvent } from '../../lib/no-arousal/storage';
+
+const initialState: NoArousalState = {
+  startDate: streakData.activeStartDate,
+  initialCommitmentDate: streakData.initialCommitmentDate,
+  checkIns: (streakData.checkIns as CheckInEntry[]) || [],
+  history: (streakData.history as HistoryEvent[]) || [],
+};
+
+const initialItems = generateTimeline(initialState, new Date());
 ---
 
 <section id="streak-log" class="w-full max-w-4xl mx-auto mb-16 sm:mb-20">
@@ -16,15 +28,44 @@
     <!-- Vertical Connecting Line -->
     <div class="absolute left-[7px] sm:left-[9px] top-3 bottom-3 w-[1px] bg-[#554936]" aria-hidden="true"></div>
 
-    <!-- Timeline Entries will be populated dynamically by the client script and pre-rendered cleanly -->
+    <!-- Timeline Entries pre-rendered statically from streak.json & hydrated on client -->
     <div id="timeline-list" class="flex flex-col gap-5 sm:gap-6">
-      <!-- Fallback / Initial Server Rendered Placeholder (Updated on client) -->
-      <div class="relative flex items-center gap-4 sm:gap-6 text-xs sm:text-sm">
-        <span class="absolute -left-6 sm:-left-8 w-3 h-3 rounded-full border border-[#D6B17A] bg-[#071116] -translate-x-[2.5px]"></span>
-        <span class="font-cinzel tracking-wider text-[#E9DDC9] min-w-[95px] sm:min-w-[110px]">12 NOV 2026</span>
-        <span class="text-[#746047] select-none">&mdash;</span>
-        <span class="font-serif text-[#A99D8A]">Commitment started</span>
-      </div>
+      {initialItems.map((item) => (
+        <div class="relative flex flex-col">
+          <div class="relative flex items-center gap-3 sm:gap-6 text-xs sm:text-sm">
+            <span
+              class={item.isReset
+                ? "absolute -left-6 sm:-left-8 w-3 h-3 rounded-full border border-amber-500 bg-[#071116] -translate-x-[2.5px] shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                : "absolute -left-6 sm:-left-8 w-3 h-3 rounded-full border border-[#D6B17A] bg-[#071116] -translate-x-[2.5px]"
+              }
+            ></span>
+            <span class="font-cinzel tracking-wider text-[#E9DDC9] min-w-[95px] sm:min-w-[110px] select-none">
+              {item.displayDate}
+            </span>
+            <span class="text-[#746047] select-none">&mdash;</span>
+            <span
+              class={item.isReset
+                ? "font-serif text-amber-300/90 italic"
+                : item.isInProgress
+                ? "font-serif text-[#E9DDC9] font-medium"
+                : "font-serif text-[#A99D8A]"
+              }
+            >
+              {item.label}
+            </span>
+            {item.statusBadge && (
+              <span class="font-cinzel text-[10px] tracking-wider px-2 py-0.5 border border-[#746047] text-[#D6B17A] bg-[#071116] ml-2 select-none uppercase">
+                {item.statusBadge}
+              </span>
+            )}
+          </div>
+          {item.note && (
+            <div class="mt-2.5 mb-1 pl-3.5 sm:pl-4 border-l border-[#D6B17A]/40 text-xs sm:text-sm font-serif italic text-[#A99D8A] leading-relaxed max-w-2xl bg-[#0D191D]/60 py-2.5 px-3 sm:px-4 whitespace-pre-line">
+              {item.note}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   </div>
 </section>
