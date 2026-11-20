@@ -30,17 +30,18 @@ export interface NoArousalState {
   history: HistoryEvent[];
 }
 
-export const STORAGE_KEY = 'noarousal_app_state_v2';
+export const STORAGE_KEY = 'noarousal_app_state_v3';
+export const STORAGE_KEY_V2 = 'noarousal_app_state_v2';
 export const STORAGE_KEY_V1 = 'noarousal_app_state_v1';
 
 export const INITIAL_COMMITMENT_TIMESTAMP = '2026-11-12T23:00:00+07:00';
 export const LATEST_RELAPSE_TIMESTAMP = '2026-11-19T03:00:00+07:00';
 
-export const RELAPSE_NOTE_NOV19 = `tbh this is very hard war so i will choose this feel of hard to use for productiviyt of other hard things, like doing 200 push up a day became feel easy, make a business is become easy, manage familiy also become easy Bismillah.
+export const RELAPSE_NOTE_NOV19 = `Tbh, this is a very hard war, so I will choose this feeling of hard to use for productivity of other hard things, like doing 200 push-ups a day becomes feeling easy, making a business becomes easy, managing family also becomes easy, Bismillah.
 
-because the access is likely very instant, internet access is so fast, so the speed maybe more fast then i can think or considering
+Because the access is likely very instant, internet access is so fast, so the speed is maybe faster than I can think or consider.
 
-considering need structural flow and effort, need to imagine how will be give many of destruction what wanna see, but currently tech is very fast, so the more deep i learn about the noarousal method maybe will be make as a anti tech or anti ai`;
+Considering it needs structural flow and effort, needing to imagine how it will give so much destruction to what I want to see, but currently tech is very fast, so the deeper I learn about the NoArousal method, maybe it will be made as anti-tech or anti-AI.`;
 
 export function getDefaultState(): NoArousalState {
   return {
@@ -76,7 +77,7 @@ export function getDefaultState(): NoArousalState {
 }
 
 /**
- * Safely loads state from localStorage with migration from v1 to v2
+ * Safely loads state from localStorage with migration across versions
  */
 export function loadNoArousalState(): NoArousalState {
   if (typeof window === 'undefined') {
@@ -84,9 +85,9 @@ export function loadNoArousalState(): NoArousalState {
   }
 
   try {
-    const rawV2 = localStorage.getItem(STORAGE_KEY);
-    if (rawV2) {
-      const parsed = JSON.parse(rawV2);
+    const rawV3 = localStorage.getItem(STORAGE_KEY);
+    if (rawV3) {
+      const parsed = JSON.parse(rawV3);
       if (parsed && typeof parsed === 'object' && parsed.startDate) {
         return {
           startDate: parsed.startDate || LATEST_RELAPSE_TIMESTAMP,
@@ -97,31 +98,36 @@ export function loadNoArousalState(): NoArousalState {
       }
     }
 
-    // Auto-migrate from v1 if present
-    const rawV1 = localStorage.getItem(STORAGE_KEY_V1);
+    // Auto-migrate from v2 or v1 if present
+    const rawPrev = localStorage.getItem(STORAGE_KEY_V2) || localStorage.getItem(STORAGE_KEY_V1);
     const initial = getDefaultState();
 
-    if (rawV1) {
+    if (rawPrev) {
       try {
-        const parsedV1 = JSON.parse(rawV1);
-        if (parsedV1 && typeof parsedV1 === 'object') {
-          // Merge user's check-ins from v1 while ensuring the Nov 19 relapse is recorded
-          const mergedCheckIns: CheckInEntry[] = Array.isArray(parsedV1.checkIns) ? [...parsedV1.checkIns] : [];
-          if (!mergedCheckIns.some((c) => c.date === '2026-11-19')) {
+        const parsedPrev = JSON.parse(rawPrev);
+        if (parsedPrev && typeof parsedPrev === 'object') {
+          const mergedCheckIns: CheckInEntry[] = Array.isArray(parsedPrev.checkIns) ? [...parsedPrev.checkIns] : [];
+          const checkInNov19 = mergedCheckIns.find((c) => c.date === '2026-11-19');
+          if (checkInNov19) {
+            checkInNov19.reflection = RELAPSE_NOTE_NOV19;
+          } else {
             mergedCheckIns.push(initial.checkIns[0]);
           }
 
-          const mergedHistory: HistoryEvent[] = Array.isArray(parsedV1.history) && parsedV1.history.length > 0
-            ? [...parsedV1.history]
+          const mergedHistory: HistoryEvent[] = Array.isArray(parsedPrev.history) && parsedPrev.history.length > 0
+            ? [...parsedPrev.history]
             : [...initial.history];
 
-          if (!mergedHistory.some((h) => h.date === '2026-11-19' && h.event === 'reset_and_learned')) {
+          const resetEventNov19 = mergedHistory.find((h) => h.date === '2026-11-19' && h.event === 'reset_and_learned');
+          if (resetEventNov19) {
+            resetEventNov19.note = RELAPSE_NOTE_NOV19;
+          } else {
             mergedHistory.push(initial.history[1]);
           }
 
           const migratedState: NoArousalState = {
             startDate: LATEST_RELAPSE_TIMESTAMP,
-            initialCommitmentDate: parsedV1.initialCommitmentDate || INITIAL_COMMITMENT_TIMESTAMP,
+            initialCommitmentDate: parsedPrev.initialCommitmentDate || INITIAL_COMMITMENT_TIMESTAMP,
             checkIns: mergedCheckIns,
             history: mergedHistory,
           };
